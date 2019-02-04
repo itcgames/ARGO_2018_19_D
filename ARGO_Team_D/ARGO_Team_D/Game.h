@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <SDL.h>
+#include <tmxlite/Map.hpp>
 
 class Game
 {
