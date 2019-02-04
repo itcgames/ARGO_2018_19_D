@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <sstream>
 
 Game::Game()
 {

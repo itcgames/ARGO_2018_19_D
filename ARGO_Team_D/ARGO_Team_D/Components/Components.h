@@ -13,7 +13,7 @@ public:
 	virtual ~Component() {}
 
 protected:
-	string id = "";
+	std::string id;
 
 };
 

@@ -21,7 +21,7 @@ public:
 
 	void addComponent(Component c) { m_components.push_back(c); }
 	void removeComponenet(Component c) {
-		m_components.erase(std::remove(m_components.begin(), m_components.end(), c), m_components.end());
+		//m_components.erase(std::remove(m_components.begin(), m_components.end(), c), m_components.end());
 	};
 	vector<Component> getComponents() { return m_components; }
 
