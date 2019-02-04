@@ -46,6 +46,7 @@ void Game::processEvents()
 		{
 		case SDL_KEYDOWN:
 			// Key Down Stuff...
+			inputHandler.handleInput(event.key.keysym.sym);
 			break;
 		case SDL_QUIT:
 			m_quit = true;

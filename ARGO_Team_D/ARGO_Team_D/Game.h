@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <tmxlite/Map.hpp>
+#include"InputHandler.h"
 
 class Game
 {
@@ -19,6 +20,8 @@ private:
 
 	SDL_Window * p_window;
 	bool m_quit = false;
+
+	InputHandler inputHandler;
 };
 
 #endif // !GAME_H
