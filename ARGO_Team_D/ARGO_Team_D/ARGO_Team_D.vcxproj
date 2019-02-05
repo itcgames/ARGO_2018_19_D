@@ -83,10 +83,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL_mixer-1.2.12\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL_mixer-1.2.12\lib\x86\;</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /E /Y "$(SolutionDir)\dlls\*.dll" "$(OutDir)"</Command>
@@ -101,9 +102,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL_mixer-1.2.12\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL_mixer-1.2.12\lib\x86\;</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -145,35 +147,28 @@
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
+    <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="MacroCommand.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Systems\RenderSystem.cpp" />
+    <ClCompile Include="Resource Manager\ImageResource.cpp" />
+    <ClCompile Include="Resource Manager\ResourceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
     <ClInclude Include="Components\Components.h" />
     <ClInclude Include="ConcreteCommand.h" />
-    <ClInclude Include="Entities\Entities.h" />
+    <ClInclude Include="ECS\Components\Components.h" />
+    <ClInclude Include="ECS\Entities\Entity.h" />
+    <ClInclude Include="ECS\Systems\RenderSystem.h" />
+    <ClInclude Include="ECS\Systems\System.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="MacroCommand.h" />
-    <ClInclude Include="Resource Manager\Resource.h" />
-    <ClInclude Include="Systems\RenderSystem.h" />
+    <ClInclude Include="Resource Manager\ImageResource.h" />
+    <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="Systems\System.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Debug\vc141.idb" />
-    <None Include="Debug\vc141.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Debug\ARGO_Team_D.log" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="Debug\Game.obj" />
-    <Object Include="Debug\main.obj" />
-    <Object Include="Debug\RenderSystem.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

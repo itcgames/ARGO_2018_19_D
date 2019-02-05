@@ -1,7 +1,7 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "..//Entities/Entities.h"
+#include "..//Entities/Entity.h"
 
 /// <summary>
 /// Base System class.

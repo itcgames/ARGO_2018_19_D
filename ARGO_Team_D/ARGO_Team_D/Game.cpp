@@ -8,6 +8,13 @@ Game::Game()
 		std::cout << "Failed to initialise SDL" << std::endl;
 	}
 
+	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
+
+	if (IMG_Init(imgFlags) != imgFlags)
+	{
+		cout << "Error: " << IMG_GetError() << endl;
+	}
+
 	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, SDL_WINDOW_OPENGL);
 	m_renderer = SDL_CreateRenderer(p_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -15,6 +22,10 @@ Game::Game()
 	{
 		std::cout << "Error: Could not create window" << std::endl;
 	}
+	
+	m_resourceManager.addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
+	m_testLoad = m_resourceManager.getImageResource("test");
+	texture = SDL_CreateTextureFromSurface(m_renderer, m_testLoad);
 
 	initialiseEntitys();
 	initialiseComponents();
@@ -88,6 +99,8 @@ void Game::render()
 	SDL_RenderClear(m_renderer);
 
 	m_renderSystem.render(m_renderer);
+
+	SDL_RenderCopy(m_renderer, texture, NULL, NULL);
 
 	SDL_RenderPresent(m_renderer);
 }

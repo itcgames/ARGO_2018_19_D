@@ -1,7 +1,7 @@
 #ifndef RENDERSYSTEM_H
 #define RENDERSYSTEM_H
 
-#include "..//Entities/Entities.h"
+#include "../Entities/Entity.h"
 #include "System.h"
 
 /// <summary>

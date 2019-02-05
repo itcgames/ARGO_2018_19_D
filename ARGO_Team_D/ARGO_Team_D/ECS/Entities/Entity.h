@@ -1,5 +1,5 @@
-#ifndef ENTITIES_H
-#define ENTITIES_H
+#ifndef ENTITY_H
+#define ENTITY_H
 
 #include <vector>
 #include <algorithm>
@@ -9,7 +9,7 @@
 using namespace std;
 
 /// <summary>
-/// innnterface for entities.
+/// interface for entities.
 /// entitys shared variables
 /// </summary>
 class Entity {
@@ -32,5 +32,5 @@ private:
 protected:
 
 };
-#endif // !ENTITIES_H
+#endif // !ENTITY_H
 
