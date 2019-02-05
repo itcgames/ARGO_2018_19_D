@@ -6,11 +6,13 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <stdlib.h>
-#include "Entities/Entity.h"
-#include "Components/Components.h"
-#include "Systems/RenderSystem.h"
+#include "ECS/Entities/Entity.h"
+#include "ECS/Components/Components.h"
+#include "ECS/Systems/RenderSystem.h"
 #include <tmxlite/Map.hpp>
 #include"InputHandler.h"
+#include "Resource Manager/ResourceManager.h"
+#include"ControlSystem.h"
 
 using namespace std;
 
@@ -41,7 +43,10 @@ private:
 
 	RenderSystem m_renderSystem;
 
-	InputHandler inputHandler;
-
+	InputHandler * inputHandler;
+	ResourceManager m_resourceManager;
+	SDL_Surface* m_testLoad;
+	SDL_Texture * texture;
+	ControlSystem m_controlSystem;
 };
 #endif // !GAME_H

@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A3499566-7139-47A3-A26F-765702B1B24D}</ProjectGuid>
     <RootNamespace>ARGOTeamD</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,11 +71,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SDL_SDK)\include;$(IncludePath);tmxlite\include;Box2D\include</IncludePath>
-    <LibraryPath>$(SDL_SDK)\lib\x86\;tmxlite\lib;Box2D\lib\AllConfigs\debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SDL_SDK)\lib\x86\;tmxlite\lib;Box2D\lib\x86_64\dbg;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SDL_SDK)\include;tmxlite\include;Box2D\include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SDL_SDK)\lib\x86;tmxlite\lib;Box2D\lib\AllConfigs\release</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86;$(SDL_SDK)\lib\x86;tmxlite\lib;Box2D\lib\x86_64\rls</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -83,10 +83,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL_mixer-1.2.12\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL_mixer-1.2.12\lib\x86\;</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /E /Y "$(SolutionDir)\dlls\*.dll" "$(OutDir)"</Command>
@@ -101,9 +102,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL_mixer-1.2.12\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL_mixer-1.2.12\lib\x86\;</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -145,23 +147,29 @@
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
+    <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
+    <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
-    <ClCompile Include="MacroCommand.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Resource Manager\ImageResource.cpp" />
+    <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="SdlVector.cpp" />
-    <ClCompile Include="Systems\RenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
     <ClInclude Include="Components\Components.h" />
     <ClInclude Include="ConcreteCommand.h" />
-    <ClInclude Include="Entities\Entity.h" />
+    <ClInclude Include="ECS\Components\Components.h" />
+    <ClInclude Include="ECS\Entities\Entity.h" />
+    <ClInclude Include="ECS\Systems\RenderSystem.h" />
+    <ClInclude Include="ECS\Systems\System.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
-    <ClInclude Include="MacroCommand.h" />
-    <ClInclude Include="Resource Manager\Resource.h" />
-    <ClInclude Include="Systems\RenderSystem.h" />
+    <ClInclude Include="Resource Manager\ImageResource.h" />
+    <ClInclude Include="Resource Manager\ResourceManager.h" />
+    <ClInclude Include="ControlSystem.h" />
+	<ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />
   </ItemGroup>
   <ItemGroup>

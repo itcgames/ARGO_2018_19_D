@@ -3,24 +3,18 @@
 #include"ConcreteCommand.h"
 #include"SDL.h"
 #include<vector>
-#include"MacroCommand.h"
+#include"ControlSystem.h"
 class InputHandler {
 public:
-	InputHandler();
+	InputHandler(ControlSystem & system);
 	void handleInput(SDL_Keycode keycode);
 
-	void bindButtonX();
-	void bindButtonY();
 	void bindButtonA();
 	void bindButtonB();
-	void bindButtonW();
 private:
-	Command * ButtonX;
-	Command * ButtonY;
-	Command * ButtonA;
-	Command * ButtonB;
-	Command * ButtonW;
+	Command * Move;
+	Command * Fire;
 
 	std::vector<Command *> commands;
-	MacroCommand macro;
+	ControlSystem & m_controlSystem;
 };

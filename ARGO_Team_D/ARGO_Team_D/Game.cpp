@@ -8,13 +8,24 @@ Game::Game()
 		std::cout << "Failed to initialise SDL" << std::endl;
 	}
 
-	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, SDL_WINDOW_OPENGL);
+	int imgFlags = IMG_INIT_PNG | IMG_INIT_JPG;
+
+	if (IMG_Init(imgFlags) != imgFlags)
+	{
+		cout << "Error: " << IMG_GetError() << endl;
+	}
+
+	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_OPENGL);
 	m_renderer = SDL_CreateRenderer(p_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 	if (NULL == p_window)
 	{
 		std::cout << "Error: Could not create window" << std::endl;
 	}
+
+	m_resourceManager.addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
+	m_testLoad = m_resourceManager.getImageResource("test");
+	texture = SDL_CreateTextureFromSurface(m_renderer, m_testLoad);
 
 	initialiseEntitys();
 	initialiseComponents();
@@ -24,6 +35,9 @@ Game::Game()
 	e->addComponent(new PositionComponent(10, 10));
 	e->addComponent(new SpriteComponent());
 	m_renderSystem.addEntity(e);
+
+	inputHandler = new InputHandler(m_controlSystem);
+
 }
 
 Game::~Game() {}
@@ -62,7 +76,7 @@ void Game::processEvents()
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			inputHandler.handleInput(event.key.keysym.sym);
+			inputHandler->handleInput(event.key.keysym.sym);
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			break;
@@ -91,6 +105,8 @@ void Game::render()
 
 	m_renderSystem.render(m_renderer);
 
+	SDL_RenderCopy(m_renderer, texture, NULL, NULL);
+
 	SDL_RenderPresent(m_renderer);
 }
 
@@ -113,7 +129,7 @@ void Game::initialiseEntitys()
 /// </summary>
 void Game::initialiseComponents()
 {
-	
+
 }
 
 /// <summary>
@@ -121,7 +137,7 @@ void Game::initialiseComponents()
 /// </summary>
 void Game::initialiseSystems()
 {
-	
+
 }
 
 /// <summary>
@@ -136,4 +152,3 @@ void Game::setUpFont() {
 	const char *path = "ASSETS\\FONTS\\arial.ttf";
 	Sans = TTF_OpenFont(path, 50);
 }
-
