@@ -26,5 +26,7 @@
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="SdlVector.h" />
+    <ClInclude Include="Systems\RenderSystem.h" />
+    <ClInclude Include="Systems\System.h" />
   </ItemGroup>
 </Project>
