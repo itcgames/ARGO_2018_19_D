@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A3499566-7139-47A3-A26F-765702B1B24D}</ProjectGuid>
     <RootNamespace>ARGOTeamD</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -145,9 +145,9 @@
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
+    <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
-    <ClCompile Include="MacroCommand.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SdlVector.cpp" />
     <ClCompile Include="Systems\RenderSystem.cpp" />
@@ -156,10 +156,10 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="Components\Components.h" />
     <ClInclude Include="ConcreteCommand.h" />
+    <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Entities\Entities.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
-    <ClInclude Include="MacroCommand.h" />
     <ClInclude Include="Resource Manager\Resource.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />

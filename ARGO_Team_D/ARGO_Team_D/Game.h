@@ -11,6 +11,7 @@
 #include "Systems/RenderSystem.h"
 #include <tmxlite/Map.hpp>
 #include"InputHandler.h"
+#include"ControlSystem.h"
 
 using namespace std;
 
@@ -41,7 +42,9 @@ private:
 
 	RenderSystem m_renderSystem;
 
-	InputHandler inputHandler;
+	InputHandler * inputHandler;
 
+	
+	ControlSystem m_controlSystem;
 };
 #endif // !GAME_H

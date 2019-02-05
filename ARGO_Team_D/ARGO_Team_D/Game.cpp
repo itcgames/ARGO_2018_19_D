@@ -8,7 +8,7 @@ Game::Game()
 		std::cout << "Failed to initialise SDL" << std::endl;
 	}
 
-	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, SDL_WINDOW_OPENGL);
+	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_OPENGL);
 	m_renderer = SDL_CreateRenderer(p_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 	if (NULL == p_window)
@@ -21,6 +21,7 @@ Game::Game()
 	initialiseSystems();
 	setUpFont();
 
+	inputHandler = new InputHandler(m_controlSystem);
 
 }
 
@@ -60,7 +61,7 @@ void Game::processEvents()
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			inputHandler.handleInput(event.key.keysym.sym);
+			inputHandler->handleInput(event.key.keysym.sym);
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			break;
