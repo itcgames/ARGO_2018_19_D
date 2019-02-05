@@ -83,11 +83,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL_mixer-1.2.12\include\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL2_mixer-2.0.4\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL_mixer-1.2.12\lib\x86\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL2_mixer-2.0.4\lib\x86\;</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /E /Y "$(SolutionDir)\dlls\*.dll" "$(OutDir)"</Command>
@@ -102,10 +102,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL_mixer-1.2.12\include\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL2_mixer-2.0.4\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL_mixer-1.2.12\lib\x86\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL2_mixer-2.0.4\lib\x86\;</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -154,6 +154,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
+    <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="SdlVector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +174,7 @@
     <ClInclude Include="Systems\System.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Resource Manager\SoundResource.h" />
     <ClInclude Include="SdlVector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

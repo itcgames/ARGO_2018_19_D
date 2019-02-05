@@ -10,6 +10,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
+    <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="SdlVector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -25,6 +26,7 @@
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />
+    <ClInclude Include="Resource Manager\SoundResource.h" />
     <ClInclude Include="SdlVector.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />
