@@ -5,6 +5,7 @@
 #include "ImageResource.h"
 #include "SoundResource.h"
 
+
 class ResourceManager
 {
 public:

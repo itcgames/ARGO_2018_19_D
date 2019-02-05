@@ -40,11 +40,16 @@ Game::Game()
 	{
 	}
 
+	m_resourceManager.addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
+	m_testLoad = m_resourceManager.getImageResource("test");
+	texture = SDL_CreateTextureFromSurface(m_renderer, m_testLoad);
+
 	initialiseEntitys();
 	initialiseComponents();
 	initialiseSystems();
 	setUpFont();
 
+	inputHandler = new InputHandler(m_controlSystem);
 
 }
 
@@ -84,7 +89,7 @@ void Game::processEvents()
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			inputHandler.handleInput(event.key.keysym.sym);
+			inputHandler->handleInput(event.key.keysym.sym);
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			break;
@@ -139,7 +144,7 @@ void Game::initialiseEntitys()
 /// </summary>
 void Game::initialiseComponents()
 {
-	
+
 }
 
 /// <summary>
@@ -147,7 +152,7 @@ void Game::initialiseComponents()
 /// </summary>
 void Game::initialiseSystems()
 {
-	
+
 }
 
 /// <summary>
@@ -162,4 +167,3 @@ void Game::setUpFont() {
 	const char *path = "ASSETS\\FONTS\\arial.ttf";
 	Sans = TTF_OpenFont(path, 50);
 }
-

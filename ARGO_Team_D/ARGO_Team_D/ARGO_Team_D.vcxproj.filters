@@ -4,14 +4,14 @@
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
+    <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
-    <ClCompile Include="MacroCommand.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
-    <ClCompile Include="SdlVector.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
+    <ClCompile Include="SdlVector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -23,10 +23,10 @@
     <ClInclude Include="ECS\Systems\System.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
-    <ClInclude Include="MacroCommand.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
-    <ClInclude Include="SdlVector.h" />
+    <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
+    <ClInclude Include="SdlVector.h" />
   </ItemGroup>
 </Project>
