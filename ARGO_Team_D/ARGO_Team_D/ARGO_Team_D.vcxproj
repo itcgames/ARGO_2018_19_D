@@ -162,6 +162,7 @@
     <ClInclude Include="Components\Components.h" />
     <ClInclude Include="ConcreteCommand.h" />
     <ClInclude Include="ECS\Components\Components.h" />
+    <ClInclude Include="ECS\Components\SpriteComponent.h" />
     <ClInclude Include="ECS\Entities\Entity.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\Systems\System.h" />

@@ -1,6 +1,7 @@
 #include "RenderSystem.h"
 #include <iostream>
 #include "../Components/Components.h"
+#include "../Components/SpriteComponent.h"
 
 /// <summary>
 /// draws each entity at their position.

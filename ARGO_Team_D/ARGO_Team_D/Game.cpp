@@ -1,6 +1,8 @@
 #include "Game.h"
 #include <sstream>
 
+#include "ECS/Components/SpriteComponent.h"
+
 Game::Game()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)

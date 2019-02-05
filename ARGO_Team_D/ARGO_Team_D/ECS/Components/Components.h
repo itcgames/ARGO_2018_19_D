@@ -44,11 +44,5 @@ private:
 	SdlVector m_position;
 };
 
-class SpriteComponent : public Component {
-public:
-	SpriteComponent() { id = "Sprite"; };
-private:
-};
-
 #endif // !COMPONENTS_H
 

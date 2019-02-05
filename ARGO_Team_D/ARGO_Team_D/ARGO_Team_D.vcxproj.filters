@@ -30,5 +30,6 @@
     <ClInclude Include="SdlVector.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />
+    <ClInclude Include="ECS\Components\SpriteComponent.h" />
   </ItemGroup>
 </Project>
