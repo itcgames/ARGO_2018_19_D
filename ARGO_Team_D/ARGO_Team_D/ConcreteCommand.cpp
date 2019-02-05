@@ -1,8 +1,13 @@
 #include "ConcreteCommand.h"
 
+JumpCommand::JumpCommand(ControlSystem & system): Command(system)
+{
+}
+
 void JumpCommand::execute()
 {
-	std::cout << "Jump Command" << std::endl;
+	//std::cout << "Jump Command" << std::endl;
+	//executed = true;
 }
 
 void JumpCommand::undo()
@@ -10,9 +15,15 @@ void JumpCommand::undo()
 	std::cout << "Jump Undone" << std::endl;
 }
 
+FireCommand::FireCommand(ControlSystem & system): Command(system)
+{
+}
+
 void FireCommand::execute()
 {
-	std::cout << "Fire Command" << std::endl;
+	//std::cout << "Fire Command" << std::endl;
+	//executed = true;
+	m_controlSystem.fire();
 }
 
 void FireCommand::undo()
@@ -20,19 +31,30 @@ void FireCommand::undo()
 	std::cout << "Fire Undone" << std::endl;
 }
 
-void CrouchCommand::execute()
+MoveCommand::MoveCommand(ControlSystem & system) : Command(system)
 {
-	std::cout << "Crouch Command" << std::endl;
 }
 
-void CrouchCommand::undo()
+void MoveCommand::execute()
 {
-	std::cout << "Crouch Undone" << std::endl;
+	//std::cout << "Move Command" << std::endl;
+	//executed = true;
+	m_controlSystem.move();
+}
+
+void MoveCommand::undo()
+{
+	std::cout << "Move Undone" << std::endl;
+}
+
+MeleeCommand::MeleeCommand(ControlSystem & system) : Command(system)
+{
 }
 
 void MeleeCommand::execute()
 {
-	std::cout << "Melee Command" << std::endl;
+	//std::cout << "Melee Command" << std::endl;
+	//executed = true;
 }
 
 void MeleeCommand::undo()
@@ -40,12 +62,17 @@ void MeleeCommand::undo()
 	std::cout << "Melee Undone" << std::endl;
 }
 
-void ShieldCommand::execute()
+SwitchWeaponCommand::SwitchWeaponCommand(ControlSystem & system) : Command(system)
 {
-	std::cout << "Shield Command" << std::endl;
 }
 
-void ShieldCommand::undo()
+void SwitchWeaponCommand::execute()
 {
-	std::cout << "Shield Undone" << std::endl;
+	//std::cout << "Switch Weapon Command" << std::endl;
+	//executed = true;
+}
+
+void SwitchWeaponCommand::undo()
+{
+	std::cout << "Switch Weapon Undone" << std::endl;
 }

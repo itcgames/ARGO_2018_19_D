@@ -1,20 +1,10 @@
 #include "InputHandler.h"
 
-InputHandler::InputHandler()
+InputHandler::InputHandler(ControlSystem & system):
+	m_controlSystem{ system }
 {
 	bindButtonA();
 	bindButtonB();
-	bindButtonW();
-	bindButtonX();
-	bindButtonY();
-
-	macro = MacroCommand();
-	macro.add(ButtonX);
-	macro.add(ButtonX);
-	macro.add(ButtonX);
-	macro.add(ButtonA);
-	macro.add(ButtonA);
-	macro.add(ButtonY);
 }
 
 void InputHandler::handleInput(SDL_Keycode keycode)
@@ -22,37 +12,22 @@ void InputHandler::handleInput(SDL_Keycode keycode)
 	switch (keycode)
 	{
 	case SDLK_a:
-		ButtonA->execute();
-		commands.push_back(ButtonA);
+		Move->execute();
+		commands.push_back(Move);
 		break;
 	case SDLK_b:
-		ButtonB->execute();
-		commands.push_back(ButtonB);
-		break;
-	case SDLK_x:
-		ButtonX->execute();
-		commands.push_back(ButtonX);
-		break;
-	case SDLK_y:
-		ButtonY->execute();
-		commands.push_back(ButtonY);
-		break;
-	case SDLK_w:
-		ButtonW->execute();
-		commands.push_back(ButtonW);
+		Fire->execute();
+		commands.push_back(Fire);
 		break;
 	case SDLK_r:
 		for (int i = 0; i < commands.size(); i++)
 		{
 			commands.at(i)->undo();
 		}
-		macro.undo();
 		commands.clear();
-		macro.removeAll();
 
 		break;
 	case SDLK_k:
-		macro.execute();
 		break;
 	default:
 		break;
@@ -60,27 +35,12 @@ void InputHandler::handleInput(SDL_Keycode keycode)
 
 }
 
-void InputHandler::bindButtonX()
-{
-	ButtonX = new FireCommand();
-}
-
-void InputHandler::bindButtonY()
-{
-	ButtonY = new CrouchCommand();
-}
-
 void InputHandler::bindButtonA()
 {
-	ButtonA = new JumpCommand();
+	Move = new MoveCommand(m_controlSystem);
 }
 
 void InputHandler::bindButtonB()
 {
-	ButtonB = new ShieldCommand();
-}
-
-void InputHandler::bindButtonW()
-{
-	ButtonW = new CrouchCommand();
+	Fire = new FireCommand(m_controlSystem);
 }

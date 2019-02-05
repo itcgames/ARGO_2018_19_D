@@ -12,6 +12,7 @@
 #include <tmxlite/Map.hpp>
 #include"InputHandler.h"
 #include "Resource Manager/ResourceManager.h"
+#include"ControlSystem.h"
 
 using namespace std;
 
@@ -42,11 +43,10 @@ private:
 
 	RenderSystem m_renderSystem;
 
-	InputHandler inputHandler;
-
+	InputHandler * inputHandler;
 	ResourceManager m_resourceManager;
 	SDL_Surface* m_testLoad;
 	SDL_Texture * texture;
-
+	ControlSystem m_controlSystem;
 };
 #endif // !GAME_H
