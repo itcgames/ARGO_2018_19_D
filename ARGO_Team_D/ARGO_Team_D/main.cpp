@@ -16,7 +16,7 @@
 #pragma comment(lib, "SDL2_ttf.lib")
 #endif 
 
-#pragma comment(lib,"Box2D.lib")
+//#pragma comment(lib,"Box2D.lib")
 
 
 #include "Game.h"
