@@ -10,7 +10,7 @@ public:
 	ImageResource();
 	virtual ~ImageResource();
 
-	void loadResource();
+	void loadResource(SDL_Renderer * renderer);
 	void unloadResource();
 
 	void setResourceId(unsigned id) { m_id = id; }
@@ -19,12 +19,13 @@ public:
 	void setResourcePath(const char* path) { m_resourcePath = path; }
 	std::string getResourcePath() const { return m_resourcePath; }
 
-	SDL_Surface * getImage() { if(m_image != nullptr) return m_image; }
+	SDL_Texture * getImage() { if(m_image != nullptr) return m_texture; }
 
 protected:
 	unsigned m_id;
 	const char * m_resourcePath;
 	SDL_Surface * m_image;
+	SDL_Texture * m_texture;
 
 };
 #endif // !IMAGERESOURCE_H

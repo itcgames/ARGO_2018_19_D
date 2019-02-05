@@ -30,19 +30,15 @@ Game::Game()
 		std::cout << "Error: Could not create window" << std::endl;
 	}
 	
-	m_resourceManager.addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
-	m_resourceManager.addSoundResource(new SoundResource, "test", "ASSETS//SOUNDS//test.mp3");
-	m_testLoad = m_resourceManager.getImageResource("test");
-	texture = SDL_CreateTextureFromSurface(m_renderer, m_testLoad);
+	m_resourceManager = new ResourceManager(m_renderer);
+	m_resourceManager->addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
+	m_resourceManager->addSoundResource(new SoundResource, "test", "ASSETS//SOUNDS//test.mp3");
+	texture = m_resourceManager->getImageResource("test");
 
-	m_testMusic = m_resourceManager.getSoundResource("test");
+	m_testMusic = m_resourceManager->getSoundResource("test");
 	if (Mix_PlayMusic(m_testMusic, -1) == -1)
 	{
 	}
-
-	m_resourceManager.addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
-	m_testLoad = m_resourceManager.getImageResource("test");
-	texture = SDL_CreateTextureFromSurface(m_renderer, m_testLoad);
 
 	initialiseEntitys();
 	initialiseComponents();

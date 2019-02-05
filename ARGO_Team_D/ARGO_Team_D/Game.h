@@ -10,9 +10,9 @@
 #include "ECS/Components/Components.h"
 #include "ECS/Systems/RenderSystem.h"
 #include <tmxlite/Map.hpp>
-#include"InputHandler.h"
+#include "InputHandler.h"
 #include "Resource Manager/ResourceManager.h"
-#include"ControlSystem.h"
+#include "ControlSystem.h"
 
 using namespace std;
 
@@ -45,8 +45,7 @@ private:
 
 	InputHandler *inputHandler;
 
-	ResourceManager m_resourceManager;
-	SDL_Surface* m_testLoad;
+	ResourceManager* m_resourceManager;
 	SDL_Texture * texture;
 	Mix_Music *	m_testMusic;
 
