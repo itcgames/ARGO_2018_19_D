@@ -41,5 +41,20 @@
     <ClInclude Include="Resource Manager\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Systems\System.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Debug\vc141.pdb" />
+    <None Include="Debug\vc141.idb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Debug\ARGO_Team_D.log" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="Debug\Game.obj" />
+    <Object Include="Debug\main.obj" />
+    <Object Include="Debug\RenderSystem.obj" />
   </ItemGroup>
 </Project>

@@ -3,8 +3,6 @@
 
 #include "..//Entities/Entities.h"
 #include "System.h"
-#include <SDL_ttf.h>
-#include <string>
 
 /// <summary>
 /// Draws any entites attached to the screen.

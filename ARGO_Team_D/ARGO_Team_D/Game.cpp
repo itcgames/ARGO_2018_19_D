@@ -60,6 +60,7 @@ void Game::processEvents()
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
+			inputHandler.handleInput(event.key.keysym.sym);
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			break;

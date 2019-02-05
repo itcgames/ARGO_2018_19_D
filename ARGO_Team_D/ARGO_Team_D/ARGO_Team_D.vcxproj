@@ -153,6 +153,19 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Resource Manager\Resource.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
+    <ClInclude Include="Systems\System.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Debug\vc141.idb" />
+    <None Include="Debug\vc141.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Debug\ARGO_Team_D.log" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="Debug\Game.obj" />
+    <Object Include="Debug\main.obj" />
+    <Object Include="Debug\RenderSystem.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

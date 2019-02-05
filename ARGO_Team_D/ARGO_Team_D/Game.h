@@ -10,6 +10,7 @@
 #include "Components/Components.h"
 #include "Systems/RenderSystem.h"
 #include <tmxlite/Map.hpp>
+#include"InputHandler.h"
 
 using namespace std;
 
@@ -39,5 +40,8 @@ private:
 	TTF_Font* Sans;
 
 	RenderSystem m_renderSystem;
+
+	InputHandler inputHandler;
+
 };
 #endif // !GAME_H

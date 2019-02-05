@@ -33,3 +33,4 @@ protected:
 
 };
 #endif // !ENTITIES_H
+
