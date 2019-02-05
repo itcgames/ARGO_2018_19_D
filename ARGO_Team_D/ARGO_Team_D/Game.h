@@ -5,12 +5,13 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include <stdlib.h>
 #include "ECS/Entities/Entity.h"
 #include "ECS/Components/Components.h"
 #include "ECS/Systems/RenderSystem.h"
 #include <tmxlite/Map.hpp>
-#include"InputHandler.h"
+#include "InputHandler.h"
 #include "Resource Manager/ResourceManager.h"
 
 using namespace std;
@@ -47,6 +48,7 @@ private:
 	ResourceManager m_resourceManager;
 	SDL_Surface* m_testLoad;
 	SDL_Texture * texture;
+	Mix_Music *	m_testMusic;
 
 };
 #endif // !GAME_H

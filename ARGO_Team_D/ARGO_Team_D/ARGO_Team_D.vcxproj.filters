@@ -11,7 +11,7 @@
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="SdlVector.cpp" />
-    <ClCompile Include="Systems\RenderSystem.cpp" />
+    <ClCompile Include="Resource Manager\SoundResource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -26,7 +26,7 @@
     <ClInclude Include="MacroCommand.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
-    <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="SdlVector.h" />
+    <ClInclude Include="Resource Manager\SoundResource.h" />
   </ItemGroup>
 </Project>

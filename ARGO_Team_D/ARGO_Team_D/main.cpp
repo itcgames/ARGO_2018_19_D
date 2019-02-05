@@ -7,7 +7,7 @@
 #pragma comment(lib, "SDL2_image.lib")
 #pragma comment(lib, "libtmxlite-s-d.lib")
 #pragma comment(lib, "SDL2_ttf.lib")
-#pragma comment(lib, "SDL_mixer.lib")
+#pragma comment(lib, "SDL2_mixer.lib")
 #else
 #pragma comment(lib, "SDL2.lib")
 #pragma comment(lib, "SDL2main.lib")

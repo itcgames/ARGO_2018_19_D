@@ -15,6 +15,13 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 
+	//Initialize SDL_mixer
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+	{
+		cout << "Error: " << "Audio Initalisation" << endl;
+	}
+
+
 	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, SDL_WINDOW_OPENGL);
 	m_renderer = SDL_CreateRenderer(p_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -24,8 +31,14 @@ Game::Game()
 	}
 	
 	m_resourceManager.addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
+	m_resourceManager.addSoundResource(new SoundResource, "test", "ASSETS//SOUNDS//test.mp3");
 	m_testLoad = m_resourceManager.getImageResource("test");
 	texture = SDL_CreateTextureFromSurface(m_renderer, m_testLoad);
+
+	m_testMusic = m_resourceManager.getSoundResource("test");
+	if (Mix_PlayMusic(m_testMusic, -1) == -1)
+	{
+	}
 
 	initialiseEntitys();
 	initialiseComponents();
@@ -107,6 +120,8 @@ void Game::render()
 
 void Game::quit()
 {
+	Mix_CloseAudio();
+	TTF_Quit();
 	SDL_DestroyWindow(p_window);
 	SDL_Quit();
 }
