@@ -151,6 +151,7 @@
     <ClInclude Include="Components\Components.h" />
     <ClInclude Include="Entities\Entities.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Resource Manager\Resource.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

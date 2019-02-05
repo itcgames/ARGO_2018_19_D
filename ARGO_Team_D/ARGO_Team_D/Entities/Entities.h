@@ -1,5 +1,5 @@
-#ifndef ENTITYS_H
-#define ENTITYS_H
+#ifndef ENTITIES_H
+#define ENTITIES_H
 
 #include <vector>
 #include <algorithm>
@@ -32,4 +32,4 @@ private:
 protected:
 
 };
-#endif // !ENTITY_H
+#endif // !ENTITIES_H
