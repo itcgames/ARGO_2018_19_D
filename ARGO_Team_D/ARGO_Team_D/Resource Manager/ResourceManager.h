@@ -28,6 +28,7 @@ private:
 	std::map<std::string, SoundResource*> m_soundResources;
 
 	SDL_Renderer * m_renderer;
+
 };
 
 #endif 

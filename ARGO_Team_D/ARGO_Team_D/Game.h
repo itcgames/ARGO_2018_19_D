@@ -46,6 +46,7 @@ private:
 	InputHandler *inputHandler;
 
 	ResourceManager* m_resourceManager;
+
 	SDL_Texture * texture;
 	Mix_Music *	m_testMusic;
 
