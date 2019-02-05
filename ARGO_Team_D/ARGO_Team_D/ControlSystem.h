@@ -19,5 +19,3 @@ private:
 
 
 #endif // !CONTROLSYSTEM
-
-
