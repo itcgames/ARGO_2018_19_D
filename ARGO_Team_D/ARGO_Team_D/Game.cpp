@@ -20,8 +20,10 @@ Game::Game()
 	initialiseComponents();
 	initialiseSystems();
 	setUpFont();
-
-
+	Entity * e = new Entity();
+	e->addComponent(new PositionComponent(10, 10));
+	e->addComponent(new SpriteComponent());
+	m_renderSystem.addEntity(e);
 }
 
 Game::~Game() {}

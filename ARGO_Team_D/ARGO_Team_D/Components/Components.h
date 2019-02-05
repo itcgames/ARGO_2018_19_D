@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <string>
+#include "../SdlVector.h"
 
 /// <summary>
 /// Component Interface
@@ -11,9 +12,8 @@ class Component {
 public:
 	Component() {}
 	virtual ~Component() {}
-
-protected:
 	std::string id;
+protected:
 
 };
 
@@ -37,19 +37,17 @@ private:
 /// </summary>
 class PositionComponent : public Component {
 public:
-	PositionComponent(std::pair<float, float> pos) : m_position(pos) { id = "Position";  m_start = pos; };
-
-	std::pair<float, float> getPos() { return m_position; };
-	void setPos(std::pair<float, float> pos) { m_position = pos; };
-	void resetPos() { m_position = m_start; }
-
-	std::string getPosStr() {
-		return std::string("X: " + std::to_string(m_position.first) + "," + "Y: " + std::to_string(m_position.second));
-	}
-
+	PositionComponent(const SdlVector & v) : m_position(v) {id = "Position"; };
+	PositionComponent(float _x, float _y) : m_position(SdlVector(_x, _y)) { id = "Position"; };
+	SdlVector getPosition() { return m_position; };
 private:
-	std::pair<float, float> m_position;
-	std::pair<float, float> m_start;
+	SdlVector m_position;
+};
+
+class SpriteComponent : public Component {
+public:
+	SpriteComponent() { id = "Sprite"; };
+private:
 };
 
 #endif // !COMPONENTS_H

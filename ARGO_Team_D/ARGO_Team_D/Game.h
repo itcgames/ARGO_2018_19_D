@@ -6,7 +6,7 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <stdlib.h>
-#include "Entities/Entities.h"
+#include "Entities/Entity.h"
 #include "Components/Components.h"
 #include "Systems/RenderSystem.h"
 #include <tmxlite/Map.hpp>

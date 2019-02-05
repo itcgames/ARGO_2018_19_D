@@ -44,9 +44,6 @@
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\Entities.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Components\Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -74,17 +71,8 @@
     <ClInclude Include="SdlVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Debug\vc141.pdb" />
-    <None Include="Debug\vc141.idb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Debug\ARGO_Team_D.log" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="Debug\Game.obj" />
-    <Object Include="Debug\main.obj" />
-    <Object Include="Debug\RenderSystem.obj" />
+    <ClInclude Include="Entities\Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
