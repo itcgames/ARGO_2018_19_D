@@ -43,8 +43,6 @@ private:
 
 	std::map<std::string, std::string> m_jsonImageFile;
 	std::map<std::string, std::string> m_jsonSoundFile;
-
-	
 };
 
 #endif 
