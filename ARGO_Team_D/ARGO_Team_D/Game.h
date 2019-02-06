@@ -12,6 +12,7 @@
 #include "InputHandler.h"
 #include "Resource Manager/ResourceManager.h"
 #include "ControlSystem.h"
+#include "Level/Level.h"
 
 using namespace std;
 
@@ -50,5 +51,6 @@ private:
 	Mix_Music *	m_testMusic;
 
 	ControlSystem m_controlSystem;
+	Level * level;
 };
 #endif // !GAME_H
