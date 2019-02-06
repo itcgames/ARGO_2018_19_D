@@ -55,6 +55,7 @@ Game::Game()
 	m_renderSystem.addEntity(e);
 
 	inputHandler = new InputHandler(m_controlSystem);
+}
 
 	level = new Level();
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
