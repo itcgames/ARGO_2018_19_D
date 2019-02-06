@@ -3,44 +3,52 @@
 InputHandler::InputHandler(ControlSystem & system):
 	m_controlSystem{ system }
 {
-	bindButtonA();
-	bindButtonB();
+	MoveRight = new MoveRightCommand(m_controlSystem);
+	MoveLeft = new MoveLeftCommand(m_controlSystem);
+	Fire = new FireCommand(m_controlSystem);
+
 }
 
-void InputHandler::handleInput(SDL_Keycode keycode)
+void InputHandler::handleInput(SDL_Event theEvent)
 {
-	switch (keycode)
-	{
-	case SDLK_a:
-		Move->execute();
-		commands.push_back(Move);
-		break;
-	case SDLK_b:
-		Fire->execute();
-		commands.push_back(Fire);
-		break;
-	case SDLK_r:
-		for (int i = 0; i < commands.size(); i++)
-		{
-			commands.at(i)->undo();
-		}
-		commands.clear();
 
+
+
+	switch (theEvent.type) {
+	case SDL_KEYDOWN:
+		if (theEvent.key.keysym.sym ==  SDLK_RIGHT || theEvent.key.keysym.sym == SDLK_d)
+		{
+			rightPressed = true;
+		}
+		if (theEvent.key.keysym.sym == SDLK_LEFT || theEvent.key.keysym.sym == SDLK_a)
+		{
+			leftPressed = true;
+		}
 		break;
-	case SDLK_k:
-		break;
-	default:
+
+	case SDL_KEYUP:
+		if (theEvent.key.keysym.sym == SDLK_RIGHT || theEvent.key.keysym.sym == SDLK_d)
+		{
+			rightPressed = false;
+		}
+		if (theEvent.key.keysym.sym == SDLK_LEFT || theEvent.key.keysym.sym == SDLK_a)
+		{
+			leftPressed = false;
+		}
 		break;
 	}
-
 }
 
-void InputHandler::bindButtonA()
-{
-	Move = new MoveCommand(m_controlSystem);
-}
 
-void InputHandler::bindButtonB()
+void InputHandler::update()
 {
-	Fire = new FireCommand(m_controlSystem);
+	
+	if (rightPressed)
+	{
+		MoveRight->execute();
+	}
+	if (leftPressed)
+	{
+		MoveLeft->execute();
+	}
 }

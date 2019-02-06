@@ -24,15 +24,25 @@ public:
 #endif // !FIRECOMMAND_H
 
 
-#ifndef MOVECOMMAND_H
-#define MOVECOMMAND_H
-class MoveCommand : public Command {
+#ifndef MOVERIGHTCOMMAND_H
+#define MOVERIGHTCOMMAND_H
+class MoveRightCommand : public Command {
 public:
-	MoveCommand(ControlSystem & system);
+	MoveRightCommand(ControlSystem & system);
 	virtual void execute();
 	virtual void undo();
 };
-#endif // !MOVECOMMAND_H
+#endif // !MOVERIGHTCOMMAND_H
+
+#ifndef MOVELEFTCOMMAND_H
+#define MOVELEFTCOMMAND_H
+class MoveLeftCommand : public Command {
+public:
+	MoveLeftCommand(ControlSystem & system);
+	virtual void execute();
+	virtual void undo();
+};
+#endif // !MOVELEFTCOMMAND_H
 
 
 #ifndef MELEECOMMAND_H

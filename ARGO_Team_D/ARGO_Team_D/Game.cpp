@@ -54,7 +54,7 @@ Game::Game()
 	std::string name = "test";
 	e->addComponent(new SpriteComponent(name, *m_resourceManager, 1920, 1080));
 	m_renderSystem.addEntity(e);
-
+	m_controlSystem.addEntity(e);
 	inputHandler = new InputHandler(m_controlSystem);
 	level = new Level();
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
@@ -95,10 +95,11 @@ void Game::processEvents()
 
 	while (SDL_PollEvent(&event))
 	{
+		inputHandler->handleInput(event);
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			inputHandler->handleInput(event.key.keysym.sym);
+			
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			break;
@@ -112,6 +113,7 @@ void Game::processEvents()
 void Game::update()
 {
 	// Empty ...
+	inputHandler->update();
 }
 
 void Game::render()

@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
+    <ClCompile Include="ECS\Components\PositionComponent.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="Game.cpp" />
