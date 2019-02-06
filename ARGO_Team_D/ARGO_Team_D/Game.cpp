@@ -15,7 +15,7 @@ Game::Game()
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 
-	//Initialize SDL_mixer
+	// Initialize SDL_mixer
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
 	{
 		cout << "Error: " << "Audio Initalisation" << endl;
@@ -31,8 +31,8 @@ Game::Game()
 	}
 	
 	m_resourceManager = new ResourceManager(m_renderer);
-	m_resourceManager->addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
-	m_resourceManager->addSoundResource(new SoundResource, "test", "ASSETS//SOUNDS//test.mp3");
+	m_resourceManager->loadFromJson();
+
 	texture = m_resourceManager->getImageResource("test");
 
 	m_testMusic = m_resourceManager->getSoundResource("test");

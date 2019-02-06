@@ -83,7 +83,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL2_mixer-2.0.4\include\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Json\;$(SDL_SDK)\SDL2_mixer-2.0.4\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,7 +102,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL2_mixer-2.0.4\include\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Json\;$(SDL_SDK)\SDL2_mixer-2.0.4\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL2_mixer-2.0.4\lib\x86\;</AdditionalLibraryDirectories>
