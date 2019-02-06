@@ -151,6 +151,7 @@
     <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
@@ -159,20 +160,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
-    <ClInclude Include="Components\Components.h" />
     <ClInclude Include="ConcreteCommand.h" />
+    <ClInclude Include="ECS\Components\AnimationComponent.h" />
     <ClInclude Include="ECS\Components\Components.h" />
+    <ClInclude Include="ECS\Components\HealthComponent.h" />
+    <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />
     <ClInclude Include="ECS\Entities\Entity.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\Systems\System.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="Level\Level.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />
-    <ClInclude Include="Systems\RenderSystem.h" />
-    <ClInclude Include="Systems\System.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource Manager\SoundResource.h" />

@@ -12,7 +12,8 @@ public:
 	void render(SDL_Renderer * renderer);
 
 private:
-
+	SDL_Rect dest;
+	SDL_Rect src;
 };
 
 #endif // !RENDERSYSTEM

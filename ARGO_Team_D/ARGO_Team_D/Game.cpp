@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <sstream>
 
+#include "ECS/Components/PositionComponent.h"
 #include "ECS/Components/SpriteComponent.h"
 
 Game::Game()
@@ -48,15 +49,17 @@ Game::Game()
 	initialiseSystems();
 	setUpFont();
 	Entity * e = new Entity();
-	e->addComponent(new PositionComponent(10, 10));
-	e->addComponent(new SpriteComponent());
+	e->addComponent(new PositionComponent(200, 200));
+	std::string name = "test";
+	e->addComponent(new SpriteComponent(name, *m_resourceManager, 1920, 1080));
 	m_renderSystem.addEntity(e);
 
 	inputHandler = new InputHandler(m_controlSystem);
-
 }
 
-Game::~Game() {}
+Game::~Game()
+{
+}
 
 void Game::run()
 {
@@ -120,8 +123,6 @@ void Game::render()
 	SDL_RenderClear(m_renderer);
 
 	m_renderSystem.render(m_renderer);
-
-	SDL_RenderCopy(m_renderer, texture, NULL, NULL);
 
 	SDL_RenderPresent(m_renderer);
 }

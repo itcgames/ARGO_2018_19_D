@@ -12,10 +12,10 @@
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="SdlVector.cpp" />
+    <ClCompile Include="Level\Level.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
-    <ClInclude Include="Components\Components.h" />
     <ClInclude Include="ConcreteCommand.h" />
     <ClInclude Include="ECS\Components\Components.h" />
     <ClInclude Include="ECS\Entities\Entity.h" />
@@ -28,8 +28,10 @@
     <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
     <ClInclude Include="SdlVector.h" />
-    <ClInclude Include="Systems\RenderSystem.h" />
-    <ClInclude Include="Systems\System.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />
+    <ClInclude Include="ECS\Components\PositionComponent.h" />
+    <ClInclude Include="ECS\Components\HealthComponent.h" />
+    <ClInclude Include="ECS\Components\AnimationComponent.h" />
+    <ClInclude Include="Level\Level.h" />
   </ItemGroup>
 </Project>

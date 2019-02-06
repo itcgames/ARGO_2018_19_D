@@ -16,7 +16,7 @@ public:
 	void addSoundResource(SoundResource* resource, const std::string& name, const char * path);
 
 	SDL_Texture * getImageResource(const std::string& name) {
-		return (m_imageResources.find(name)->second->getImage());
+		return (m_imageResources.find(name)->second->getTexture());
 	}
 
 	Mix_Music * getSoundResource(const std::string& name) {

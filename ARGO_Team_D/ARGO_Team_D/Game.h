@@ -7,7 +7,6 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include "ECS/Entities/Entity.h"
-#include "ECS/Components/Components.h"
 #include "ECS/Systems/RenderSystem.h"
 #include <tmxlite/Map.hpp>
 #include "InputHandler.h"
