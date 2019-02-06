@@ -4,8 +4,32 @@
 #include "ECS/Components/PositionComponent.h"
 #include "ECS/Components/SpriteComponent.h"
 
-Game::Game()
+Game::Game() : m_gravity(0, 90.81f),
+	m_world(m_gravity)
 {
+	// Box2D Test Code
+	m_bodyDef1.position = b2Vec2(b1X, b1Y);
+	m_bodyDef1.type = b2_staticBody;
+	m_body1 = m_world.CreateBody(&m_bodyDef1);
+	m_poly1.SetAsBox((50.f), (50.f));
+	m_fixture1.density = 1.f;
+	m_fixture1.friction = 0.1f;
+	m_fixture1.restitution = 0.8f;
+	m_fixture1.shape = &m_poly1;
+	m_body1->CreateFixture(&m_fixture1);
+	m_body1->SetFixedRotation(true);
+
+	m_bodyDef2.position = b2Vec2(b2X, b2Y);
+	m_bodyDef2.type = b2_dynamicBody;
+	m_body2 = m_world.CreateBody(&m_bodyDef2);
+	m_poly2.SetAsBox((50.f), (50.f));
+	m_fixture2.density = 1.f;
+	m_fixture2.friction = 0.1f;
+	m_fixture2.restitution = 0.8f;
+	m_fixture2.shape = &m_poly2;
+	m_body2->CreateFixture(&m_fixture2);
+	m_body2->SetFixedRotation(true);
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
 		std::cout << "Failed to initialise SDL" << std::endl;
@@ -35,8 +59,10 @@ Game::Game()
 	
 	m_resourceManager = new ResourceManager(m_renderer);
 	m_resourceManager->addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
+	m_resourceManager->addImageResource(new ImageResource, "testsquare", "ASSETS//IMAGES//TestSquare.png");
 	m_resourceManager->addSoundResource(new SoundResource, "test", "ASSETS//SOUNDS//test.mp3");
 	texture = m_resourceManager->getImageResource("test");
+	square = m_resourceManager->getImageResource("testsquare");
 
 	m_testMusic = m_resourceManager->getSoundResource("test");
 	if (Mix_PlayMusic(m_testMusic, -1) == -1)
@@ -108,7 +134,7 @@ void Game::processEvents()
 
 void Game::update()
 {
-	// Empty ...
+	m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 }
 
 void Game::render()
@@ -123,6 +149,25 @@ void Game::render()
 	SDL_RenderClear(m_renderer);
 
 	m_renderSystem.render(m_renderer);
+
+	b1X = m_body1->GetPosition().x;
+	b1Y = m_body1->GetPosition().y;
+	b2X = m_body2->GetPosition().x;
+	b2Y = m_body2->GetPosition().y;
+
+	SDL_Rect dest;
+	dest.x = b1X;
+	dest.y = b1Y;
+	dest.w = 100.f;
+	dest.h = 100.f;
+	SDL_RenderCopy(m_renderer, square, NULL, &dest);
+
+	SDL_Rect dest2;
+	dest2.x = b2X;
+	dest2.y = b2Y;
+	dest2.w = 100.f;
+	dest2.h = 100.f;
+	SDL_RenderCopy(m_renderer, square, NULL, &dest2);
 
 	SDL_RenderPresent(m_renderer);
 }
