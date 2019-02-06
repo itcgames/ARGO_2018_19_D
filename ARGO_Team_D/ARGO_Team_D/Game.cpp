@@ -23,7 +23,7 @@ Game::Game()
 	{
 		cout << "Error: " << "Audio Initalisation" << endl;
 	}
-
+	
 
 	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, 0);
 	printf("Window Size(%d , %d)", m_windowWidth, m_windowHeight);
@@ -45,11 +45,15 @@ Game::Game()
 	{
 	}
 
+	m_gameState = State::Menu;
+	m_menu = new MainMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 
 	initialiseEntitys();
 	initialiseComponents();
 	initialiseSystems();
 	setUpFont();
+
+
 	Entity * e = new Entity();
 	e->addComponent(new PositionComponent(200, 200));
 	std::string name = "test";
@@ -90,6 +94,11 @@ void Game::run()
 	quit();
 }
 
+void Game::setGameState(State state)
+{
+	m_gameState = state;
+}
+
 void Game::processEvents()
 {
 	SDL_Event event;
@@ -97,6 +106,7 @@ void Game::processEvents()
 	while (SDL_PollEvent(&event))
 	{
 		inputHandler->handleInput(event);
+		m_menu->handleMouse(event);
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
@@ -113,8 +123,18 @@ void Game::processEvents()
 
 void Game::update()
 {
-	// Empty ...
-	inputHandler->update();
+	switch (m_gameState)
+	{
+	case State::Menu:
+		m_menu->update();
+		break;
+	case State::PlayScreen:
+		inputHandler->update();
+		break;
+	default:
+		break;
+	}
+	
 }
 
 void Game::render()
@@ -128,8 +148,20 @@ void Game::render()
 
 	SDL_RenderClear(m_renderer);
 
-	m_renderSystem.render(m_renderer);
-	level->render(m_renderer);
+
+	switch (m_gameState)
+	{
+	case State::Menu:
+		m_menu->draw();
+		break;
+	case State::PlayScreen:
+		m_renderSystem.render(m_renderer);
+		level->render(m_renderer);
+		break;
+	default:
+		break;
+	}
+
 
 	SDL_RenderPresent(m_renderer);
 }

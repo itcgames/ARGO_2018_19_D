@@ -154,6 +154,8 @@
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu\Button.cpp" />
+    <ClCompile Include="Menu\MainMenu.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
@@ -173,6 +175,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Level\Level.h" />
+    <ClInclude Include="Menu\Button.h" />
+    <ClInclude Include="Menu\MainMenu.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />

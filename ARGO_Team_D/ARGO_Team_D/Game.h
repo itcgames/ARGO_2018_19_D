@@ -13,8 +13,15 @@
 #include "Resource Manager/ResourceManager.h"
 #include "ControlSystem.h"
 #include "Level/Level.h"
+#include"Menu/Button.h"
+#include"Menu/MainMenu.h"
 
+class MainMenu;
 
+enum State {
+	Menu,
+	PlayScreen
+};
 using namespace std;
 
 class Game
@@ -23,7 +30,7 @@ public:
 	Game();
 	~Game();
 	void run();
-
+	void setGameState(State state);
 private:
 	void processEvents();
 	void update();
@@ -53,5 +60,11 @@ private:
 
 	ControlSystem m_controlSystem;
 	Level * level;
+
+	State m_gameState;
+
+	std::vector<Button *> buttons;
+
+	MainMenu * m_menu;
 };
 #endif // !GAME_H

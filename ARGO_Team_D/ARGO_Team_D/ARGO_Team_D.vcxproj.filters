@@ -14,6 +14,8 @@
     <ClCompile Include="SdlVector.cpp" />
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
+    <ClCompile Include="Menu\Button.cpp" />
+    <ClCompile Include="Menu\MainMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -36,5 +38,7 @@
     <ClInclude Include="Level\Level.h" />
     <ClInclude Include="Systems\System.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
+    <ClInclude Include="Menu\Button.h" />
+    <ClInclude Include="Menu\MainMenu.h" />
   </ItemGroup>
 </Project>
