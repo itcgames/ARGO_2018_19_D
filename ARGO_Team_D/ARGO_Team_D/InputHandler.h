@@ -7,14 +7,18 @@
 class InputHandler {
 public:
 	InputHandler(ControlSystem & system);
-	void handleInput(SDL_Keycode keycode);
-
-	void bindButtonA();
-	void bindButtonB();
+	void handleInput(SDL_Event theEvent);
+	void update();
 private:
-	Command * Move;
+	Command * MoveRight;
+	Command * MoveLeft;
 	Command * Fire;
 
 	std::vector<Command *> commands;
 	ControlSystem & m_controlSystem;
+
+	bool rightPressed = false;
+	bool leftPressed = false;
+	bool upPressed = false;
+	bool cntrlPressed = false;
 };

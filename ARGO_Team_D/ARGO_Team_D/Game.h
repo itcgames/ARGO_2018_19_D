@@ -13,6 +13,7 @@
 #include "Resource Manager/ResourceManager.h"
 #include "ControlSystem.h"
 #include <Box2D\Box2D.h>
+#include "Level/Level.h"
 
 using namespace std;
 
@@ -52,7 +53,7 @@ private:
 	Mix_Music *	m_testMusic;
 
 	ControlSystem m_controlSystem;
-
+  
 	b2Vec2 m_gravity;
 	b2World m_world;
 
@@ -71,5 +72,6 @@ private:
 	b2Body * m_body2;
 	b2PolygonShape m_poly2;
 	b2FixtureDef m_fixture2;
+	Level * level;
 };
 #endif // !GAME_H

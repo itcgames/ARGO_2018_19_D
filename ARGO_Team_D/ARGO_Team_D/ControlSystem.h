@@ -5,6 +5,8 @@
 #include"ECS/Systems/System.h"
 #include<SDL.h>
 #include<iostream>
+#include"ECS/Components/PositionComponent.h"
+#include"SdlVector.h"
 class ControlSystem : public System {
 public:
 	ControlSystem();
@@ -13,8 +15,10 @@ public:
 
 	void handleInput(SDL_Keycode key);
 	void fire();
-	void move();
+	void moveRight();
+	void moveLeft();
 private:
+
 };
 
 

@@ -42,14 +42,15 @@ Game::Game() : m_gravity(0, 90.81f),
 		cout << "Error: " << IMG_GetError() << endl;
 	}
 
-	//Initialize SDL_mixer
+	// Initialize SDL_mixer
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
 	{
 		cout << "Error: " << "Audio Initalisation" << endl;
 	}
 
 
-	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, SDL_WINDOW_OPENGL);
+	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, 0);
+	printf("Window Size(%d , %d)", m_windowWidth, m_windowHeight);
 	m_renderer = SDL_CreateRenderer(p_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 	if (NULL == p_window)
@@ -61,6 +62,8 @@ Game::Game() : m_gravity(0, 90.81f),
 	m_resourceManager->addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
 	m_resourceManager->addImageResource(new ImageResource, "testsquare", "ASSETS//IMAGES//TestSquare.png");
 	m_resourceManager->addSoundResource(new SoundResource, "test", "ASSETS//SOUNDS//test.mp3");
+	m_resourceManager->loadFromJson();
+
 	texture = m_resourceManager->getImageResource("test");
 	square = m_resourceManager->getImageResource("testsquare");
 
@@ -79,8 +82,10 @@ Game::Game() : m_gravity(0, 90.81f),
 	std::string name = "test";
 	e->addComponent(new SpriteComponent(name, *m_resourceManager, 1920, 1080));
 	m_renderSystem.addEntity(e);
-
+	m_controlSystem.addEntity(e);
 	inputHandler = new InputHandler(m_controlSystem);
+	level = new Level();
+	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
 }
 
 Game::~Game()
@@ -118,10 +123,11 @@ void Game::processEvents()
 
 	while (SDL_PollEvent(&event))
 	{
+		inputHandler->handleInput(event);
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			inputHandler->handleInput(event.key.keysym.sym);
+			
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			break;
@@ -135,6 +141,7 @@ void Game::processEvents()
 void Game::update()
 {
 	m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+	inputHandler->update();
 }
 
 void Game::render()
@@ -149,6 +156,7 @@ void Game::render()
 	SDL_RenderClear(m_renderer);
 
 	m_renderSystem.render(m_renderer);
+	level->render(m_renderer);
 
 	b1X = m_body1->GetPosition().x;
 	b1Y = m_body1->GetPosition().y;

@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A3499566-7139-47A3-A26F-765702B1B24D}</ProjectGuid>
     <RootNamespace>ARGOTeamD</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -83,7 +83,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL2_mixer-2.0.4\include\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Json\;$(SDL_SDK)\SDL2_mixer-2.0.4\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,7 +102,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SDL_SDK)\SDL2_mixer-2.0.4\include\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Json\;$(SDL_SDK)\SDL2_mixer-2.0.4\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SDL_SDK)\SDL2_IMAGE-2.0.3\lib\x86\;$(SDL_SDK)\SDL2_mixer-2.0.4\lib\x86\;</AdditionalLibraryDirectories>
@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
+    <ClCompile Include="ECS\Components\PositionComponent.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="Game.cpp" />
