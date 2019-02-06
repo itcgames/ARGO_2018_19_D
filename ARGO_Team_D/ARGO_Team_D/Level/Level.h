@@ -21,7 +21,6 @@ public:
 	Level();
 	~Level();
 
-
 	bool load(const std::string filepath, ResourceManager * rManager);
 	void parseTMXTileLayer(const std::unique_ptr<tmx::Layer> & layer, int layerNum);
 	void parseTMXObjectLayer(const std::unique_ptr<tmx::Layer> & layer, int layerNum);
