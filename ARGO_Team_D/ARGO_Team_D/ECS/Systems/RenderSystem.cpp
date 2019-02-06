@@ -17,9 +17,7 @@ void RenderSystem::render(SDL_Renderer* renderer)
 		if (comps.size() == allowedTypes.size()) {
 			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
 			std::cout << "Pos: " << p->getPosition().x << ", " << p->getPosition().y << std::endl;
-
 			SpriteComponent * s = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
-			std::cout << std::endl;
 			SdlVector pos = p->getPosition();
 			dest.x = pos.x;
 			dest.y = pos.y;

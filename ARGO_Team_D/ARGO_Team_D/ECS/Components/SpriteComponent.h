@@ -3,6 +3,7 @@
 
 #include "../../Resource Manager/ResourceManager.h"
 #include <SDL.h>
+#include "Components.h"
 
 class SpriteComponent : public Component {
 public:

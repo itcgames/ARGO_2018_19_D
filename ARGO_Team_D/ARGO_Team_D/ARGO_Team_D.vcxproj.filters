@@ -33,5 +33,6 @@
     <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\AnimationComponent.h" />
     <ClInclude Include="Level\Level.h" />
+    <ClInclude Include="Systems\System.h" />
   </ItemGroup>
 </Project>
