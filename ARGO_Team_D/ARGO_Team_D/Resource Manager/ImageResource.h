@@ -19,7 +19,7 @@ public:
 	void setResourcePath(const char* path) { m_resourcePath = path; }
 	std::string getResourcePath() const { return m_resourcePath; }
 
-	SDL_Texture * getImage() { if(m_image != nullptr) return m_texture; }
+	SDL_Texture * getTexture() { if(m_texture != nullptr) return m_texture; }
 
 protected:
 	unsigned m_id;

@@ -1,6 +1,9 @@
 #include "Game.h"
 #include <sstream>
 
+#include "ECS/Components/PositionComponent.h"
+#include "ECS/Components/SpriteComponent.h"
+
 Game::Game()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -33,6 +36,7 @@ Game::Game()
 	m_resourceManager = new ResourceManager(m_renderer);
 	m_resourceManager->loadFromJson();
 
+
 	texture = m_resourceManager->getImageResource("test");
 
 	m_testMusic = m_resourceManager->getSoundResource("test");
@@ -45,12 +49,20 @@ Game::Game()
 	initialiseComponents();
 	initialiseSystems();
 	setUpFont();
+	Entity * e = new Entity();
+	e->addComponent(new PositionComponent(200, 200));
+	std::string name = "test";
+	e->addComponent(new SpriteComponent(name, *m_resourceManager, 1920, 1080));
+	m_renderSystem.addEntity(e);
 
 	inputHandler = new InputHandler(m_controlSystem);
-
+	level = new Level();
+	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
 }
 
-Game::~Game() {}
+Game::~Game()
+{
+}
 
 void Game::run()
 {
@@ -114,8 +126,7 @@ void Game::render()
 	SDL_RenderClear(m_renderer);
 
 	m_renderSystem.render(m_renderer);
-
-	SDL_RenderCopy(m_renderer, texture, NULL, NULL);
+	level->render(m_renderer);
 
 	SDL_RenderPresent(m_renderer);
 }
