@@ -57,21 +57,6 @@ private:
 	b2Vec2 m_gravity;
 	b2World m_world;
 
-	// Box2D Test Code
-	float b1X = 400.f;
-	float b1Y = 450.f;
-	float b2X = 400.f;
-	float b2Y = 0.f;
-
-	b2BodyDef m_bodyDef1;
-	b2Body * m_body1;
-	b2PolygonShape m_poly1;
-	b2FixtureDef m_fixture1;
-
-	b2BodyDef m_bodyDef2;
-	b2Body * m_body2;
-	b2PolygonShape m_poly2;
-	b2FixtureDef m_fixture2;
 	Level * level;
 
 	// Box2D Test Code
