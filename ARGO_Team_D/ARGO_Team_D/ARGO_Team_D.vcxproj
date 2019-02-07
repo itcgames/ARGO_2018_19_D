@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
@@ -155,10 +156,17 @@
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu\Button.cpp" />
+    <ClCompile Include="Menu\CreditsScreen.cpp" />
+    <ClCompile Include="Menu\Label.cpp" />
+    <ClCompile Include="Menu\LevelSelectMenu.cpp" />
+    <ClCompile Include="Menu\MainMenu.cpp" />
+    <ClCompile Include="Menu\OptionsMenu.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
+    <ClCompile Include="Utils\MathUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -176,12 +184,20 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Level\Level.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Menu\Button.h" />
+    <ClInclude Include="Menu\CreditsScreen.h" />
+    <ClInclude Include="Menu\Label.h" />
+    <ClInclude Include="Menu\LevelSelectMenu.h" />
+    <ClInclude Include="Menu\MainMenu.h" />
+    <ClInclude Include="Menu\OptionsMenu.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />
     <ClInclude Include="Utils\VectorAPI.h" />
+    <ClInclude Include="Utils\MathUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource Manager\SoundResource.h" />

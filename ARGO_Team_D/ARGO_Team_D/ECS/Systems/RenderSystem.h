@@ -9,7 +9,7 @@
 /// </summary>
 class RenderSystem : public System {
 public:
-	void render(SDL_Renderer * renderer);
+	void render(SDL_Renderer* renderer, const SDL_Rect & camera);
 
 private:
 	SDL_Rect dest;

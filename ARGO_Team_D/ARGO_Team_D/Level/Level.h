@@ -29,7 +29,7 @@ public:
 	bool load(const std::string filepath, ResourceManager * rManager);
 	void parseTMXTileLayer(const std::unique_ptr<tmx::Layer> & layer, int layerNum);
 	void parseTMXObjectLayer(const std::unique_ptr<tmx::Layer> & layer, int layerNum);
-	void render(SDL_Renderer * renderer);
+	void render(SDL_Renderer * renderer, const SDL_Rect &camera);
 	void addBodyToTile(TileData * t, int x, int y);
 
 	// Public Members

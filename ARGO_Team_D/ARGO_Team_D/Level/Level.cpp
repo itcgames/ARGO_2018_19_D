@@ -178,13 +178,13 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 /// Render all tile objects that exist in the level
 /// </summary>
 /// <param name="renderer"></param>
-void Level::render(SDL_Renderer * renderer)
+void Level::render(SDL_Renderer * renderer, const SDL_Rect &camera)
 {
 	for (auto & row : m_tiles) {
 		for (auto tileData : row) {
 			if (tileData) {
 				const SDL_Rect srcRect = { tileData->srcX, tileData->srcY, m_tileWidth, m_tileHeight };
-				const SDL_Rect destRect = { tileData->destX, tileData->destY, m_tileWidth, m_tileHeight };
+				const SDL_Rect destRect = { tileData->destX - camera.x, tileData->destY - camera.y, m_tileWidth, m_tileHeight };
 				SDL_RenderCopy(renderer, tileData->texture, &srcRect, &destRect);
 			}
 		}
