@@ -63,8 +63,8 @@ private:
 	SDL_Renderer * m_renderer;
 	bool m_quit = false;
 
-	int m_windowWidth = 1920;
-	int m_windowHeight = 1080;
+	int m_windowWidth = 1280;
+	int m_windowHeight = 720;
 	TTF_Font* Sans;
 
 	RenderSystem m_renderSystem;

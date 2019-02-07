@@ -305,6 +305,15 @@ void Game::render()
 		dest.w = 100.f;
 		dest.h = 100.f;
 		SDL_RenderCopy(m_renderer, square, NULL, &dest);
+
+		SDL_Rect dest2;
+		dest2.x = b2X - bounds.x;
+		dest2.y = b2Y - bounds.y;
+		dest2.w = 100.f;
+		dest2.h = 100.f;
+		SDL_RenderCopy(m_renderer, square, NULL, &dest2);
+
+		
 		break;
 	case Options:
 		m_options->draw();
@@ -321,13 +330,6 @@ void Game::render()
 
 	fade();
 	
-	SDL_Rect dest2;
-	dest2.x = b2X - bounds.x;
-	dest2.y = b2Y - bounds.y;
-	dest2.w = 100.f;
-	dest2.h = 100.f;
-	SDL_RenderCopy(m_renderer, square, NULL, &dest2);
-
 	SDL_RenderPresent(m_renderer);
 }
 
