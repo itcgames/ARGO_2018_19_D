@@ -13,6 +13,7 @@
 #include "Resource Manager/ResourceManager.h"
 #include "ControlSystem.h"
 #include "Level/Level.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -52,5 +53,8 @@ private:
 
 	ControlSystem m_controlSystem;
 	Level * level;
+
+	Camera m_camera;
+	Entity player;
 };
 #endif // !GAME_H

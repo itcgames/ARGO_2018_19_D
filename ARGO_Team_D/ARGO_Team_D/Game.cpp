@@ -34,7 +34,7 @@ Game::Game()
 	}
 	
 	m_resourceManager = new ResourceManager(m_renderer);
-	m_resourceManager->addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
+	m_resourceManager->addImageResource(new ImageResource, "test", "ASSETS//IMAGES//images.png");
 	m_resourceManager->addSoundResource(new SoundResource, "test", "ASSETS//SOUNDS//test.mp3");
 	texture = m_resourceManager->getImageResource("test");
 
@@ -48,15 +48,16 @@ Game::Game()
 	initialiseComponents();
 	initialiseSystems();
 	setUpFont();
-	Entity * e = new Entity();
-	e->addComponent(new PositionComponent(200, 200));
+	player.addComponent(new PositionComponent(0, 100));
 	std::string name = "test";
-	e->addComponent(new SpriteComponent(name, *m_resourceManager, 1920, 1080));
-	m_renderSystem.addEntity(e);
+	player.addComponent(new SpriteComponent(name, *m_resourceManager, 1920, 1080));
+	m_renderSystem.addEntity(&player);
 
 	inputHandler = new InputHandler(m_controlSystem);
 	level = new Level();
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
+	SDL_Rect bounds = { 0,0, 1920, 1080 };
+	m_camera.setBounds(bounds);
 }
 
 Game::~Game()
@@ -110,6 +111,10 @@ void Game::processEvents()
 
 void Game::update()
 {
+	std::vector<std::string> s = { "Position" };
+	auto comps = player.getComponentsOfType(s);
+	PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
+	m_camera.update(m_camera.m_position, 0);
 	// Empty ...
 }
 
@@ -123,9 +128,18 @@ void Game::render()
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 
 	SDL_RenderClear(m_renderer);
-
-	m_renderSystem.render(m_renderer);
-	level->render(m_renderer);
+	m_renderSystem.render(m_renderer, m_camera.getBounds());
+	std::vector<std::string> s = { "Position" };
+	auto test = player.getComponentsOfType(s);
+	auto p = dynamic_cast<PositionComponent*>(test["Position"]);
+	//p->m_position.y++;
+	if (m_camera.m_position.x < 960) {
+		SdlVector v;
+		v.x = m_camera.m_position.x + 1;
+		v.y = m_camera.m_position.y;
+		m_camera.setPosition(v);
+	}
+	//level->render(m_renderer);
 
 	SDL_RenderPresent(m_renderer);
 }
