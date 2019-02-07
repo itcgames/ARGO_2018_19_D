@@ -119,5 +119,7 @@ private:
 
 	SDL_Rect m_transitionScreen;
 	float m_transitionAlphaPercent;
+
+	std::vector<Entity*> m_entityList;
 };
 #endif // !GAME_H

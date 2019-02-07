@@ -93,14 +93,6 @@ m_world(m_gravity)
 	initialiseSystems();
 	setUpFont();
 
-	std::string name = "test";
-
-	playerFactory = new CharacterFactory(m_resourceManager);
-	Entity * e = playerFactory->CreateEntityPlayer(name, 1, VectorAPI(0,0), 1920, 1080);
-	m_renderSystem.addEntity(e);
-	m_controlSystem.addEntity(e);
-
-	player = new Entity(2);
 	/*Entity * e = new Entity();
 	e->addComponent(new PositionComponent(200, 200));
 	std::string name = "test";
@@ -352,6 +344,12 @@ void Game::quit()
 /// </summary>
 void Game::initialiseEntitys()
 {
+	std::string name = "test";
+
+	playerFactory = new CharacterFactory(m_resourceManager);
+	Entity * e = playerFactory->CreateEntityPlayer(name, 1, VectorAPI(0, 0), 1920, 1080);
+	m_entityList.push_back(e);
+	player = new Entity(2);
 
 }
 
@@ -368,6 +366,18 @@ void Game::initialiseComponents()
 /// </summary>
 void Game::initialiseSystems()
 {
+	for (auto i : m_entityList) {
+
+		if (i->checkForComponent("Sprite"))
+		{
+			m_renderSystem.addEntity(i);
+		}
+
+		if (i->checkForComponent("Control"))
+		{
+			m_controlSystem.addEntity(i);
+		}
+	}
 
 }
 
