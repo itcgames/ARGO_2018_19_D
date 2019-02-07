@@ -6,10 +6,10 @@ SdlVector::SdlVector(float xIn, float yIn) : x(xIn), y(yIn) {}
 
 SdlVector::~SdlVector() {}
 
-//SdlVector SdlVector::operator+(const SdlVector & vec)
-//{
-//	return SdlVector(x + v.x, y + v.y);
-//}
+SdlVector SdlVector::operator+(const SdlVector & vec)
+{
+	return SdlVector(x + vec.x, y + vec.y);
+}
 //
 //SdlVector SdlVector::operator-(const SdlVector & vec)
 //{

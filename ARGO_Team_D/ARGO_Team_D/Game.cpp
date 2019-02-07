@@ -4,8 +4,32 @@
 #include "ECS/Components/PositionComponent.h"
 #include "ECS/Components/SpriteComponent.h"
 
-Game::Game()
+Game::Game() : m_gravity(0, 90.81f),
+	m_world(m_gravity)
 {
+	// Box2D Test Code
+	m_bodyDef1.position = b2Vec2(b1X, b1Y);
+	m_bodyDef1.type = b2_staticBody;
+	m_body1 = m_world.CreateBody(&m_bodyDef1);
+	m_poly1.SetAsBox((50.f), (50.f));
+	m_fixture1.density = 1.f;
+	m_fixture1.friction = 0.1f;
+	m_fixture1.restitution = 0.8f;
+	m_fixture1.shape = &m_poly1;
+	m_body1->CreateFixture(&m_fixture1);
+	m_body1->SetFixedRotation(true);
+
+	m_bodyDef2.position = b2Vec2(b2X, b2Y);
+	m_bodyDef2.type = b2_dynamicBody;
+	m_body2 = m_world.CreateBody(&m_bodyDef2);
+	m_poly2.SetAsBox((50.f), (50.f));
+	m_fixture2.density = 1.f;
+	m_fixture2.friction = 0.1f;
+	m_fixture2.restitution = 0.8f;
+	m_fixture2.shape = &m_poly2;
+	m_body2->CreateFixture(&m_fixture2);
+	m_body2->SetFixedRotation(true);
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
 		std::cout << "Failed to initialise SDL" << std::endl;
@@ -25,7 +49,8 @@ Game::Game()
 	}
 
 
-	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, SDL_WINDOW_OPENGL);
+	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, 0);
+	printf("Window Size(%d , %d)", m_windowWidth, m_windowHeight);
 	m_renderer = SDL_CreateRenderer(p_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
 	if (NULL == p_window)
@@ -39,7 +64,9 @@ Game::Game()
 		cout << "Loading..." << endl;
 	}
 
+
 	texture = m_resourceManager->getImageResource("test");
+	square = m_resourceManager->getImageResource("testsquare");
 
 	m_testMusic = m_resourceManager->getSoundResource("test");
 	if (Mix_PlayMusic(m_testMusic, -1) == -1)
@@ -56,7 +83,7 @@ Game::Game()
 	std::string name = "test";
 	e->addComponent(new SpriteComponent(name, *m_resourceManager, 1920, 1080));
 	m_renderSystem.addEntity(e);
-
+	m_controlSystem.addEntity(e);
 	inputHandler = new InputHandler(m_controlSystem);
 	level = new Level();
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
@@ -97,10 +124,11 @@ void Game::processEvents()
 
 	while (SDL_PollEvent(&event))
 	{
+		inputHandler->handleInput(event);
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			inputHandler->handleInput(event.key.keysym.sym);
+			
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			break;
@@ -113,7 +141,8 @@ void Game::processEvents()
 
 void Game::update()
 {
-	// Empty ...
+	m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+	inputHandler->update();
 }
 
 void Game::render()
@@ -129,6 +158,25 @@ void Game::render()
 
 	m_renderSystem.render(m_renderer);
 	level->render(m_renderer);
+
+	b1X = m_body1->GetPosition().x;
+	b1Y = m_body1->GetPosition().y;
+	b2X = m_body2->GetPosition().x;
+	b2Y = m_body2->GetPosition().y;
+
+	SDL_Rect dest;
+	dest.x = b1X;
+	dest.y = b1Y;
+	dest.w = 100.f;
+	dest.h = 100.f;
+	SDL_RenderCopy(m_renderer, square, NULL, &dest);
+
+	SDL_Rect dest2;
+	dest2.x = b2X;
+	dest2.y = b2Y;
+	dest2.w = 100.f;
+	dest2.h = 100.f;
+	SDL_RenderCopy(m_renderer, square, NULL, &dest2);
 
 	SDL_RenderPresent(m_renderer);
 }

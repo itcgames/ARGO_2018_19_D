@@ -2,6 +2,7 @@
 
 ControlSystem::ControlSystem()
 {
+
 }
 
 ControlSystem::~ControlSystem()
@@ -32,7 +33,32 @@ void ControlSystem::fire()
 	std::cout << "Im firing" << std::endl;
 }
 
-void ControlSystem::move()
+void ControlSystem::moveRight()
 {
-	std::cout << "im moving" << std::endl;
+
+	
+	std::vector<string> allowedTypes = { "Position" };
+	for (auto &e : m_entityList)
+	{
+		auto comps = e->getComponentsOfType(allowedTypes);
+		PositionComponent * posComp = dynamic_cast<PositionComponent *>(comps["Position"]);
+		if (posComp != nullptr)
+		{
+			posComp->setPosition(posComp->getPosition() + SdlVector(1, 0));
+		}
+	}
+}
+
+void ControlSystem::moveLeft()
+{
+	std::vector<string> allowedTypes = { "Position" };
+	for (auto &e : m_entityList)
+	{
+		auto comps = e->getComponentsOfType(allowedTypes);
+		PositionComponent * posComp = dynamic_cast<PositionComponent *>(comps["Position"]);
+		if (posComp != nullptr)
+		{
+			posComp->setPosition(posComp->getPosition() + SdlVector(-1, 0));
+		}
+	}
 }

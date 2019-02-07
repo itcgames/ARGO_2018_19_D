@@ -13,6 +13,7 @@
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="SdlVector.cpp" />
     <ClCompile Include="Level\Level.cpp" />
+    <ClCompile Include="ECS\Components\PositionComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -34,5 +35,6 @@
     <ClInclude Include="ECS\Components\AnimationComponent.h" />
     <ClInclude Include="Level\Level.h" />
     <ClInclude Include="Systems\System.h" />
+    <ClInclude Include="Systems\RenderSystem.h" />
   </ItemGroup>
 </Project>

@@ -9,7 +9,6 @@
 #pragma comment(lib, "SDL2_ttf.lib")
 #pragma comment(lib, "SDL2_mixer.lib")
 #pragma comment(lib,"Box2D.lib")
-
 #else
 #pragma comment(lib, "SDL2.lib")
 #pragma comment(lib, "SDL2main.lib")
@@ -17,6 +16,7 @@
 #pragma comment(lib, "SDL2_image.lib")
 #pragma comment(lib, "tmxlite.lib")
 #pragma comment(lib, "SDL2_ttf.lib")
+#pragma comment(lib,"Box2D.lib")
 #endif 
 
 #include "Game.h"
