@@ -15,12 +15,21 @@
 #include "Level/Level.h"
 #include"Menu/Button.h"
 #include"Menu/MainMenu.h"
+#include"Menu/OptionsMenu.h"
+#include"Menu/CreditsScreen.h"
+#include"Menu/LevelSelectMenu.h"
 
 class MainMenu;
+class OptionsMenu;
+class CreditScreen;
+class LevelSelectMenu;
 
 enum State {
 	Menu,
-	PlayScreen
+	PlayScreen,
+	Options,
+	Credits,
+	LevelSelect
 };
 using namespace std;
 
@@ -73,6 +82,9 @@ private:
 	std::vector<Button *> buttons;
 
 	MainMenu * m_menu;
+	OptionsMenu * m_options;
+	CreditScreen * m_credits;
+	LevelSelectMenu * m_levelSelect;
 
 	SDL_Rect m_transitionScreen;
 	float m_transitionAlphaPercent;

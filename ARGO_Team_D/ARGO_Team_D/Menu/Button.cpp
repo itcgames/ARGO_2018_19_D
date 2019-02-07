@@ -24,7 +24,7 @@ Button::Button(const char * string,int x, int y, int w, int h, SDL_Color color, 
 	displayWidth = w;
 	displayHeight = h;
 
-	surfaceMessage = TTF_RenderText_Solid(arial, string, color);
+	surfaceMessage = TTF_RenderText_Blended(arial, string, color);
 	message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 	message_rect.x = startPosX;  //controls the rect's x coordinate 
 	message_rect.y = startPosY; // controls the rect's y coordinte
@@ -33,8 +33,8 @@ Button::Button(const char * string,int x, int y, int w, int h, SDL_Color color, 
 
 	r.x = message_rect.x - 5;
 	r.y = message_rect.y - 5;
-	r.w = w + 10;
-	r.h = h + 10;
+	r.w = w + 20;
+	r.h = h + 20;
 	alpha = 0;
 	this->string= string;
 
@@ -42,7 +42,6 @@ Button::Button(const char * string,int x, int y, int w, int h, SDL_Color color, 
 	
 
 	onScreen = false;
-	activateFunction = false;
 	isTransitioning = false;
 	percent = 0;
 	hasFocus = false;
@@ -73,14 +72,14 @@ void Button::update()
 	{
 		SDL_DestroyTexture(message);
 		color = focusColor;
-		surfaceMessage = TTF_RenderText_Solid(arial, string, color);
+		surfaceMessage = TTF_RenderText_Blended(arial, string, color);
 		message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
 		SDL_FreeSurface(surfaceMessage);		
 	}
 	else {
 		SDL_DestroyTexture(message);
 		color = nonFocusColor;
-		surfaceMessage = TTF_RenderText_Solid(arial, string, color);
+		surfaceMessage = TTF_RenderText_Blended(arial, string, color);
 		message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
 		SDL_FreeSurface(surfaceMessage);
 		
@@ -120,15 +119,17 @@ void Button::goToTransition()
 
 void Button::reset()
 {
+	//onScreen && percent >= 1.0f && isClicked && !activateFunction
+
 	message_rect.x = startPosX;  //controls the rect's x coordinate 
 	message_rect.y = startPosY; // controls the rect's y coordinte
 	message_rect.w = 0; // controls the width of the rect
 	message_rect.h = 0; // controls the height of the rect
 	onScreen = false;
-	activateFunction = false;
 	isTransitioning = false;
 	percent = 0;
 	hasFocus = false;
+	isClicked = false;
 }
 
 void Button::getMouseCollision(int x, int y)
@@ -179,7 +180,7 @@ void Button::Lerp(int startPosX, int startPosY, int destX, int destY)
 		r.h = message_rect.h + 10;
 	}
 
-	if (onScreen && percent >= 1.0f && isClicked && !activateFunction)
+	if (onScreen && percent >= 1.0f && isClicked)
 	{
 		try
 		{

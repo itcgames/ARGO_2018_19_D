@@ -16,6 +16,10 @@
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
     <ClCompile Include="Menu\Button.cpp" />
     <ClCompile Include="Menu\MainMenu.cpp" />
+    <ClCompile Include="Menu\Label.cpp" />
+    <ClCompile Include="Menu\OptionsMenu.cpp" />
+    <ClCompile Include="Menu\CreditsScreen.cpp" />
+    <ClCompile Include="Menu\LevelSelectMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -40,5 +44,9 @@
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Menu\Button.h" />
     <ClInclude Include="Menu\MainMenu.h" />
+    <ClInclude Include="Menu\Label.h" />
+    <ClInclude Include="Menu\OptionsMenu.h" />
+    <ClInclude Include="Menu\CreditsScreen.h" />
+    <ClInclude Include="Menu\LevelSelectMenu.h" />
   </ItemGroup>
 </Project>

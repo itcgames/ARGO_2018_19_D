@@ -155,7 +155,11 @@
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu\Button.cpp" />
+    <ClCompile Include="Menu\CreditsScreen.cpp" />
+    <ClCompile Include="Menu\Label.cpp" />
+    <ClCompile Include="Menu\LevelSelectMenu.cpp" />
     <ClCompile Include="Menu\MainMenu.cpp" />
+    <ClCompile Include="Menu\OptionsMenu.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
@@ -176,7 +180,11 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Level\Level.h" />
     <ClInclude Include="Menu\Button.h" />
+    <ClInclude Include="Menu\CreditsScreen.h" />
+    <ClInclude Include="Menu\Label.h" />
+    <ClInclude Include="Menu\LevelSelectMenu.h" />
     <ClInclude Include="Menu\MainMenu.h" />
+    <ClInclude Include="Menu\OptionsMenu.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />

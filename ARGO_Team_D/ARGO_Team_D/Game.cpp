@@ -26,9 +26,10 @@ Game::Game()
 	
 
 	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, 0);
-	printf("Window Size(%d , %d)", m_windowWidth, m_windowHeight);
+	printf("Window Size(%d , %d)\n", m_windowWidth, m_windowHeight);
 	m_renderer = SDL_CreateRenderer(p_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
 	m_transitionScreen.x = 0;
 	m_transitionScreen.y = 0;
@@ -59,7 +60,10 @@ Game::Game()
 
 	m_gameState = State::Menu;
 	m_menu = new MainMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
-	
+	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+
 	initialiseEntitys();
 	initialiseComponents();
 	initialiseSystems();
@@ -122,7 +126,7 @@ void Game::fade()
 {
 	if (fadeOn)
 	{
-		m_transitionAlphaPercent += 0.02;
+		m_transitionAlphaPercent += 0.075;
 		if (m_transitionAlphaPercent >= 1)
 		{
 			m_transitionAlphaPercent = 1;
@@ -137,7 +141,7 @@ void Game::fade()
 
 	if (fadeOff)
 	{
-		m_transitionAlphaPercent -= 0.02;
+		m_transitionAlphaPercent -= 0.075;
 		if (m_transitionAlphaPercent <= 0)
 		{
 			m_transitionAlphaPercent = 0;
@@ -156,8 +160,29 @@ void Game::processEvents()
 
 	while (SDL_PollEvent(&event))
 	{
-		inputHandler->handleInput(event);
-		m_menu->handleMouse(event);
+
+		switch (m_gameState)
+		{
+		case Menu:
+			m_menu->handleMouse(event);
+			break;
+		case PlayScreen:
+			inputHandler->handleInput(event);
+			break;
+		case Options:
+			m_options->handleMouse(event);
+			break;
+		case Credits:
+			m_credits->handleMouse(event);
+			break;
+		case LevelSelect:
+			m_levelSelect->handleMouse(event);
+			break;
+		default:
+			break;
+		}
+
+		
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
@@ -176,11 +201,23 @@ void Game::update()
 {
 	switch (m_gameState)
 	{
-	case State::Menu:
+	case Menu:
 		m_menu->update();
 		break;
-	case State::PlayScreen:
-		inputHandler->update();
+	case PlayScreen:
+		if (doneFading) // dont update the game unless screen is done fading
+		{
+			inputHandler->update();
+		}
+		break;
+	case Options:
+		m_options->update();
+		break;
+	case Credits:
+		m_credits->update();
+		break;
+	case LevelSelect:
+		m_levelSelect->update();
 		break;
 	default:
 		break;
@@ -202,12 +239,21 @@ void Game::render()
 
 	switch (m_gameState)
 	{
-	case State::Menu:
+	case Menu:
 		m_menu->draw();
 		break;
-	case State::PlayScreen:
+	case PlayScreen:
 		m_renderSystem.render(m_renderer);
 		level->render(m_renderer);
+		break;
+	case Options:
+		m_options->draw();
+		break;
+	case Credits:
+		m_credits->draw();
+		break;
+	case LevelSelect:
+		m_levelSelect->draw();
 		break;
 	default:
 		break;
