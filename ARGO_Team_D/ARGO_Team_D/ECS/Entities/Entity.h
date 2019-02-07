@@ -18,7 +18,7 @@ class Entity {
 public:
 	int id;
 
-	Entity() {};
+	Entity(int id) {};
 	virtual ~Entity() {};
 
 	void addComponent(Component * c) { m_components.push_back(c); }
@@ -36,6 +36,17 @@ public:
 		}
 		return compMap;
 	};
+
+	bool checkForComponent(const std::string type) {
+		for (auto & comp : m_components) {
+			if (comp->id == type)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 private:
 	vector<Component*> m_components;
 

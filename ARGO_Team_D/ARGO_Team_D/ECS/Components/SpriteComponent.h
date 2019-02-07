@@ -8,7 +8,7 @@
 class SpriteComponent : public Component {
 public:
 	SpriteComponent() { id = "Sprite"; };
-	SpriteComponent(
+	SpriteComponent (
 		const std::string & name,
 		ResourceManager & resourceManager,
 		const int w, const int h, 
