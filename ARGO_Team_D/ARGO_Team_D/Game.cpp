@@ -28,6 +28,18 @@ Game::Game()
 	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, 0);
 	printf("Window Size(%d , %d)", m_windowWidth, m_windowHeight);
 	m_renderer = SDL_CreateRenderer(p_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
+
+	m_transitionScreen.x = 0;
+	m_transitionScreen.y = 0;
+	m_transitionScreen.w = m_windowWidth;
+	m_transitionScreen.h = m_windowHeight;
+
+	m_transitionAlphaPercent = 0;
+
+	fadeOff = false;
+	fadeOn = false;
+	doneFading = false;
 
 	if (NULL == p_window)
 	{
@@ -47,7 +59,7 @@ Game::Game()
 
 	m_gameState = State::Menu;
 	m_menu = new MainMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
-
+	
 	initialiseEntitys();
 	initialiseComponents();
 	initialiseSystems();
@@ -99,6 +111,45 @@ void Game::setGameState(State state)
 	m_gameState = state;
 }
 
+void Game::fadeToState(State state)
+{
+	m_nextState = state;
+	fadeOn = true;
+	doneFading = false;
+}
+
+void Game::fade()
+{
+	if (fadeOn)
+	{
+		m_transitionAlphaPercent += 0.02;
+		if (m_transitionAlphaPercent >= 1)
+		{
+			m_transitionAlphaPercent = 1;
+			m_gameState = m_nextState;
+			fadeOff = true;
+			fadeOn = false;
+		}
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
+		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
+	}
+
+	if (fadeOff)
+	{
+		m_transitionAlphaPercent -= 0.02;
+		if (m_transitionAlphaPercent <= 0)
+		{
+			m_transitionAlphaPercent = 0;
+			fadeOff = false;
+			doneFading = true;
+		}
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
+		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
+	}
+}
+
 void Game::processEvents()
 {
 	SDL_Event event;
@@ -144,7 +195,7 @@ void Game::render()
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
 
-	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(m_renderer, 125, 125, 125, 255);
 
 	SDL_RenderClear(m_renderer);
 
@@ -162,7 +213,8 @@ void Game::render()
 		break;
 	}
 
-
+	fade();
+	
 	SDL_RenderPresent(m_renderer);
 }
 

@@ -31,6 +31,12 @@ public:
 	~Game();
 	void run();
 	void setGameState(State state);
+	bool fadeOn;
+	bool fadeOff;
+	bool doneFading;
+
+	void fadeToState(State state);
+	void fade();
 private:
 	void processEvents();
 	void update();
@@ -62,9 +68,15 @@ private:
 	Level * level;
 
 	State m_gameState;
+	State m_nextState;
 
 	std::vector<Button *> buttons;
 
 	MainMenu * m_menu;
+
+	SDL_Rect m_transitionScreen;
+	float m_transitionAlphaPercent;
+
+	
 };
 #endif // !GAME_H

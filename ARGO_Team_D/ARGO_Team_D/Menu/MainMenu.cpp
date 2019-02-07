@@ -72,5 +72,5 @@ bool MainMenu::itemSelected()
 
 void MainMenu::GoToPlay()
 {
-	m_game->setGameState(State::PlayScreen);
+	m_game->fadeToState(State::PlayScreen);
 }
