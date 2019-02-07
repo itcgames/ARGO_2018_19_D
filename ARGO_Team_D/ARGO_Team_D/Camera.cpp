@@ -3,10 +3,13 @@
 #include <cmath>
 #include <iostream>
 
-Camera::Camera()
+Camera::Camera(const int windowWidth, const int windowHeight)
 {
 	m_viewOffset = 0;
 	m_weight = 1;
+	m_maxOffset = 3;
+	m_shake = 0.1;
+	m_bounds = { 0,0,windowWidth, windowHeight };
 }
 
 void Camera::update(const VectorAPI & boundPosition, const float & rotation)
@@ -20,9 +23,17 @@ void Camera::update(const VectorAPI & boundPosition, const float & rotation)
 	m_position.x += ((boundPos.x - m_position.x) * m_weight);
 	m_position.y += ((boundPos.y - m_position.y) * m_weight);
 
+	if (m_shaking) {
+		float min = -1;
+		float max = 1;
+		auto val = min + ((float)rand() / (float)RAND_MAX) * (max - min);
+		m_offset.x = m_maxOffset * m_shake * val;
+		m_offset.y = m_maxOffset * m_shake * val;
+		m_position += m_offset;
+	}
+
 	m_bounds.x = m_position.x - (m_bounds.w / 2);
 	m_bounds.y = m_position.y - (m_bounds.h / 2);
-	std::cout << "x:" << m_bounds.x << ", y: " << m_bounds.y << std::endl;
 }
 
 void Camera::setPosition(const VectorAPI & position)

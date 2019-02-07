@@ -8,6 +8,7 @@
 #include <Box2D/Box2D.h>
 
 #include "../Resource Manager/ResourceManager.h"
+#include "../Camera.h"
 
 struct TileData {
 	int destX;
@@ -29,7 +30,7 @@ public:
 	bool load(const std::string filepath, ResourceManager * rManager);
 	void parseTMXTileLayer(const std::unique_ptr<tmx::Layer> & layer, int layerNum);
 	void parseTMXObjectLayer(const std::unique_ptr<tmx::Layer> & layer, int layerNum);
-	void render(SDL_Renderer * renderer, const SDL_Rect &camera);
+	void render(SDL_Renderer * renderer, Camera &camera);
 	void addBodyToTile(TileData * t, int x, int y);
 
 	// Public Members
