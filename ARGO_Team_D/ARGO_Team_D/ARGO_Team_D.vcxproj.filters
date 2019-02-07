@@ -11,9 +11,11 @@
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
-    <ClCompile Include="SdlVector.cpp" />
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
+    <ClCompile Include="Utils\VectorAPI.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Utils\MathUtils.cpp" />
     <ClCompile Include="Menu\Button.cpp" />
     <ClCompile Include="Menu\MainMenu.cpp" />
     <ClCompile Include="Menu\Label.cpp" />
@@ -34,7 +36,6 @@
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
-    <ClInclude Include="SdlVector.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />
@@ -48,5 +49,8 @@
     <ClInclude Include="Menu\OptionsMenu.h" />
     <ClInclude Include="Menu\CreditsScreen.h" />
     <ClInclude Include="Menu\LevelSelectMenu.h" />
+    <ClInclude Include="Utils\VectorAPI.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Utils\MathUtils.h" />
   </ItemGroup>
 </Project>

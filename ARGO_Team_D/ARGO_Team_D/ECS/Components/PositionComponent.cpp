@@ -1,6 +1,6 @@
 #include "PositionComponent.h"
 
-void PositionComponent::setPosition(SdlVector pos)
+void PositionComponent::setPosition(VectorAPI pos)
 {
 	m_position = pos;
 }

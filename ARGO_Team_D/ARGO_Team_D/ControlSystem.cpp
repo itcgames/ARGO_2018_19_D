@@ -44,7 +44,7 @@ void ControlSystem::moveRight()
 		PositionComponent * posComp = dynamic_cast<PositionComponent *>(comps["Position"]);
 		if (posComp != nullptr)
 		{
-			posComp->setPosition(posComp->getPosition() + SdlVector(1, 0));
+			posComp->setPosition(posComp->getPosition() + VectorAPI(1, 0));
 		}
 	}
 }
@@ -58,7 +58,7 @@ void ControlSystem::moveLeft()
 		PositionComponent * posComp = dynamic_cast<PositionComponent *>(comps["Position"]);
 		if (posComp != nullptr)
 		{
-			posComp->setPosition(posComp->getPosition() + SdlVector(-1, 0));
+			posComp->setPosition(posComp->getPosition() + VectorAPI(-1, 0));
 		}
 	}
 }

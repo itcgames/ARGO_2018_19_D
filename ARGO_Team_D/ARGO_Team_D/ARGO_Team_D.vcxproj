@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A3499566-7139-47A3-A26F-765702B1B24D}</ProjectGuid>
     <RootNamespace>ARGOTeamD</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
@@ -163,7 +164,8 @@
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
-    <ClCompile Include="SdlVector.cpp" />
+    <ClCompile Include="Utils\VectorAPI.cpp" />
+    <ClCompile Include="Utils\MathUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -179,6 +181,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Level\Level.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Menu\Button.h" />
     <ClInclude Include="Menu\CreditsScreen.h" />
     <ClInclude Include="Menu\Label.h" />
@@ -190,10 +193,11 @@
     <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />
+    <ClInclude Include="Utils\VectorAPI.h" />
+    <ClInclude Include="Utils\MathUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource Manager\SoundResource.h" />
-    <ClInclude Include="SdlVector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

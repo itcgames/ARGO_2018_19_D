@@ -3,7 +3,7 @@
 
 #include <utility>
 #include <string>
-#include "../../SdlVector.h"
+#include "../Utils/VectorAPI.h"
 
 /// <summary>
 /// Component Interface
