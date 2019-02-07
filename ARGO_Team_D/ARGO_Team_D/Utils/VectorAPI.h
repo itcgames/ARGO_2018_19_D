@@ -3,8 +3,6 @@
 
 //INCLUDES
 #include <math.h>
-#include <iostream>
-#include <limits>
 
 class VectorAPI
 {
@@ -68,6 +66,5 @@ public:
 	float x = 0.0;
 	float y = 0.0;
 };
-
 #endif // !VECTORAPI_H
 

@@ -50,6 +50,7 @@ float VectorAPI::Cross(const VectorAPI & v) const {
 void VectorAPI::Truncate(float upperBound)
 {
 	float sqrLen = LengthSquared();
+
 	if (sqrLen > upperBound * upperBound)
 	{
 		float mult = upperBound / sqrt(sqrLen);

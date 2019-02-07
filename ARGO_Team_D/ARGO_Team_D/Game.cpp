@@ -1,6 +1,5 @@
 #include "Game.h"
 #include <sstream>
-
 #include "ECS/Components/PositionComponent.h"
 #include "ECS/Components/SpriteComponent.h"
 
@@ -76,12 +75,21 @@ m_world(m_gravity)
 	initialiseComponents();
 	initialiseSystems();
 	setUpFont();
-	Entity * e = new Entity();
+
+	std::string name = "test";
+
+	playerFactory = new CharacterFactory(m_resourceManager);
+	Entity * e = playerFactory->CreateEntityPlayer(name, 1, VectorAPI(0,0), 1920, 1080);
+	m_renderSystem.addEntity(e);
+	m_controlSystem.addEntity(e);
+
+	/*Entity * e = new Entity();
 	e->addComponent(new PositionComponent(200, 200));
 	std::string name = "test";
 	e->addComponent(new SpriteComponent(name, *m_resourceManager, 1920, 1080));
 	m_renderSystem.addEntity(e);
-	m_controlSystem.addEntity(e);
+	m_controlSystem.addEntity(e);*/
+
 	inputHandler = new InputHandler(m_controlSystem);
 	level = new Level(m_world);
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);

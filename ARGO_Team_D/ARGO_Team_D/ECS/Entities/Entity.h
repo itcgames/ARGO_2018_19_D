@@ -18,7 +18,7 @@ class Entity {
 public:
 	int id;
 
-	Entity() {};
+	Entity(int id) {};
 	virtual ~Entity() {};
 
 	void addComponent(Component * c) { m_components.push_back(c); }
@@ -36,6 +36,7 @@ public:
 		}
 		return compMap;
 	};
+
 private:
 	vector<Component*> m_components;
 

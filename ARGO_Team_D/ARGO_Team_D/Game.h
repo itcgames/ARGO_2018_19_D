@@ -15,6 +15,8 @@
 #include <Box2D\Box2D.h>
 #include "Level/Level.h"
 #include "Utils/VectorAPI.h"
+#include "Factories/Factory.h"
+#include "Factories/CharacterFactory.h"
 
 
 using namespace std;
@@ -77,5 +79,7 @@ private:
 	b2PolygonShape m_poly2;
 	b2FixtureDef m_fixture2;
 
+
+	Factory* playerFactory;
 };
 #endif // !GAME_H
