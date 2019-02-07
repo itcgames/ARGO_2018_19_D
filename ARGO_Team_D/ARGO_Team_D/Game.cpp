@@ -8,24 +8,24 @@ Game::Game() : m_gravity(0, 90.81f),
 m_world(m_gravity)
 {
 	// Box2D Test Code
-	m_bodyDef1.position = b2Vec2(b1X, b1Y);
+	m_bodyDef1.position = b2Vec2(b1X + 50, b1Y + 50);
 	m_bodyDef1.type = b2_staticBody;
 	m_body1 = m_world.CreateBody(&m_bodyDef1);
 	m_poly1.SetAsBox((50.f), (50.f));
 	m_fixture1.density = 1.f;
 	m_fixture1.friction = 0.1f;
-	m_fixture1.restitution = 0.8f;
+	m_fixture1.restitution = 0.0f;
 	m_fixture1.shape = &m_poly1;
 	m_body1->CreateFixture(&m_fixture1);
 	m_body1->SetFixedRotation(true);
 
-	m_bodyDef2.position = b2Vec2(b2X, b2Y);
+	m_bodyDef2.position = b2Vec2(b2X + 32, b2Y + 32);
 	m_bodyDef2.type = b2_dynamicBody;
 	m_body2 = m_world.CreateBody(&m_bodyDef2);
 	m_poly2.SetAsBox((50.f), (50.f));
 	m_fixture2.density = 1.f;
 	m_fixture2.friction = 0.1f;
-	m_fixture2.restitution = 0.8f;
+	m_fixture2.restitution = 0.0f;
 	m_fixture2.shape = &m_poly2;
 	m_body2->CreateFixture(&m_fixture2);
 	m_body2->SetFixedRotation(true);
@@ -63,7 +63,6 @@ m_world(m_gravity)
 		cout << "Loading..." << endl;
 	}
 
-
 	texture = m_resourceManager->getImageResource("test");
 	square = m_resourceManager->getImageResource("testsquare");
 
@@ -84,7 +83,7 @@ m_world(m_gravity)
 	m_renderSystem.addEntity(e);
 	m_controlSystem.addEntity(e);
 	inputHandler = new InputHandler(m_controlSystem);
-	level = new Level();
+	level = new Level(m_world);
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
 }
 
@@ -127,9 +126,21 @@ void Game::processEvents()
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
+			// Demo Code
+			if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
+			{
+				m_body2->SetLinearVelocity(b2Vec2(100, 0));
+			}
+			if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
+			{
+				m_body2->SetLinearVelocity(b2Vec2(-100, 0));
+			}
+			if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
+			{
+				m_body2->SetLinearVelocity(b2Vec2(0, -100));
+			}
 			break;
 		case SDL_QUIT:
 			m_quit = true;
@@ -158,10 +169,10 @@ void Game::render()
 	m_renderSystem.render(m_renderer);
 	level->render(m_renderer);
 
-	b1X = m_body1->GetPosition().x;
-	b1Y = m_body1->GetPosition().y;
-	b2X = m_body2->GetPosition().x;
-	b2Y = m_body2->GetPosition().y;
+	b1X = m_body1->GetPosition().x - 50;
+	b1Y = m_body1->GetPosition().y - 50;
+	b2X = m_body2->GetPosition().x - 50;
+	b2Y = m_body2->GetPosition().y - 50;
 
 	SDL_Rect dest;
 	dest.x = b1X;
