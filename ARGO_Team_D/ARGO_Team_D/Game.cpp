@@ -34,8 +34,10 @@ Game::Game()
 	}
 	
 	m_resourceManager = new ResourceManager(m_renderer);
-	m_resourceManager->loadFromJson();
 
+	while (!m_resourceManager->checkLoaded()) {
+		cout << "Loading..." << endl;
+	}
 
 	texture = m_resourceManager->getImageResource("test");
 

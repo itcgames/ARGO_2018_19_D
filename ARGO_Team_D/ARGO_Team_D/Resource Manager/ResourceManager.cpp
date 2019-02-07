@@ -4,6 +4,7 @@
 ResourceManager::ResourceManager(SDL_Renderer * renderer)
 {
 	m_renderer = renderer;
+	loadFromJson();
 }
 
 // Deconstructor
@@ -57,4 +58,24 @@ void ResourceManager::addSoundResource(SoundResource * resource, const std::stri
 	resource->loadResource();
 
 	m_soundResources.insert(std::pair<std::string, SoundResource*>(name, resource));
+}
+
+// Bool to ensure All assets are loaded before game starts.
+bool ResourceManager::checkLoaded()
+{
+	for (auto i : m_imageResources) {
+		std::cout << "Loading: " << i.first << std::endl;
+		if (i.second->getTexture() == nullptr) {
+			return false;
+		}
+	}
+
+	for (auto i : m_soundResources) {
+		std::cout << "Loading: " << i.first << std::endl;
+		if (i.second->getSound() == nullptr) {
+			return false;
+		}
+	}
+
+	return true;
 }
