@@ -5,7 +5,7 @@
 #include "ECS/Components/SpriteComponent.h"
 
 Game::Game() : m_gravity(0, 90.81f),
-	m_world(m_gravity)
+m_world(m_gravity)
 {
 	// Box2D Test Code
 	m_bodyDef1.position = b2Vec2(b1X, b1Y);
@@ -48,7 +48,6 @@ Game::Game() : m_gravity(0, 90.81f),
 		cout << "Error: " << "Audio Initalisation" << endl;
 	}
 
-
 	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, 0);
 	printf("Window Size(%d , %d)", m_windowWidth, m_windowHeight);
 	m_renderer = SDL_CreateRenderer(p_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -57,7 +56,7 @@ Game::Game() : m_gravity(0, 90.81f),
 	{
 		std::cout << "Error: Could not create window" << std::endl;
 	}
-	
+
 	m_resourceManager = new ResourceManager(m_renderer);
 
 	while (!m_resourceManager->checkLoaded()) {
@@ -69,9 +68,9 @@ Game::Game() : m_gravity(0, 90.81f),
 	square = m_resourceManager->getImageResource("testsquare");
 
 	m_testMusic = m_resourceManager->getSoundResource("test");
-	if (Mix_PlayMusic(m_testMusic, -1) == -1)
+	/*if (Mix_PlayMusic(m_testMusic, -1) == -1)
 	{
-	}
+	}*/
 
 
 	initialiseEntitys();

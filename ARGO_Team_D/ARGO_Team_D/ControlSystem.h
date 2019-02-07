@@ -6,7 +6,8 @@
 #include<SDL.h>
 #include<iostream>
 #include"ECS/Components/PositionComponent.h"
-#include"SdlVector.h"
+#include "Utils/VectorAPI.h"
+
 class ControlSystem : public System {
 public:
 	ControlSystem();

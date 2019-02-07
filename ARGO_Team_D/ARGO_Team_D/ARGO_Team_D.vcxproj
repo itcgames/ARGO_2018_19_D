@@ -157,7 +157,7 @@
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
-    <ClCompile Include="SdlVector.cpp" />
+    <ClCompile Include="Utils\VectorAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -178,10 +178,10 @@
     <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />
+    <ClInclude Include="Utils\VectorAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource Manager\SoundResource.h" />
-    <ClInclude Include="SdlVector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

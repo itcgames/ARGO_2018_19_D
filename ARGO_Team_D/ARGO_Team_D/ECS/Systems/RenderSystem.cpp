@@ -18,7 +18,7 @@ void RenderSystem::render(SDL_Renderer* renderer)
 			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
 			//std::cout << "Pos: " << p->getPosition().x << ", " << p->getPosition().y << std::endl;
 			SpriteComponent * s = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
-			SdlVector pos = p->getPosition();
+			VectorAPI pos = p->getPosition();
 			dest.x = pos.x;
 			dest.y = pos.y;
 			dest.w = s->m_width;
