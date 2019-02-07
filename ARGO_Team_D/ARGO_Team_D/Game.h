@@ -12,8 +12,11 @@
 #include "InputHandler.h"
 #include "Resource Manager/ResourceManager.h"
 #include "ControlSystem.h"
+#include <Box2D\Box2D.h>
 #include "Level/Level.h"
+#include "Utils/VectorAPI.h"
 #include "Camera.h"
+
 
 using namespace std;
 
@@ -49,10 +52,32 @@ private:
 	ResourceManager* m_resourceManager;
 
 	SDL_Texture * texture;
+	SDL_Texture * square;
 	Mix_Music *	m_testMusic;
 
 	ControlSystem m_controlSystem;
+  
+	b2Vec2 m_gravity;
+	b2World m_world;
+
 	Level * level;
+
+	// Box2D Test Code
+	float b1X = 100.f;
+	float b1Y = 100.f;
+	float b2X = 500.f;
+	float b2Y = 0.f;
+
+	b2BodyDef m_bodyDef1;
+	b2Body * m_body1;
+	b2PolygonShape m_poly1;
+	b2FixtureDef m_fixture1;
+
+	b2BodyDef m_bodyDef2;
+	b2Body * m_body2;
+	b2PolygonShape m_poly2;
+	b2FixtureDef m_fixture2;
+
 
 	Camera m_camera;
 	Entity player;

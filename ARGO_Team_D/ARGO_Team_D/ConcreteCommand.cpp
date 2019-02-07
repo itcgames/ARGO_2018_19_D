@@ -31,18 +31,18 @@ void FireCommand::undo()
 	std::cout << "Fire Undone" << std::endl;
 }
 
-MoveCommand::MoveCommand(ControlSystem & system) : Command(system)
+MoveLeftCommand::MoveLeftCommand(ControlSystem & system) : Command(system)
 {
 }
 
-void MoveCommand::execute()
+void MoveLeftCommand::execute()
 {
 	//std::cout << "Move Command" << std::endl;
 	//executed = true;
-	m_controlSystem.move();
+	m_controlSystem.moveLeft();
 }
 
-void MoveCommand::undo()
+void MoveLeftCommand::undo()
 {
 	std::cout << "Move Undone" << std::endl;
 }
@@ -75,4 +75,17 @@ void SwitchWeaponCommand::execute()
 void SwitchWeaponCommand::undo()
 {
 	std::cout << "Switch Weapon Undone" << std::endl;
+}
+
+MoveRightCommand::MoveRightCommand(ControlSystem & system): Command(system)
+{	
+}
+
+void MoveRightCommand::execute()
+{
+	m_controlSystem.moveRight();
+}
+
+void MoveRightCommand::undo()
+{
 }

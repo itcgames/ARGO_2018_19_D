@@ -2,7 +2,7 @@
 #include <iostream>
 
 
-Level::Level()
+Level::Level(b2World & world) : m_refWorld(world)
 {
 }
 
@@ -146,12 +146,13 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 			t->srcX = region_x;
 			t->srcY = region_y;
 			t->texture = m_tilesets.at(tset_gid);
+			addBodyToTile(t, x_pos, y_pos); // Add a static body to the tile for Box2D physics
 			m_tiles[y][x] = t;
 			//t->m_index = tile_index;
 			count++;
 		}
 	}
-	std::cout << "Loaded Count" << count << std::endl;
+	std::cout << "Loaded Count: " << count << std::endl;
 }
 
 /// <summary>
@@ -177,15 +178,35 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 /// Render all tile objects that exist in the level
 /// </summary>
 /// <param name="renderer"></param>
-void Level::render(SDL_Renderer * renderer)
+void Level::render(SDL_Renderer * renderer, const SDL_Rect &camera)
 {
 	for (auto & row : m_tiles) {
 		for (auto tileData : row) {
 			if (tileData) {
 				const SDL_Rect srcRect = { tileData->srcX, tileData->srcY, m_tileWidth, m_tileHeight };
-				const SDL_Rect destRect = { tileData->destX, tileData->destY, m_tileWidth, m_tileHeight };
+				const SDL_Rect destRect = { tileData->destX - camera.x, tileData->destY - camera.y, m_tileWidth, m_tileHeight };
 				SDL_RenderCopy(renderer, tileData->texture, &srcRect, &destRect);
 			}
 		}
 	}
+}
+
+/// <summary>
+/// Create a Box2D body for a tile for collision physics
+/// </summary>
+/// <param name="t">A pointer to the tile</param>
+/// <param name="x">The top left X position of the tile</param>
+/// <param name="y">The top left Y position of the tile</param>
+void Level::addBodyToTile(TileData * t, int x, int y)
+{
+	t->bodyDef.type = b2_staticBody; // All tiles are static
+	t->bodyDef.position = b2Vec2(x + (m_tileWidth / 2.f), y + (m_tileHeight / 2.f)); // Box2D coordinates are at the centre so we must add dimensions
+	t->body = m_refWorld.CreateBody(&t->bodyDef);
+	t->shape.SetAsBox((m_tileWidth / 2.f), (m_tileHeight / 2.f));
+	t->fixture.density = 1.f;
+	t->fixture.friction = 0.1f; // Subject to change
+	t->fixture.restitution = 0.f;
+	t->fixture.shape = &t->shape;
+	t->body->CreateFixture(&t->fixture);
+	t->body->SetFixedRotation(true);
 }

@@ -3,7 +3,7 @@
 #include "../Components/Components.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/SpriteComponent.h"
-#include "../../SdlVector.h"
+#include "../Utils/VectorAPI.h"
 
 /// <summary>
 /// draws each entity at their position.
@@ -16,9 +16,9 @@ void RenderSystem::render(SDL_Renderer* renderer, const SDL_Rect & camera)
 		auto comps = i->getComponentsOfType(allowedTypes);
 		if (comps.size() == allowedTypes.size()) {
 			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
-			std::cout << "Pos: " << p->getPosition().x << ", " << p->getPosition().y << std::endl;
+			//std::cout << "Pos: " << p->getPosition().x << ", " << p->getPosition().y << std::endl;
 			SpriteComponent * s = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
-			SdlVector pos = p->getPosition();
+			VectorAPI pos = p->getPosition();
 			dest.x = pos.x - camera.x;
 			dest.y = pos.y - camera.y;
 			dest.w = s->m_width;

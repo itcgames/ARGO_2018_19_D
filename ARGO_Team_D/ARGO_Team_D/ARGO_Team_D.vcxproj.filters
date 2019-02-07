@@ -11,8 +11,9 @@
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
-    <ClCompile Include="SdlVector.cpp" />
     <ClCompile Include="Level\Level.cpp" />
+    <ClCompile Include="ECS\Components\PositionComponent.cpp" />
+    <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
   </ItemGroup>
@@ -29,7 +30,6 @@
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
-    <ClInclude Include="SdlVector.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />
@@ -37,6 +37,7 @@
     <ClInclude Include="Level\Level.h" />
     <ClInclude Include="Systems\System.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
+    <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Utils\MathUtils.h" />
   </ItemGroup>

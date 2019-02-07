@@ -9,9 +9,9 @@ Camera::Camera()
 	m_weight = 1;
 }
 
-void Camera::update(const SdlVector & boundPosition, const float & rotation)
+void Camera::update(const VectorAPI & boundPosition, const float & rotation)
 {
-	SdlVector boundPos = boundPosition;
+	VectorAPI boundPos = boundPosition;
 	
 	float rotInRadians = mu::degToRadians(rotation);
 	boundPos.x += std::cos(rotInRadians) * m_viewOffset;
@@ -25,12 +25,12 @@ void Camera::update(const SdlVector & boundPosition, const float & rotation)
 	std::cout << "x:" << m_bounds.x << ", y: " << m_bounds.y << std::endl;
 }
 
-void Camera::setPosition(const SdlVector & position)
+void Camera::setPosition(const VectorAPI & position)
 {
 	m_position = position;
 }
 
-void Camera::setSize(const SdlVector & size)
+void Camera::setSize(const VectorAPI & size)
 {
 	m_bounds.w = size.x;
 	m_bounds.y = size.y;
