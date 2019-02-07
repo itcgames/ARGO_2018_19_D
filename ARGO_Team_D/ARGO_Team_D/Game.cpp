@@ -59,10 +59,10 @@ Game::Game() : m_gravity(0, 90.81f),
 	}
 	
 	m_resourceManager = new ResourceManager(m_renderer);
-	m_resourceManager->addImageResource(new ImageResource, "test", "ASSETS//IMAGES//test.png");
-	m_resourceManager->addImageResource(new ImageResource, "testsquare", "ASSETS//IMAGES//TestSquare.png");
-	m_resourceManager->addSoundResource(new SoundResource, "test", "ASSETS//SOUNDS//test.mp3");
-	m_resourceManager->loadFromJson();
+
+	while (!m_resourceManager->checkLoaded()) {
+		cout << "Loading..." << endl;
+	}
 
 	texture = m_resourceManager->getImageResource("test");
 	square = m_resourceManager->getImageResource("testsquare");

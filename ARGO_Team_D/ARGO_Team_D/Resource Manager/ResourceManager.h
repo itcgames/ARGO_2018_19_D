@@ -35,6 +35,8 @@ public:
 		return (m_soundResources.find(name)->second->getSound());
 	}
 
+	bool checkLoaded();
+
 private:
 	std::map<std::string, ImageResource*> m_imageResources;
 	std::map<std::string, SoundResource*> m_soundResources;
