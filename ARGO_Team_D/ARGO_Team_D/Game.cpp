@@ -283,19 +283,6 @@ void Game::render()
 		m_renderSystem.render(m_renderer, m_camera);
 		level->render(m_renderer, m_camera);
 
-		// Box2D Demo Code
-		b1X = m_body1->GetPosition().x - 50;
-		b1Y = m_body1->GetPosition().y - 50;
-		b2X = m_body2->GetPosition().x - 50;
-		b2Y = m_body2->GetPosition().y - 50;
-
-		SDL_Rect dest;
-		dest.x = b1X - bounds.x;
-		dest.y = b1Y - bounds.y;
-		dest.w = 100.f;
-		dest.h = 100.f;
-		SDL_RenderCopy(m_renderer, square, NULL, &dest);
-
 		// Demo Code
 		b2X = (m_body2->GetPosition().x * WORLD_SCALE) - 50.f;
 		b2Y = (m_body2->GetPosition().y * WORLD_SCALE) - 50.f;
