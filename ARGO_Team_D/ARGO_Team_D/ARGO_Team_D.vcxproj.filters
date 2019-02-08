@@ -55,5 +55,6 @@
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
+    <ClInclude Include="FSM\IState.h" />
   </ItemGroup>
 </Project>

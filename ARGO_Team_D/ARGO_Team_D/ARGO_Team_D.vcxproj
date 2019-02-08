@@ -181,6 +181,7 @@
     <ClInclude Include="ECS\Systems\System.h" />
     <ClInclude Include="Factories\CharacterFactory.h" />
     <ClInclude Include="Factories\Factory.h" />
+    <ClInclude Include="FSM\IState.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Level\Level.h" />
