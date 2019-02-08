@@ -26,6 +26,7 @@
 #include "Menu/LevelSelectMenu.h"
 #include "Utils/VectorAPI.h"
 #include "Camera.h"
+#include<SDL_haptic.h>
 
 class MainMenu;
 class OptionsMenu;
@@ -54,6 +55,7 @@ public:
 
 	void fadeToState(State state);
 	void fade();
+	int test_haptic(SDL_Joystick * joystick);
 private:
 	void processEvents();
 	void update();
@@ -119,5 +121,12 @@ private:
 	float m_transitionAlphaPercent;
 
 	std::vector<Entity*> m_entityList;
+
+
+	//controller stuff
+	const int JOYSTICK_DEAD_ZONE = 16000;
+	SDL_Joystick* gGameController = NULL;
+	SDL_Haptic* gControllerHaptic = NULL;
+
 };
 #endif // !GAME_H
