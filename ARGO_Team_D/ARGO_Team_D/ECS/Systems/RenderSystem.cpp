@@ -16,10 +16,16 @@ void RenderSystem::render(SDL_Renderer* renderer, Camera & camera)
 		auto comps = i->getComponentsOfType(allowedTypes);
 		if (comps.size() == allowedTypes.size()) {
 			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
-			//std::cout << "Pos: " << p->getPosition().x << ", " << p->getPosition().y << std::endl;
 			SpriteComponent * s = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
-			VectorAPI pos = p->getPosition();
+
 			SDL_Rect bounds = camera.getBounds();
+			VectorAPI pos = p->getPosition();
+			VectorAPI size(s->m_width, s->m_height);
+
+			if (pos.x + size.x < bounds.x || pos.x > bounds.x + bounds.w
+				|| pos.y + size.y < bounds.y || pos.y > bounds.y + bounds.h) {
+				continue;
+			}
 			dest.x = pos.x - bounds.x;
 			dest.y = pos.y - bounds.y;
 			dest.w = s->m_width;

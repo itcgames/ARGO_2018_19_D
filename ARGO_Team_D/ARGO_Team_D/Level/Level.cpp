@@ -214,7 +214,7 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 			}
 		}
 	}
-	std::cout << tileD << "/" << tileC << " tiles Shown with bounds of: " << bounds.x << "," << bounds.y  << "," << bounds.w << "," << bounds.h << std::endl;
+	//std::cout << tileD << "/" << tileC << " tiles Shown with bounds of: " << bounds.x << "," << bounds.y  << "," << bounds.w << "," << bounds.h << std::endl;
 }
 
 /// <summary>
