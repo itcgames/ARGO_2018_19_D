@@ -3,27 +3,18 @@
 #include "ECS/Components/PositionComponent.h"
 #include "ECS/Components/SpriteComponent.h"
 
+const float WORLD_SCALE = 30.f;
+
 Game::Game() :
 	m_gravity(0, 90.81f),
 	m_world(m_gravity),
 	m_camera(m_windowWidth, m_windowHeight)
 {
 	// Box2D Test Code
-	m_bodyDef1.position = b2Vec2(b1X + 50, b1Y + 50);
-	m_bodyDef1.type = b2_staticBody;
-	m_body1 = m_world.CreateBody(&m_bodyDef1);
-	m_poly1.SetAsBox((50.f), (50.f));
-	m_fixture1.density = 1.f;
-	m_fixture1.friction = 0.1f;
-	m_fixture1.restitution = 0.0f;
-	m_fixture1.shape = &m_poly1;
-	m_body1->CreateFixture(&m_fixture1);
-	m_body1->SetFixedRotation(true);
-
-	m_bodyDef2.position = b2Vec2(b2X + 32, b2Y + 32);
+	m_bodyDef2.position = b2Vec2((b2X + 50) / WORLD_SCALE, (b2Y + 50) / WORLD_SCALE);
 	m_bodyDef2.type = b2_dynamicBody;
 	m_body2 = m_world.CreateBody(&m_bodyDef2);
-	m_poly2.SetAsBox((50.f), (50.f));
+	m_poly2.SetAsBox((50.f) / WORLD_SCALE, (50.f) / WORLD_SCALE);
 	m_fixture2.density = 1.f;
 	m_fixture2.friction = 0.1f;
 	m_fixture2.restitution = 0.0f;
@@ -103,7 +94,7 @@ Game::Game() :
 	m_controlSystem.addEntity(e);*/
 
 	inputHandler = new InputHandler(m_controlSystem);
-	level = new Level(m_world);
+	level = new Level(m_world, WORLD_SCALE);
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
 }
 
@@ -114,11 +105,9 @@ Game::~Game()
 void Game::run()
 {
 	bool exit = false;
-
 	float timePerFrame = 1000.f / 60.f;
 	Uint32 timeSinceLastUpdate = 0;
 	Uint32 timeSinceStart = SDL_GetTicks();
-
 	while (!m_quit)
 	{
 		processEvents();
@@ -217,15 +206,15 @@ void Game::processEvents()
 			// Demo Code
 			if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
 			{
-				m_body2->SetLinearVelocity(b2Vec2(100, 0));
+				m_body2->SetLinearVelocity(b2Vec2(15, m_body2->GetLinearVelocity().y));
 			}
 			if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
 			{
-				m_body2->SetLinearVelocity(b2Vec2(-100, 0));
+				m_body2->SetLinearVelocity(b2Vec2(-15, m_body2->GetLinearVelocity().y));
 			}
 			if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
 			{
-				m_body2->SetLinearVelocity(b2Vec2(0, -100));
+				m_body2->SetLinearVelocity(b2Vec2(m_body2->GetLinearVelocity().x, -35));
 			}
 			if (event.key.keysym.sym == SDLK_RETURN) {
 				m_camera.m_shaking = true;
@@ -254,8 +243,8 @@ void Game::update()
 			std::vector<std::string> s = { "Position" };
 			auto comps = player->getComponentsOfType(s);
 			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
-			m_camera.update(VectorAPI(m_body2->GetPosition().x, m_body2->GetPosition().y), 0);
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+			m_camera.update(VectorAPI(m_body2->GetPosition().x * WORLD_SCALE + 50.f, m_body2->GetPosition().y * WORLD_SCALE + 50.f), 0);
 			inputHandler->update();
 		}
 		break;
@@ -271,7 +260,6 @@ void Game::update()
 	default:
 		break;
 	}
-	
 }
 
 void Game::render()
@@ -292,22 +280,12 @@ void Game::render()
 		m_menu->draw();
 		break;
 	case PlayScreen:
-		m_renderSystem.render(m_renderer, bounds);
+		m_renderSystem.render(m_renderer, m_camera);
+		level->render(m_renderer, m_camera);
 
-		level->render(m_renderer, bounds);
-
-		b1X = m_body1->GetPosition().x - 50;
-		b1Y = m_body1->GetPosition().y - 50;
-		b2X = m_body2->GetPosition().x - 50;
-		b2Y = m_body2->GetPosition().y - 50;
-
-		SDL_Rect dest;
-		dest.x = b1X - bounds.x;
-		dest.y = b1Y - bounds.y;
-		dest.w = 100.f;
-		dest.h = 100.f;
-		SDL_RenderCopy(m_renderer, square, NULL, &dest);
-
+		// Demo Code
+		b2X = (m_body2->GetPosition().x * WORLD_SCALE) - 50.f;
+		b2Y = (m_body2->GetPosition().y * WORLD_SCALE) - 50.f;
 		SDL_Rect dest2;
 		dest2.x = b2X - bounds.x;
 		dest2.y = b2Y - bounds.y;
@@ -315,7 +293,6 @@ void Game::render()
 		dest2.h = 100.f;
 		SDL_RenderCopy(m_renderer, square, NULL, &dest2);
 
-		
 		break;
 	case Options:
 		m_options->draw();
