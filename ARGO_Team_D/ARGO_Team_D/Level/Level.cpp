@@ -182,16 +182,39 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 /// <param name="renderer"></param>
 void Level::render(SDL_Renderer * renderer, Camera &camera)
 {
+	int tileC = 0;
+	int tileD = 0;
+	SDL_Rect destRect;
+	SDL_Rect srcRect;
+	SDL_Rect bounds = camera.getBounds();
+
+
+	destRect.w = m_tileWidth;
+	destRect.h = m_tileHeight;
+
+	srcRect.w = m_tileWidth;
+	srcRect.h = m_tileHeight;
+
 	for (auto & row : m_tiles) {
 		for (auto tileData : row) {
 			if (tileData) {
-				SDL_Rect bounds = camera.getBounds();
-				const SDL_Rect srcRect = { tileData->srcX, tileData->srcY, m_tileWidth, m_tileHeight };
-				const SDL_Rect destRect = { tileData->destX - bounds.x, tileData->destY - bounds.y, m_tileWidth, m_tileHeight };
+				tileC++;
+				int tdX = tileData->destX;
+				int tdY = tileData->destY;
+				if (tdX + destRect.w < bounds.x || tdX > bounds.x + bounds.w ||
+					tdY + destRect.h < bounds.y || tdY > bounds.y + bounds.h) {
+					continue;
+				}
+				tileD++;
+				destRect.x = tileData->destX - bounds.x;
+				destRect.y = tileData->destY - bounds.y;
+				srcRect.x = tileData->srcX;
+				srcRect.y = tileData->srcY;
 				SDL_RenderCopy(renderer, tileData->texture, &srcRect, &destRect);
 			}
 		}
 	}
+	std::cout << tileD << "/" << tileC << " tiles Shown with bounds of: " << bounds.x << "," << bounds.y  << "," << bounds.w << "," << bounds.h << std::endl;
 }
 
 /// <summary>

@@ -237,7 +237,6 @@ void Game::processEvents()
 			break;
 		default:
 			m_camera.m_shaking = false;
-			//SDL_RenderSetScale(m_renderer, 1, 1);
 			break;
 		}
 	}
@@ -257,7 +256,7 @@ void Game::update()
 			auto comps = player->getComponentsOfType(s);
 			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
-			m_camera.update(VectorAPI(m_body2->GetPosition().x * WORLD_SCALE + 50.f, m_body2->GetPosition().y * WORLD_SCALE + 50.f), 0);
+			m_camera.update(VectorAPI(m_body2->GetPosition().x * WORLD_SCALE, m_body2->GetPosition().y * WORLD_SCALE), 0);
 			inputHandler->update();
 		}
 		break;
