@@ -154,6 +154,35 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 			count++;
 		}
 	}
+	for (auto y = 0; y < m_rows; ++y)
+	{
+		float startX = -1;
+		float startY = -1;
+		float endX = -1;
+		float endY = -1;
+		for (auto x = 0; x < m_cols; ++x)
+		{
+			if (nullptr != m_tiles[y][x])
+			{
+				if (startX < 0 && startY < 0)
+				{
+					startX = m_tiles[y][x]->destX;
+					startX = m_tiles[y][x]->destX;
+					endX = m_tiles[y][x]->destX;
+					endY = m_tiles[y][x]->destY;
+				}
+				else
+				{
+					endX = m_tiles[y][x]->destX;
+					endY = m_tiles[y][x]->destY;
+				}
+			}
+			else if(startX > 0 && startY > 0)
+			{
+
+			}
+		}
+	}
 	std::cout << "Loaded Count: " << count << std::endl;
 }
 
