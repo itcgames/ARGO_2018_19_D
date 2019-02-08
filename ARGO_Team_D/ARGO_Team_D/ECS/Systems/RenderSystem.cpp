@@ -9,7 +9,7 @@
 /// draws each entity at their position.
 /// </summary>
 /// <param name="renderer"></param>
-void RenderSystem::render(SDL_Renderer* renderer, const SDL_Rect & camera)
+void RenderSystem::render(SDL_Renderer* renderer, Camera & camera)
 {
 	std::vector<std::string> allowedTypes{ "Position", "Sprite" };
 	for (Entity* i : m_entityList) {
@@ -19,11 +19,12 @@ void RenderSystem::render(SDL_Renderer* renderer, const SDL_Rect & camera)
 			//std::cout << "Pos: " << p->getPosition().x << ", " << p->getPosition().y << std::endl;
 			SpriteComponent * s = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
 			VectorAPI pos = p->getPosition();
-			dest.x = pos.x - camera.x;
-			dest.y = pos.y - camera.y;
+			SDL_Rect bounds = camera.getBounds();
+			dest.x = pos.x - bounds.x;
+			dest.y = pos.y - bounds.y;
 			dest.w = s->m_width;
 			dest.h = s->m_height;
-			SDL_RenderCopyEx(renderer, s->getTexture(), NULL, &dest, s->m_angle, s->m_center, s->m_flip);
+			SDL_RenderCopyEx(renderer, s->getTexture(), NULL, &dest, s->m_angle,s->m_center, s->m_flip);
 		}
 	}
 }

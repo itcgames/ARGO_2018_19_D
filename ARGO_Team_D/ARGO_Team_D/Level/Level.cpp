@@ -2,7 +2,9 @@
 #include <iostream>
 
 
-Level::Level(b2World & world) : m_refWorld(world)
+Level::Level(b2World & world, float worldScale)
+	: m_refWorld(world),
+	m_worldScale(worldScale)
 {
 }
 
@@ -178,13 +180,14 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 /// Render all tile objects that exist in the level
 /// </summary>
 /// <param name="renderer"></param>
-void Level::render(SDL_Renderer * renderer, const SDL_Rect &camera)
+void Level::render(SDL_Renderer * renderer, Camera &camera)
 {
 	for (auto & row : m_tiles) {
 		for (auto tileData : row) {
 			if (tileData) {
+				SDL_Rect bounds = camera.getBounds();
 				const SDL_Rect srcRect = { tileData->srcX, tileData->srcY, m_tileWidth, m_tileHeight };
-				const SDL_Rect destRect = { tileData->destX - camera.x, tileData->destY - camera.y, m_tileWidth, m_tileHeight };
+				const SDL_Rect destRect = { tileData->destX - bounds.x, tileData->destY - bounds.y, m_tileWidth, m_tileHeight };
 				SDL_RenderCopy(renderer, tileData->texture, &srcRect, &destRect);
 			}
 		}
@@ -200,9 +203,9 @@ void Level::render(SDL_Renderer * renderer, const SDL_Rect &camera)
 void Level::addBodyToTile(TileData * t, int x, int y)
 {
 	t->bodyDef.type = b2_staticBody; // All tiles are static
-	t->bodyDef.position = b2Vec2(x + (m_tileWidth / 2.f), y + (m_tileHeight / 2.f)); // Box2D coordinates are at the centre so we must add dimensions
+	t->bodyDef.position = b2Vec2(((x + (m_tileWidth / 2.f)) / m_worldScale), ((y + (m_tileHeight / 2.f)) / m_worldScale)); // Box2D coordinates are at the centre so we must add dimensions
 	t->body = m_refWorld.CreateBody(&t->bodyDef);
-	t->shape.SetAsBox((m_tileWidth / 2.f), (m_tileHeight / 2.f));
+	t->shape.SetAsBox((m_tileWidth / 2.f) / m_worldScale, (m_tileHeight / 2.f) / m_worldScale);
 	t->fixture.density = 1.f;
 	t->fixture.friction = 0.1f; // Subject to change
 	t->fixture.restitution = 0.f;

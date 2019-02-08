@@ -3,13 +3,14 @@
 
 #include "../Entities/Entity.h"
 #include "System.h"
+#include "../Camera.h"
 
 /// <summary>
 /// Draws any entites attached to the screen.
 /// </summary>
 class RenderSystem : public System {
 public:
-	void render(SDL_Renderer* renderer, const SDL_Rect & camera);
+	void render(SDL_Renderer* renderer, Camera & camera);
 
 private:
 	SDL_Rect dest;
