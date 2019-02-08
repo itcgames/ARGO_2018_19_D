@@ -230,12 +230,25 @@ void Game::processEvents()
 			if (event.key.keysym.sym == SDLK_RETURN) {
 				m_camera.m_shaking = true;
 			}
+			if (event.key.keysym.sym == SDLK_SPACE) {
+				VectorAPI scale = m_camera.m_scale;
+				scale += 0.1f;
+				m_camera.setScale(scale);
+				SDL_RenderSetScale(m_renderer, m_camera.m_scale.x, m_camera.m_scale.y);
+			}
+			if (event.key.keysym.sym == SDLK_BACKSPACE) {
+				VectorAPI scale = m_camera.m_scale;
+				scale -= 0.1f;
+				m_camera.setScale(scale);
+				SDL_RenderSetScale(m_renderer, m_camera.m_scale.x, m_camera.m_scale.y);
+			}
 			break;
 		case SDL_QUIT:
 			m_quit = true;
 			break;
 		default:
 			m_camera.m_shaking = false;
+			//SDL_RenderSetScale(m_renderer, 1, 1);
 			break;
 		}
 	}
