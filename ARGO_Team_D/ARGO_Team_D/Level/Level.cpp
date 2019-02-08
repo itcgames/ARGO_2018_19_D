@@ -2,7 +2,9 @@
 #include <iostream>
 
 
-Level::Level(b2World & world) : m_refWorld(world)
+Level::Level(b2World & world, float worldScale)
+	: m_refWorld(world),
+	m_worldScale(worldScale)
 {
 }
 
@@ -201,9 +203,9 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 void Level::addBodyToTile(TileData * t, int x, int y)
 {
 	t->bodyDef.type = b2_staticBody; // All tiles are static
-	t->bodyDef.position = b2Vec2(x + (m_tileWidth / 2.f), y + (m_tileHeight / 2.f)); // Box2D coordinates are at the centre so we must add dimensions
+	t->bodyDef.position = b2Vec2(((x + (m_tileWidth / 2.f)) / m_worldScale), ((y + (m_tileHeight / 2.f)) / m_worldScale)); // Box2D coordinates are at the centre so we must add dimensions
 	t->body = m_refWorld.CreateBody(&t->bodyDef);
-	t->shape.SetAsBox((m_tileWidth / 2.f), (m_tileHeight / 2.f));
+	t->shape.SetAsBox((m_tileWidth / 2.f) / m_worldScale, (m_tileHeight / 2.f) / m_worldScale);
 	t->fixture.density = 1.f;
 	t->fixture.friction = 0.1f; // Subject to change
 	t->fixture.restitution = 0.f;

@@ -25,7 +25,7 @@ struct TileData {
 class Level {
 public:
 	// Public Functions
-	Level(b2World & world);
+	Level(b2World & world, const float worldScale);
 	~Level();
 	bool load(const std::string filepath, ResourceManager * rManager);
 	void parseTMXTileLayer(const std::unique_ptr<tmx::Layer> & layer, int layerNum);
@@ -35,6 +35,7 @@ public:
 
 	// Public Members
 	b2World & m_refWorld;
+	float m_worldScale;
 	int m_rows;
 	int m_cols;
 	uint32_t m_tileWidth;
