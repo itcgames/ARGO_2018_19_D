@@ -148,7 +148,6 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 			t->srcX = region_x;
 			t->srcY = region_y;
 			t->texture = m_tilesets.at(tset_gid);
-			addBodyToTile(t, x_pos, y_pos); // Add a static body to the tile for Box2D physics
 			m_tiles[y][x] = t;
 			//t->m_index = tile_index;
 			count++;
@@ -156,30 +155,28 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 	}
 	for (auto y = 0; y < m_rows; ++y)
 	{
-		float startX = -1;
-		float startY = -1;
-		float endX = -1;
-		float endY = -1;
+		float xPos, yPos, width = 0;
+		bool bodyStarted = false;
 		for (auto x = 0; x < m_cols; ++x)
 		{
 			if (nullptr != m_tiles[y][x])
 			{
-				if (startX < 0 && startY < 0)
+				if (!bodyStarted)
 				{
-					startX = m_tiles[y][x]->destX;
-					startX = m_tiles[y][x]->destX;
-					endX = m_tiles[y][x]->destX;
-					endY = m_tiles[y][x]->destY;
+					bodyStarted = true;
+					xPos = m_tiles[y][x]->destX;
+					yPos = m_tiles[y][x]->destY;
+					width = m_tileWidth;
 				}
 				else
 				{
-					endX = m_tiles[y][x]->destX;
-					endY = m_tiles[y][x]->destY;
+					width += m_tileWidth;
 				}
 			}
-			else if(startX > 0 && startY > 0)
+			else if(bodyStarted)
 			{
-
+				bodyStarted = false;
+				createBody(xPos, yPos, width);
 			}
 		}
 	}
@@ -224,21 +221,34 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 }
 
 /// <summary>
-/// Create a Box2D body for a tile for collision physics
+/// Create a Box2D body in the level that represents one or more tiles
 /// </summary>
-/// <param name="t">A pointer to the tile</param>
-/// <param name="x">The top left X position of the tile</param>
-/// <param name="y">The top left Y position of the tile</param>
-void Level::addBodyToTile(TileData * t, int x, int y)
+/// <param name="x">The top left X position of the body</param>
+/// <param name="y">The top left Y position of the body</param>
+/// <param name="t">The width of the body</param>
+void Level::createBody(float x, float y, float width)
 {
-	t->bodyDef.type = b2_staticBody; // All tiles are static
-	t->bodyDef.position = b2Vec2(((x + (m_tileWidth / 2.f)) / m_worldScale), ((y + (m_tileHeight / 2.f)) / m_worldScale)); // Box2D coordinates are at the centre so we must add dimensions
-	t->body = m_refWorld.CreateBody(&t->bodyDef);
-	t->shape.SetAsBox((m_tileWidth / 2.f) / m_worldScale, (m_tileHeight / 2.f) / m_worldScale);
-	t->fixture.density = 1.f;
-	t->fixture.friction = 0.1f; // Subject to change
-	t->fixture.restitution = 0.f;
-	t->fixture.shape = &t->shape;
-	t->body->CreateFixture(&t->fixture);
-	t->body->SetFixedRotation(true);
+	PhysicsBody  * pb = new PhysicsBody();
+	pb->bodyDef.type = b2_staticBody;
+	pb->bodyDef.position = b2Vec2((x + (width / 2.f)) / m_worldScale, (y + (m_tileHeight / 2.f)) / m_worldScale);
+	pb->body = m_refWorld.CreateBody(&pb->bodyDef);
+	pb->shape.SetAsBox((width / 2.f) / m_worldScale, (m_tileHeight / 2.f) / m_worldScale);
+	pb->fixture.density = 1.f;
+	pb->fixture.friction = 0.1f;
+	pb->fixture.shape = &pb->shape;
+	pb->body->CreateFixture(&pb->fixture);
+	pb->body->SetFixedRotation(true);
+	m_physicsBodies.push_back(pb);
+}
+
+/// <summary>
+/// Function used to properly clear all Box2D bodies from a level
+/// </summary>
+void Level::clearPhysicsBodies()
+{
+	for (auto & pb : m_physicsBodies)
+	{
+		m_refWorld.DestroyBody(pb->body);
+	}
+	m_physicsBodies.clear();
 }
