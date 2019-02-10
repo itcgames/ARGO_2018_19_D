@@ -23,6 +23,8 @@
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
+    <ClCompile Include="ECS\Components\BodyComponent.cpp" />
+    <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -55,6 +57,8 @@
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
+    <ClInclude Include="ECS\Components\BodyComponent.h" />
+    <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="FSM\IState.h" />
   </ItemGroup>
 </Project>

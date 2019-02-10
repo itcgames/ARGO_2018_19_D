@@ -1,14 +1,12 @@
 #include "Game.h"
-#include <sstream>
-#include "ECS/Components/PositionComponent.h"
-#include "ECS/Components/SpriteComponent.h"
 
 const float WORLD_SCALE = 30.f;
 
 Game::Game() :
 	m_gravity(0, 90.81f),
 	m_world(m_gravity),
-	m_camera(m_windowWidth, m_windowHeight)
+	m_camera(m_windowWidth, m_windowHeight),
+	m_physicsSystem(WORLD_SCALE)
 {
 	// Box2D Test Code
 	m_bodyDef2.position = b2Vec2((b2X + 50) / WORLD_SCALE, (b2Y + 50) / WORLD_SCALE);
@@ -38,6 +36,38 @@ Game::Game() :
 	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
 	{
 		cout << "Error: " << "Audio Initalisation" << endl;
+	}
+	//Check for joysticks
+	if (SDL_NumJoysticks() < 1)
+	{
+		cout << ("No Joystick connected!\n") << std::endl;
+	}
+	else
+	{
+		//Load joystick
+		gGameController = SDL_JoystickOpen(0);
+		if (gGameController == NULL)
+		{
+			cout << ("Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError()) << endl;
+		}
+		else
+		{
+			// Get controller haptic device
+			gControllerHaptic = SDL_HapticOpenFromJoystick(gGameController);
+			if (gControllerHaptic == NULL)
+			{
+				printf("Warning: Controller does not support haptics! SDL Error: %s\n", SDL_GetError());
+			}
+			else
+			{
+				//Get initialize rumble
+				if (SDL_HapticRumbleInit(gControllerHaptic) < 0)
+				{
+					printf("Warning: Unable to initialize rumble! SDL Error: %s\n", SDL_GetError());
+				}
+			}
+
+		}
 	}
 
 	p_window = SDL_CreateWindow("Argo Project", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_windowWidth, m_windowHeight, 0);
@@ -81,20 +111,22 @@ Game::Game() :
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 
-	initialiseEntitys();
-	initialiseComponents();
+	initialiseEntities();
 	initialiseSystems();
 	setUpFont();
 
-	/*Entity * e = new Entity();
+	Entity * e = new Entity(0);
 	e->addComponent(new PositionComponent(200, 200));
-	std::string name = "test";
-	e->addComponent(new SpriteComponent(name, *m_resourceManager, 1920, 1080));
+	std::string name = "testsquare";
+	e->addComponent(new SpriteComponent(name, *m_resourceManager, 100, 100));
+	e->addComponent(new BodyComponent(200, 200, 100, m_world, WORLD_SCALE));
 	m_renderSystem.addEntity(e);
-	m_controlSystem.addEntity(e);*/
+	m_physicsSystem.addEntity(e);
+	m_controlSystem.addEntity(e);
 
-	inputHandler = new InputHandler(m_controlSystem);
+
 	level = new Level(m_world, WORLD_SCALE);
+	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
 }
 
@@ -125,64 +157,20 @@ void Game::run()
 	quit();
 }
 
-void Game::setGameState(State state)
-{
-	m_gameState = state;
-}
-
-void Game::fadeToState(State state)
-{
-	m_nextState = state;
-	fadeOn = true;
-	doneFading = false;
-}
-
-void Game::fade()
-{
-	if (fadeOn)
-	{
-		m_transitionAlphaPercent += 0.075;
-		if (m_transitionAlphaPercent >= 1)
-		{
-			m_transitionAlphaPercent = 1;
-			m_gameState = m_nextState;
-			fadeOff = true;
-			fadeOn = false;
-		}
-
-		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
-		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
-	}
-
-	if (fadeOff)
-	{
-		m_transitionAlphaPercent -= 0.075;
-		if (m_transitionAlphaPercent <= 0)
-		{
-			m_transitionAlphaPercent = 0;
-			fadeOff = false;
-			doneFading = true;
-		}
-
-		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
-		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
-	}
-}
-
 void Game::processEvents()
 {
 	SDL_Event event;
 
 	while (SDL_PollEvent(&event))
 	{
-
 		switch (m_gameState)
 		{
 		case Menu:
 			m_menu->handleMouse(event);
 			break;
 		case PlayScreen:
-			inputHandler->handleInput(event);
+			inputHandler->handleKeyboardInput(event);
+			inputHandler->handleControllerInput(event);
 			break;
 		case Options:
 			m_options->handleMouse(event);
@@ -197,7 +185,6 @@ void Game::processEvents()
 			break;
 		}
 
-		
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
@@ -253,9 +240,11 @@ void Game::update()
 		if (doneFading) // dont update the game unless screen is done fading
 		{
 			std::vector<std::string> s = { "Position" };
-			auto comps = player->getComponentsOfType(s);
+			auto comps = m_player->getComponentsOfType(s);
 			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
+			m_controlSystem.update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_body2->GetPosition().x * WORLD_SCALE, m_body2->GetPosition().y * WORLD_SCALE), 0);
 			inputHandler->update();
 		}
@@ -320,7 +309,7 @@ void Game::render()
 	}
 
 	fade();
-	
+
 	SDL_RenderPresent(m_renderer);
 }
 
@@ -328,29 +317,69 @@ void Game::quit()
 {
 	Mix_CloseAudio();
 	TTF_Quit();
+	SDL_HapticClose(gControllerHaptic);
+	SDL_JoystickClose(gGameController);
+	gGameController = NULL;
+	gControllerHaptic = NULL;
 	SDL_DestroyWindow(p_window);
 	SDL_Quit();
+}
+
+void Game::setGameState(State state)
+{
+	m_gameState = state;
+}
+
+void Game::fadeToState(State state)
+{
+	m_nextState = state;
+	fadeOn = true;
+	doneFading = false;
+}
+
+void Game::fade()
+{
+	if (fadeOn)
+	{
+		m_transitionAlphaPercent += 0.075;
+		if (m_transitionAlphaPercent >= 1)
+		{
+			m_transitionAlphaPercent = 1;
+			m_gameState = m_nextState;
+			fadeOff = true;
+			fadeOn = false;
+		}
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
+		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
+	}
+
+	if (fadeOff)
+	{
+		m_transitionAlphaPercent -= 0.075;
+		if (m_transitionAlphaPercent <= 0)
+		{
+			m_transitionAlphaPercent = 0;
+			fadeOff = false;
+			doneFading = true;
+		}
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
+		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
+	}
 }
 
 /// <summary>
 /// initialises entitys.
 /// </summary>
-void Game::initialiseEntitys()
+void Game::initialiseEntities()
 {
 	std::string name = "test";
 
-	playerFactory = new CharacterFactory(m_resourceManager);
-	Entity * e = playerFactory->CreateEntityPlayer(name, 1, VectorAPI(0, 0), 1920, 1080);
+	m_playerFactory = new CharacterFactory(m_resourceManager);
+	Entity * e = m_playerFactory->CreateEntityPlayer(name, 1, VectorAPI(0, 0), 1920, 1080);
 	m_entityList.push_back(e);
-	player = new Entity(2);
-
-}
-
-/// <summary>
-/// adds components to entitys.
-/// </summary>
-void Game::initialiseComponents()
-{
+	m_player = new Entity(2);
 
 }
 
@@ -385,4 +414,46 @@ void Game::setUpFont() {
 	}
 	const char *path = "ASSETS\\FONTS\\arial.ttf";
 	Sans = TTF_OpenFont(path, 50);
+}
+
+int Game::test_haptic(SDL_Joystick * joystick) {
+	SDL_Haptic *haptic;
+	SDL_HapticEffect effect;
+	int effect_id;
+
+	// Open the device
+	haptic = SDL_HapticOpenFromJoystick(joystick);
+	if (haptic == NULL) return -1; // Most likely joystick isn't haptic
+
+	// See if it can do sine waves
+	//if ((SDL_HapticQuery(haptic) & SDL_HAPTIC_SINE) == 0) {
+	//	SDL_HapticClose(haptic); // No sine effect
+	//	return -1;
+	//}
+
+	// Create the effect
+	SDL_memset(&effect, 0, sizeof(SDL_HapticEffect)); // 0 is safe default
+	effect.type = SDL_HAPTIC_SINE;
+	effect.periodic.direction.type = SDL_HAPTIC_POLAR; // Polar coordinates
+	effect.periodic.direction.dir[0] = 18000; // Force comes from south
+	effect.periodic.period = 1000; // 1000 ms
+	effect.periodic.magnitude = 20000; // 20000/32767 strength
+	effect.periodic.length = 5000; // 5 seconds long
+	effect.periodic.attack_length = 1000; // Takes 1 second to get max strength
+	effect.periodic.fade_length = 1000; // Takes 1 second to fade away
+
+	// Upload the effect
+	effect_id = SDL_HapticNewEffect(haptic, &effect);
+
+	// Test the effect
+	SDL_HapticRunEffect(haptic, effect_id, 1);
+	SDL_Delay(5000); // Wait for the effect to finish
+
+	// We destroy the effect, although closing the device also does this
+	SDL_HapticDestroyEffect(haptic, effect_id);
+
+	// Close the device
+	SDL_HapticClose(haptic);
+
+	return 0; // Success
 }

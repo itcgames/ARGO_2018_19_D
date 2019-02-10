@@ -7,12 +7,11 @@ public:
 	Command(ControlSystem & system);
 	virtual ~Command();
 	virtual void execute() = 0;
-	virtual void undo() = 0;
+	virtual bool isExecuted();
 
-	virtual bool isExecuted() { return executed; };
 protected:
 	ControlSystem & m_controlSystem;
-	bool executed = false;
+	bool m_executed = false;
 };
 #endif // !COMMAND_H
 
