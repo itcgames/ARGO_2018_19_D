@@ -5,15 +5,16 @@ InputHandler::InputHandler(ControlSystem & system, SDL_Joystick& controller, SDL
 {
 	gGameController = &controller;
 	gControllerHaptic = &haptic;
-	MoveRight = new MoveRightCommand(m_controlSystem);
-	MoveLeft = new MoveLeftCommand(m_controlSystem);
-	Fire = new FireCommand(m_controlSystem);
-
+	m_moveRight = new MoveRightCommand(m_controlSystem);
+	m_moveLeft = new MoveLeftCommand(m_controlSystem);
+	m_fire = new FireCommand(m_controlSystem);
+	m_jump = new JumpCommand(m_controlSystem);
 }
 
-void InputHandler::handleInput(SDL_Event theEvent)
+void InputHandler::handleKeyboardInput(SDL_Event theEvent)
 {
-	switch (theEvent.type) {
+	switch (theEvent.type) 
+	{
 	case SDL_KEYDOWN:
 		if (theEvent.key.keysym.sym ==  SDLK_RIGHT || theEvent.key.keysym.sym == SDLK_d)
 		{
@@ -38,7 +39,7 @@ void InputHandler::handleInput(SDL_Event theEvent)
 	}
 }
 
-void InputHandler::handleJoyStick(SDL_Event theEvent)
+void InputHandler::handleControllerInput(SDL_Event theEvent)
 {
 	switch (theEvent.type)
 	{
@@ -149,22 +150,21 @@ void InputHandler::handleJoyStick(SDL_Event theEvent)
 	}
 }
 
-
 void InputHandler::update()
 {
 	if (rightPressed)
 	{
-		MoveRight->execute();
+		m_moveRight->execute();
 		std::cout << "Moving Right" << std::endl;
 	}
 	if (leftPressed)
 	{
-		MoveLeft->execute();
+		m_moveLeft->execute();
 		std::cout << "Moving Left" << std::endl;
 	}
 	if (cntrlPressed)
 	{
-		Fire->execute();
+		m_fire->execute();
 		std::cout << "Firing" << std::endl;
 	}
 }

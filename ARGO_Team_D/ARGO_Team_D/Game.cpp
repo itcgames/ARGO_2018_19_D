@@ -111,8 +111,7 @@ Game::Game() :
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 
-	initialiseEntitys();
-	initialiseComponents();
+	initialiseEntities();
 	initialiseSystems();
 	setUpFont();
 
@@ -123,6 +122,7 @@ Game::Game() :
 	e->addComponent(new BodyComponent(200, 200, 100, m_world, WORLD_SCALE));
 	m_renderSystem.addEntity(e);
 	m_physicsSystem.addEntity(e);
+	m_controlSystem.addEntity(e);
 
 
 	level = new Level(m_world, WORLD_SCALE);
@@ -157,65 +157,20 @@ void Game::run()
 	quit();
 }
 
-void Game::setGameState(State state)
-{
-	m_gameState = state;
-}
-
-void Game::fadeToState(State state)
-{
-	m_nextState = state;
-	fadeOn = true;
-	doneFading = false;
-}
-
-void Game::fade()
-{
-	if (fadeOn)
-	{
-		m_transitionAlphaPercent += 0.075;
-		if (m_transitionAlphaPercent >= 1)
-		{
-			m_transitionAlphaPercent = 1;
-			m_gameState = m_nextState;
-			fadeOff = true;
-			fadeOn = false;
-		}
-
-		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
-		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
-	}
-
-	if (fadeOff)
-	{
-		m_transitionAlphaPercent -= 0.075;
-		if (m_transitionAlphaPercent <= 0)
-		{
-			m_transitionAlphaPercent = 0;
-			fadeOff = false;
-			doneFading = true;
-		}
-
-		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
-		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
-	}
-}
-
 void Game::processEvents()
 {
 	SDL_Event event;
 
 	while (SDL_PollEvent(&event))
 	{
-
 		switch (m_gameState)
 		{
 		case Menu:
 			m_menu->handleMouse(event);
 			break;
 		case PlayScreen:
-			inputHandler->handleInput(event);
-			inputHandler->handleJoyStick(event);
+			inputHandler->handleKeyboardInput(event);
+			inputHandler->handleControllerInput(event);
 			break;
 		case Options:
 			m_options->handleMouse(event);
@@ -229,7 +184,7 @@ void Game::processEvents()
 		default:
 			break;
 		}
-		
+
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
@@ -273,8 +228,9 @@ void Game::update()
 		if (doneFading) // dont update the game unless screen is done fading
 		{
 			std::vector<std::string> s = { "Position" };
-			auto comps = player->getComponentsOfType(s);
+			auto comps = m_player->getComponentsOfType(s);
 			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
+			m_controlSystem.update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_body2->GetPosition().x * WORLD_SCALE + 50.f, m_body2->GetPosition().y * WORLD_SCALE + 50.f), 0);
@@ -341,7 +297,7 @@ void Game::render()
 	}
 
 	fade();
-	
+
 	SDL_RenderPresent(m_renderer);
 }
 
@@ -357,25 +313,61 @@ void Game::quit()
 	SDL_Quit();
 }
 
-/// <summary>
-/// initialises entitys.
-/// </summary>
-void Game::initialiseEntitys()
+void Game::setGameState(State state)
 {
-	std::string name = "test";
+	m_gameState = state;
+}
 
-	playerFactory = new CharacterFactory(m_resourceManager);
-	Entity * e = playerFactory->CreateEntityPlayer(name, 1, VectorAPI(0, 0), 1920, 1080);
-	m_entityList.push_back(e);
-	player = new Entity(2);
+void Game::fadeToState(State state)
+{
+	m_nextState = state;
+	fadeOn = true;
+	doneFading = false;
+}
 
+void Game::fade()
+{
+	if (fadeOn)
+	{
+		m_transitionAlphaPercent += 0.075;
+		if (m_transitionAlphaPercent >= 1)
+		{
+			m_transitionAlphaPercent = 1;
+			m_gameState = m_nextState;
+			fadeOff = true;
+			fadeOn = false;
+		}
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
+		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
+	}
+
+	if (fadeOff)
+	{
+		m_transitionAlphaPercent -= 0.075;
+		if (m_transitionAlphaPercent <= 0)
+		{
+			m_transitionAlphaPercent = 0;
+			fadeOff = false;
+			doneFading = true;
+		}
+
+		SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255 * m_transitionAlphaPercent);
+		SDL_RenderFillRect(m_renderer, &m_transitionScreen);
+	}
 }
 
 /// <summary>
-/// adds components to entitys.
+/// initialises entitys.
 /// </summary>
-void Game::initialiseComponents()
+void Game::initialiseEntities()
 {
+	std::string name = "test";
+
+	m_playerFactory = new CharacterFactory(m_resourceManager);
+	Entity * e = m_playerFactory->CreateEntityPlayer(name, 1, VectorAPI(0, 0), 1920, 1080);
+	m_entityList.push_back(e);
+	m_player = new Entity(2);
 
 }
 

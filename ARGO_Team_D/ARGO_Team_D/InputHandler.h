@@ -1,21 +1,23 @@
-#pragma once
-#include"Command.h"
-#include"ConcreteCommand.h"
-#include"SDL.h"
-#include<vector>
-#include"ControlSystem.h"
+#ifndef INPUTHANDLER_H
+#define INPUTHANDLER_H
+
+#include "Command.h"
+#include "ConcreteCommand.h"
+#include "SDL.h"
+#include <vector>
+#include "ControlSystem.h"
 class InputHandler {
 public:
 	InputHandler(ControlSystem & system, SDL_Joystick& controller, SDL_Haptic& haptic);
-	void handleInput(SDL_Event theEvent);
-	void handleJoyStick(SDL_Event theEvent);
+	void handleKeyboardInput(SDL_Event theEvent);
+	void handleControllerInput(SDL_Event theEvent);
 	void update();
 private:
 	Command * m_moveRight;
 	Command * m_moveLeft;
 	Command * m_fire;
+	Command * m_jump;
 
-	std::vector<Command *> commands;
 	ControlSystem & m_controlSystem;
 
 	bool rightPressed = false;
@@ -28,3 +30,5 @@ private:
 	SDL_Joystick* gGameController = NULL;
 	SDL_Haptic* gControllerHaptic = NULL;
 };
+
+#endif // !INPUTHANDLER_H

@@ -5,7 +5,7 @@
 #include <iostream>
 #include "ECS/Components/Components.h"
 #include "ECS/Systems/System.h"
-#include "ECS/Components/PositionComponent.h"
+#include "ECS/Components/BodyComponent.h"
 #include "Utils/VectorAPI.h"
 
 class ControlSystem : public System {
@@ -21,7 +21,7 @@ private:
 	bool m_moveRight;
 	bool m_moveLeft;
 	bool m_jump;
-	bool m_fire
+	bool m_fire;
 };
 
 

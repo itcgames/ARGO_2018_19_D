@@ -14,10 +14,28 @@ void ControlSystem::update()
 	for (auto &e : m_entityList)
 	{
 		auto comps = e->getComponentsOfType(allowedTypes);
-		BodyComponent * posComp = dynamic_cast<PositionComponent *>(comps["Position"]);
-		if (posComp != nullptr)
+		BodyComponent * bodyComp = dynamic_cast<BodyComponent *>(comps["Body"]);
+		if (bodyComp != nullptr)
 		{
-			posComp->setPosition(posComp->getPosition() + VectorAPI(1, 0));
+			b2Body * body = bodyComp->getBody();
+			b2Vec2 currentVelocity = body->GetLinearVelocity();
+			if (m_moveRight)
+			{
+				body->SetLinearVelocity(b2Vec2(15, currentVelocity.y));
+			}
+			else if (m_moveLeft)
+			{
+				body->SetLinearVelocity(b2Vec2(-15, currentVelocity.y));
+			}
+			else if (m_jump)
+			{
+				body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+			}
+			else
+			{
+				body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
+			}
+			m_moveRight = false, m_moveLeft = false, m_jump = false;
 		}
 	}
 }

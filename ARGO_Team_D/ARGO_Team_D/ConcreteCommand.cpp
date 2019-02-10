@@ -1,84 +1,38 @@
 #include "ConcreteCommand.h"
 
+// Jump
 JumpCommand::JumpCommand(ControlSystem & system): Command(system)
 {
 }
 
 void JumpCommand::execute()
 {
-	//std::cout << "Jump Command" << std::endl;
-	//executed = true;
+	m_controlSystem.jump();
 }
 
-void JumpCommand::undo()
-{
-	std::cout << "Jump Undone" << std::endl;
-}
-
+// Fire
 FireCommand::FireCommand(ControlSystem & system): Command(system)
 {
 }
 
 void FireCommand::execute()
 {
-	//std::cout << "Fire Command" << std::endl;
-	//executed = true;
 	m_controlSystem.fire();
 }
 
-void FireCommand::undo()
-{
-	std::cout << "Fire Undone" << std::endl;
-}
-
+// Move Left
 MoveLeftCommand::MoveLeftCommand(ControlSystem & system) : Command(system)
 {
 }
 
 void MoveLeftCommand::execute()
 {
-	//std::cout << "Move Command" << std::endl;
-	//executed = true;
 	m_controlSystem.moveLeft();
 }
 
-void MoveLeftCommand::undo()
+// Move Right
+MoveRightCommand::MoveRightCommand(ControlSystem & system) : Command(system)
 {
-	std::cout << "Move Undone" << std::endl;
-}
-
-MeleeCommand::MeleeCommand(ControlSystem & system) : Command(system)
-{
-}
-
-void MeleeCommand::execute()
-{
-	//std::cout << "Melee Command" << std::endl;
-	//executed = true;
-}
-
-void MeleeCommand::undo()
-{
-	std::cout << "Melee Undone" << std::endl;
-}
-
-SwitchWeaponCommand::SwitchWeaponCommand(ControlSystem & system) : Command(system)
-{
-}
-
-void SwitchWeaponCommand::execute()
-{
-	//std::cout << "Switch Weapon Command" << std::endl;
-	//executed = true;
-}
-
-void SwitchWeaponCommand::undo()
-{
-	std::cout << "Switch Weapon Undone" << std::endl;
-}
-
-MoveRightCommand::MoveRightCommand(ControlSystem & system): Command(system)
-{	
 }
 
 void MoveRightCommand::execute()
@@ -86,6 +40,21 @@ void MoveRightCommand::execute()
 	m_controlSystem.moveRight();
 }
 
-void MoveRightCommand::undo()
+// Melee
+MeleeCommand::MeleeCommand(ControlSystem & system) : Command(system)
+{
+}
+
+void MeleeCommand::execute()
+{
+}
+
+
+// Switch Weapon
+SwitchWeaponCommand::SwitchWeaponCommand(ControlSystem & system) : Command(system)
+{
+}
+
+void SwitchWeaponCommand::execute()
 {
 }
