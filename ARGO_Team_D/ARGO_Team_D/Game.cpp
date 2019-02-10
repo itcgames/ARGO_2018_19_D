@@ -196,7 +196,6 @@ void Game::processEvents()
 		default:
 			break;
 		}
-
 		
 		switch (event.type)
 		{

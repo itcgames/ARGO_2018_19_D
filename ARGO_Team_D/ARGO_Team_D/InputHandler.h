@@ -10,9 +10,9 @@ public:
 	void handleInput(SDL_Event theEvent);
 	void update();
 private:
-	Command * MoveRight;
-	Command * MoveLeft;
-	Command * Fire;
+	Command * m_moveRight;
+	Command * m_moveLeft;
+	Command * m_fire;
 
 	std::vector<Command *> commands;
 	ControlSystem & m_controlSystem;

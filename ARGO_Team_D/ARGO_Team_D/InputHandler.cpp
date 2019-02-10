@@ -3,18 +3,15 @@
 InputHandler::InputHandler(ControlSystem & system):
 	m_controlSystem{ system }
 {
-	MoveRight = new MoveRightCommand(m_controlSystem);
-	MoveLeft = new MoveLeftCommand(m_controlSystem);
-	Fire = new FireCommand(m_controlSystem);
-
+	m_moveRight = new MoveRightCommand(m_controlSystem);
+	m_moveLeft = new MoveLeftCommand(m_controlSystem);
+	m_fire = new FireCommand(m_controlSystem);
 }
 
 void InputHandler::handleInput(SDL_Event theEvent)
 {
-
-
-
-	switch (theEvent.type) {
+	switch (theEvent.type) 
+	{
 	case SDL_KEYDOWN:
 		if (theEvent.key.keysym.sym ==  SDLK_RIGHT || theEvent.key.keysym.sym == SDLK_d)
 		{
@@ -39,16 +36,14 @@ void InputHandler::handleInput(SDL_Event theEvent)
 	}
 }
 
-
 void InputHandler::update()
 {
-	
 	if (rightPressed)
 	{
-		MoveRight->execute();
+		m_moveRight->execute();
 	}
 	if (leftPressed)
 	{
-		MoveLeft->execute();
+		m_moveLeft->execute();
 	}
 }
