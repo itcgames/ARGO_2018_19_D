@@ -26,6 +26,10 @@ private:
 	Label * label2;
 	float m_width;
 	float m_height;
+
+	int m_selectedItem = 0;
+	const int JOYSTICK_DEAD_ZONE = 16000;
+	bool activateJoystick = false;
 };
 
 #endif // !CREDITSCREEN_H

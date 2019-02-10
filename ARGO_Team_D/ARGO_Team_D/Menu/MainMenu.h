@@ -28,6 +28,11 @@ private:
 	Label * label;
 	float m_width;
 	float m_height;
+
+
+	int m_selectedItem = 0;
+	const int JOYSTICK_DEAD_ZONE = 16000;
+	bool activateJoystick = false;
 };
 
 #endif // !MAINMENU_H

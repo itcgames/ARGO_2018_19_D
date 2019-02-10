@@ -49,6 +49,60 @@ void LevelSelectMenu::handleMouse(SDL_Event theEvent)
 			}
 		}
 		break;
+	case SDL_JOYAXISMOTION:
+		if (theEvent.jaxis.which == 0)
+		{
+			if (theEvent.jaxis.axis == 1)
+			{
+				//Below of dead zone
+				if (theEvent.jaxis.value < -JOYSTICK_DEAD_ZONE)
+				{
+
+					if (activateJoystick)
+					{
+						m_selectedItem--;
+						activateJoystick = false;
+					}
+				}
+				//Above of dead zone
+				else if (theEvent.jaxis.value > JOYSTICK_DEAD_ZONE)
+				{
+					if (activateJoystick)
+					{
+						m_selectedItem++;
+						activateJoystick = false;
+					}
+				}
+				else
+				{
+					//yDir = 0;
+					activateJoystick = true;
+				}
+			}
+		}
+		break;
+	case SDL_JOYBUTTONDOWN:
+		//Play rumble at 75% strenght for 500 milliseconds
+		//SDL_HapticRumblePlay(gControllerHaptic, 0.75, 500);
+
+		switch (theEvent.jbutton.button)
+		{
+		case 0:
+			for (auto & b : m_buttons)
+			{
+				b->mousePress();
+
+				if (b->isClicked)
+				{
+					for (auto & c : m_buttons)
+					{
+						c->goToTransition();
+					}
+					label->goToTransition();
+				}
+			}
+			break;
+		}
 	}
 }
 
@@ -63,6 +117,26 @@ void LevelSelectMenu::draw()
 
 void LevelSelectMenu::update()
 {
+	if (SDL_NumJoysticks() >= 1)
+	{
+		if (m_selectedItem > (int)m_buttons.size() - 1) //cast to int as .size() returns unsigned int
+		{
+			m_selectedItem = 0;
+		}
+		if (m_selectedItem < 0)
+		{
+			m_selectedItem = m_buttons.size() - 1;
+		}
+
+		for (int i = 0; i < m_buttons.size(); i++)
+		{
+			if (i != m_selectedItem)
+			{
+				m_buttons.at(i)->Focus(false);
+			}
+		}
+		m_buttons.at(m_selectedItem)->Focus(true);
+	}
 	for (auto & b : m_buttons)
 	{
 		b->update();

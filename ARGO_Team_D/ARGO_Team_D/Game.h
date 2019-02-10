@@ -8,6 +8,9 @@
 #include <SDL_mixer.h>
 #include "ECS/Entities/Entity.h"
 #include "ECS/Systems/RenderSystem.h"
+#include "ECS/Systems/PhysicsSystem.h"
+#include "ECS/Components/PositionComponent.h"
+#include "ECS/Components/SpriteComponent.h"
 #include <tmxlite/Map.hpp>
 #include "InputHandler.h"
 #include "Resource Manager/ResourceManager.h"
@@ -23,6 +26,7 @@
 #include "Menu/LevelSelectMenu.h"
 #include "Utils/VectorAPI.h"
 #include "Camera.h"
+#include<SDL_haptic.h>
 
 class MainMenu;
 class OptionsMenu;
@@ -51,6 +55,7 @@ public:
 
 	void fadeToState(State state);
 	void fade();
+	int test_haptic(SDL_Joystick * joystick);
 private:
 	void processEvents();
 	void update();
@@ -70,6 +75,8 @@ private:
 	TTF_Font* Sans;
 
 	RenderSystem m_renderSystem;
+
+	PhysicsSystem m_physicsSystem;
 
 	InputHandler *inputHandler;
 
@@ -114,5 +121,12 @@ private:
 	float m_transitionAlphaPercent;
 
 	std::vector<Entity*> m_entityList;
+
+
+	//controller stuff
+	const int JOYSTICK_DEAD_ZONE = 16000;
+	SDL_Joystick* gGameController = NULL;
+	SDL_Haptic* gControllerHaptic = NULL;
+
 };
 #endif // !GAME_H

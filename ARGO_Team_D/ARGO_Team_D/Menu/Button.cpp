@@ -193,3 +193,8 @@ void Button::Lerp(int startPosX, int startPosY, int destX, int destY)
 		activateFunction = true;
 	}
 }
+
+void Button::Focus(bool b)
+{
+	hasFocus = b;
+}

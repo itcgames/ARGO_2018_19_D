@@ -20,6 +20,7 @@ public:
 	Callback Enter;
 
 	void Lerp(int startPosX, int startPosY, int destX, int destY);
+	void Focus(bool b);
 private:
 	SDL_Renderer * rend;
 	TTF_Font* arial;

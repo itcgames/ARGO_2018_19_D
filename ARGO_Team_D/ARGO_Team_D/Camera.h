@@ -15,6 +15,7 @@ public:
 	SDL_Rect getBounds();
 	VectorAPI m_position;
 	float m_shaking = false;
+	//float m_shake;
 private:
 	SDL_Rect m_bounds;
 	int m_viewOffset;
