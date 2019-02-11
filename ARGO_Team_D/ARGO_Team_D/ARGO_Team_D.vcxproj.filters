@@ -67,5 +67,8 @@
     <ClInclude Include="FSM\AnimationState.h" />
     <ClInclude Include="FSM\IdleState.h" />
     <ClInclude Include="FSM\WalkingState.h" />
+    <ClInclude Include="ECS\Components\BodyComponent.h" />
+    <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
+    <ClInclude Include="FSM\IState.h" />
   </ItemGroup>
 </Project>

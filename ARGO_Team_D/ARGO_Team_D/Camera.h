@@ -1,7 +1,6 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <SDL_render.h>
 #include <SDL_rect.h>
 #include "Utils\VectorAPI.h"
 
