@@ -5,6 +5,7 @@
 #include "..//Resource Manager/ResourceManager.h"
 #include "..//ECS/Components/PositionComponent.h"
 #include "..//ECS/Components/SpriteComponent.h"
+#include "..//ECS/Components/BodyComponent.h"
 
 /// <summary>
 /// Base Factory class.
