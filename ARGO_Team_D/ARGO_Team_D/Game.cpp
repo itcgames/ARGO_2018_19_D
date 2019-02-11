@@ -166,20 +166,20 @@ void Game::processEvents()
 		switch (m_gameState)
 		{
 		case Menu:
-			m_menu->handleMouse(event);
+			m_menu->handleInput(event);
 			break;
 		case PlayScreen:
 			inputHandler->handleKeyboardInput(event);
 			inputHandler->handleControllerInput(event);
 			break;
 		case Options:
-			m_options->handleMouse(event);
+			m_options->handleInput(event);
 			break;
 		case Credits:
-			m_credits->handleMouse(event);
+			m_credits->handleInput(event);
 			break;
 		case LevelSelect:
-			m_levelSelect->handleMouse(event);
+			m_levelSelect->handleInput(event);
 			break;
 		default:
 			break;

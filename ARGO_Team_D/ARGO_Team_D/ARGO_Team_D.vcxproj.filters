@@ -25,6 +25,7 @@
     <ClCompile Include="Utils\MathUtils.cpp" />
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
     <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="Menu\Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -59,5 +60,6 @@
     <ClInclude Include="Resource Manager\SoundResource.h" />
     <ClInclude Include="ECS\Components\BodyComponent.h" />
     <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
+    <ClInclude Include="Menu\Screen.h" />
   </ItemGroup>
 </Project>
