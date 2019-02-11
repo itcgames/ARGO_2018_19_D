@@ -4,7 +4,9 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
+    <ClCompile Include="ECS\Components\BodyComponent.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
+    <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="Factories\CharacterFactory.cpp" />
@@ -23,22 +25,25 @@
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
-    <ClCompile Include="ECS\Components\BodyComponent.cpp" />
-    <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="ECS\Systems\AnimationSystem.cpp" />
+    <ClCompile Include="FSM\Animation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
     <ClInclude Include="ConcreteCommand.h" />
     <ClInclude Include="ECS\Components\AnimationComponent.h" />
+    <ClInclude Include="ECS\Components\BodyComponent.h" />
     <ClInclude Include="ECS\Components\Components.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />
     <ClInclude Include="ECS\Entities\Entity.h" />
+    <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\Systems\System.h" />
     <ClInclude Include="Factories\CharacterFactory.h" />
     <ClInclude Include="Factories\Factory.h" />
+    <ClInclude Include="FSM\IState.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Level\Level.h" />
@@ -57,8 +62,10 @@
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
-    <ClInclude Include="ECS\Components\BodyComponent.h" />
-    <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
-    <ClInclude Include="FSM\IState.h" />
+    <ClInclude Include="ECS\Systems\AnimationSystem.h" />
+    <ClInclude Include="FSM\Animation.h" />
+    <ClInclude Include="FSM\AnimationState.h" />
+    <ClInclude Include="FSM\IdleState.h" />
+    <ClInclude Include="FSM\WalkingState.h" />
   </ItemGroup>
 </Project>

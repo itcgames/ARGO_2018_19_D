@@ -14,6 +14,4 @@ protected:
 	vector<Entity*> m_entityList;
 };
 
-#endif // !RENDERSYSTEM
-
-
+#endif //!SYSTEM_H
