@@ -8,18 +8,6 @@ Game::Game() :
 	m_camera(m_windowWidth, m_windowHeight),
 	m_physicsSystem(WORLD_SCALE)
 {
-	// Box2D Test Code
-	m_bodyDef2.position = b2Vec2((b2X + 50) / WORLD_SCALE, (b2Y + 50) / WORLD_SCALE);
-	m_bodyDef2.type = b2_dynamicBody;
-	m_body2 = m_world.CreateBody(&m_bodyDef2);
-	m_poly2.SetAsBox((50.f) / WORLD_SCALE, (50.f) / WORLD_SCALE);
-	m_fixture2.density = 1.f;
-	m_fixture2.friction = 0.1f;
-	m_fixture2.restitution = 0.0f;
-	m_fixture2.shape = &m_poly2;
-	m_body2->CreateFixture(&m_fixture2);
-	m_body2->SetFixedRotation(true);
-
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
 		std::cout << "Failed to initialise SDL" << std::endl;
@@ -111,19 +99,10 @@ Game::Game() :
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 
+	initialiseFactories();
 	initialiseEntities();
 	initialiseSystems();
 	setUpFont();
-
-	Entity * e = new Entity(0);
-	e->addComponent(new PositionComponent(200, 200));
-	std::string name = "testsquare";
-	e->addComponent(new SpriteComponent(name, *m_resourceManager, 100, 100));
-	e->addComponent(new BodyComponent(200, 200, 100, m_world, WORLD_SCALE));
-	m_renderSystem.addEntity(e);
-	m_physicsSystem.addEntity(e);
-	m_controlSystem.addEntity(e);
-
 
 	level = new Level(m_world, WORLD_SCALE);
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
@@ -190,22 +169,6 @@ void Game::processEvents()
 		case SDL_KEYDOWN:
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
-			// Demo Code
-			if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_d)
-			{
-				m_body2->SetLinearVelocity(b2Vec2(15, m_body2->GetLinearVelocity().y));
-			}
-			if (event.key.keysym.sym == SDLK_LEFT || event.key.keysym.sym == SDLK_a)
-			{
-				m_body2->SetLinearVelocity(b2Vec2(-15, m_body2->GetLinearVelocity().y));
-			}
-			if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w)
-			{
-				m_body2->SetLinearVelocity(b2Vec2(m_body2->GetLinearVelocity().x, -35));
-			}
-			if (event.key.keysym.sym == SDLK_RETURN) {
-				m_camera.m_shaking = true;
-			}
 			break;
 		case SDL_QUIT:
 			m_quit = true;
@@ -227,13 +190,10 @@ void Game::update()
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
-			std::vector<std::string> s = { "Position" };
-			auto comps = m_player->getComponentsOfType(s);
-			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
 			m_controlSystem.update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
-			m_physicsSystem.update();
-			m_camera.update(VectorAPI(m_body2->GetPosition().x * WORLD_SCALE + 50.f, m_body2->GetPosition().y * WORLD_SCALE + 50.f), 0);
+			m_physicsSystem.update(); 
+			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);
 			inputHandler->update();
 		}
 		break;
@@ -271,16 +231,6 @@ void Game::render()
 	case PlayScreen:
 		m_renderSystem.render(m_renderer, m_camera);
 		level->render(m_renderer, m_camera);
-
-		// Demo Code
-		b2X = (m_body2->GetPosition().x * WORLD_SCALE) - 50.f;
-		b2Y = (m_body2->GetPosition().y * WORLD_SCALE) - 50.f;
-		SDL_Rect dest2;
-		dest2.x = b2X - bounds.x;
-		dest2.y = b2Y - bounds.y;
-		dest2.w = 100.f;
-		dest2.h = 100.f;
-		SDL_RenderCopy(m_renderer, square, NULL, &dest2);
 
 		break;
 	case Options:
@@ -362,13 +312,12 @@ void Game::fade()
 /// </summary>
 void Game::initialiseEntities()
 {
-	std::string name = "test";
-
-	m_playerFactory = new CharacterFactory(m_resourceManager);
-	Entity * e = m_playerFactory->CreateEntityPlayer(name, 1, VectorAPI(0, 0), 1920, 1080);
+	// Init Player
+	Entity * e = m_playerFactory->create(1, VectorAPI(150, 0));
 	m_entityList.push_back(e);
-	m_player = new Entity(2);
-
+	m_controlSystem.addEntity(e);
+	m_player = e;
+	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
 }
 
 /// <summary>
@@ -376,19 +325,23 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	for (auto i : m_entityList) {
-
+	for (auto i : m_entityList) 
+	{ 
 		if (i->checkForComponent("Sprite"))
 		{
 			m_renderSystem.addEntity(i);
 		}
-
-		if (i->checkForComponent("Control"))
+		if (i->checkForComponent("Body"))
 		{
-			m_controlSystem.addEntity(i);
+			m_physicsSystem.addEntity(i);
 		}
 	}
+}
 
+void Game::initialiseFactories()
+{
+	std::string spriteName = "test";
+	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE);
 }
 
 /// <summary>

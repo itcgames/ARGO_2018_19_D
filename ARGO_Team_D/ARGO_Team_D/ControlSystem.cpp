@@ -19,21 +19,25 @@ void ControlSystem::update()
 		{
 			b2Body * body = bodyComp->getBody();
 			b2Vec2 currentVelocity = body->GetLinearVelocity();
+			if (m_jump)
+			{
+				body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+				currentVelocity.y = -35;
+			}
 			if (m_moveRight)
 			{
 				body->SetLinearVelocity(b2Vec2(15, currentVelocity.y));
+				currentVelocity.x = 15;
 			}
 			else if (m_moveLeft)
 			{
 				body->SetLinearVelocity(b2Vec2(-15, currentVelocity.y));
-			}
-			else if (m_jump)
-			{
-				body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+				currentVelocity.x = -15;
 			}
 			else
 			{
 				body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
+				currentVelocity.x = 0;
 			}
 			m_moveRight = false, m_moveLeft = false, m_jump = false;
 		}

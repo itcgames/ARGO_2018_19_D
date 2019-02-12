@@ -20,10 +20,10 @@ private:
 
 	ControlSystem & m_controlSystem;
 
-	bool rightPressed = false;
-	bool leftPressed = false;
-	bool upPressed = false;
-	bool cntrlPressed = false;
+	bool m_rightPressed = false;
+	bool m_leftPressed = false;
+	bool m_upPressed = false;
+	bool m_ctrlPressed = false;
 
 	const int JOYSTICK_DEAD_ZONE = 16000;
 	const int TRIGGER_DEAD_ZONE = 20000;
