@@ -41,8 +41,12 @@ bool Client::init()
 	int connResult = connect(sock, (sockaddr*)&hint, sizeof(hint));
 	if (connResult == SOCKET_ERROR)
 	{
+		return true;
 	}
-	return true;
+	else
+	{
+		return false;
+	}
 }
 
 void Client::Send(std::string userInput)

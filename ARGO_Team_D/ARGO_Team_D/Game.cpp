@@ -11,6 +11,9 @@ Game::Game() :
 	if (m_client.init()) {
 		cout << "Client Created" << endl;
 	}
+	else {
+		std::cout << "Couldnt Connect" << std::endl;
+	}
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
