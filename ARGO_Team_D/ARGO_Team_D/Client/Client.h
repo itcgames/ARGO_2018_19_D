@@ -17,13 +17,14 @@ public:
 	void Send(std::string userInput);
 	vector<std::string> Receive();
 	map<std::string, int> processMessage(std::vector<std::string> items);
-	void setID(int newId) { m_id = newId; }
+	void setID(int newId) { m_networkId = newId; }
+	int getNetworkId() { return m_networkId; }
 
 	void close();
 
 private:
 	SOCKET sock;
-	int m_id = 0;
+	int m_networkId = 0;
 	char buf[4096];
 };
 

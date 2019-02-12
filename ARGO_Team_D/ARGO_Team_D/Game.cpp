@@ -237,7 +237,6 @@ void Game::render()
 	case PlayScreen:
 		m_renderSystem.render(m_renderer, m_camera);
 		level->render(m_renderer, m_camera);
-
 		break;
 	case Options:
 		m_options->draw();

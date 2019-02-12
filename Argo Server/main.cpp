@@ -11,6 +11,7 @@ void main()
 {
 	static int playerID = 1;
 	int port = 8080;
+
 	// Initialze winsock
 	WSADATA wsData;
 	WORD ver = MAKEWORD(2, 2);
@@ -33,11 +34,7 @@ void main()
 	// Bind the ip address and port to a socket
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
-<<<<<<< HEAD
-	hint.sin_port = htons(8080);
-=======
 	hint.sin_port = htons(port);
->>>>>>> fd840e649da1595e1a21f0c4860639d9596a8862
 	hint.sin_addr.S_un.S_addr = INADDR_ANY; // Could also use inet_pton .... 
 	bind(listening, (sockaddr*)&hint, sizeof(hint));
 
@@ -79,6 +76,7 @@ void main()
 				FD_SET(client, &master);
 
 				string welcomeMsg = "ID: " + to_string(playerID);
+				playerID++;
 				send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
 
 			}
@@ -107,7 +105,6 @@ void main()
 							running = false;
 							break;
 						}
-
 						// Unknown command
 						continue;
 					}
