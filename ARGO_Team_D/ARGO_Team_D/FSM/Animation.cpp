@@ -1,5 +1,6 @@
 #include "Animation.h"
 #include "IdleState.h"
+#include <iostream>
 
 
 Animation::Animation()
@@ -35,7 +36,8 @@ void Animation::setPrevious(AnimationState * s)
 void Animation::handle(SDL_Event & e)
 {
 	AnimationState * state = m_current->handle(this, e);
-	if (nullptr != state) {
+	if (nullptr != state && state != m_current) {
+		std::cout << "Changing state" << std::endl;
 		state->onEntry(this);
 	}
 }
