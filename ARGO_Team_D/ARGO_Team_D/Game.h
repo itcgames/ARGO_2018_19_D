@@ -26,7 +26,7 @@
 #include "Menu/LevelSelectMenu.h"
 #include "Utils/VectorAPI.h"
 #include "Camera.h"
-#include<SDL_haptic.h>
+#include <SDL_haptic.h>
 
 class MainMenu;
 class OptionsMenu;
