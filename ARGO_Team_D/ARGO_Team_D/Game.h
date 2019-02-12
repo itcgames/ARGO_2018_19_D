@@ -9,6 +9,7 @@
 #include "ECS/Entities/Entity.h"
 #include "ECS/Systems/RenderSystem.h"
 #include "ECS/Systems/PhysicsSystem.h"
+#include "ECS/Systems/AnimationSystem.h"
 #include "ECS/Components/PositionComponent.h"
 #include "ECS/Components/SpriteComponent.h"
 #include <tmxlite/Map.hpp>
@@ -26,7 +27,7 @@
 #include "Menu/LevelSelectMenu.h"
 #include "Utils/VectorAPI.h"
 #include "Camera.h"
-#include<SDL_haptic.h>
+#include <SDL_haptic.h>
 
 class MainMenu;
 class OptionsMenu;
@@ -54,7 +55,7 @@ public:
 	void fade();
 private:
 	void processEvents();
-	void update();
+	void update(const float & dt);
 	void render();
 	void initialiseEntities();
 	void initialiseSystems();
@@ -65,8 +66,8 @@ private:
 	// SDL Window
 	SDL_Window * p_window;
 	SDL_Renderer * m_renderer;
-	int m_windowWidth = 1920;
-	int m_windowHeight = 1080;
+	int m_windowWidth = 1280;
+	int m_windowHeight = 720;
 	bool m_quit = false;
 	TTF_Font* Sans;
 
@@ -82,6 +83,7 @@ private:
 	RenderSystem m_renderSystem;
 	PhysicsSystem m_physicsSystem;
 	ControlSystem m_controlSystem;
+	AnimationSystem m_animationSystem;
 
 	// Input
 	InputHandler * inputHandler;

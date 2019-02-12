@@ -3,6 +3,7 @@
 #include "../Components/Components.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/SpriteComponent.h"
+#include "../Components/AnimationComponent.h"
 #include "../Utils/VectorAPI.h"
 
 /// <summary>
@@ -11,7 +12,7 @@
 /// <param name="renderer"></param>
 void RenderSystem::render(SDL_Renderer* renderer, Camera & camera)
 {
-	std::vector<std::string> allowedTypes{ "Position", "Sprite" };
+	std::vector<std::string> allowedTypes{ "Position", "Sprite"};
 	for (Entity* i : m_entityList) {
 		auto comps = i->getComponentsOfType(allowedTypes);
 		if (comps.size() == allowedTypes.size()) {
@@ -30,7 +31,16 @@ void RenderSystem::render(SDL_Renderer* renderer, Camera & camera)
 			dest.y = pos.y - bounds.y;
 			dest.w = s->m_width;
 			dest.h = s->m_height;
-			SDL_RenderCopyEx(renderer, s->getTexture(), NULL, &dest, s->m_angle,s->m_center, s->m_flip);
+
+			std::vector<std::string> type = { "Animation" };
+			auto animationComps = i->getComponentsOfType(type);
+			if (!animationComps.empty()) {
+				AnimationComponent * a = dynamic_cast<AnimationComponent*>(animationComps["Animation"]);
+				SDL_RenderCopyEx(renderer, s->getTexture(), &a->getCurrentFrame(), &dest, s->m_angle, s->m_center, s->m_flip);
+			}
+			else {
+				SDL_RenderCopyEx(renderer, s->getTexture(), NULL, &dest, s->m_angle, s->m_center, s->m_flip);
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "ECS/Components/AnimationComponent.h"
 
 const float WORLD_SCALE = 30.f;
 
@@ -128,6 +129,27 @@ Game::Game() :
 	level = new Level(m_world, WORLD_SCALE);
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
+
+	Entity * e2 = new Entity(1);
+	AnimationComponent * a = new AnimationComponent();
+	std::vector<SDL_Rect> frames;
+	for (int i = 0; i < 5; ++i) {
+		SDL_Rect frame = { i * 86, 0, 86, 86 };
+		frames.push_back(frame);
+	}
+	a->addAnimation("Test", frames, 1, 1);
+
+	frames.clear();
+	for (int i = 0; i < 5; ++i) {
+		SDL_Rect frame = { i * 86, 86, 86, 86 };
+		frames.push_back(frame);
+	}
+	a->addAnimation("Test2", frames, 1, 1, true);
+	e2->addComponent(new SpriteComponent("TestAnimation", *m_resourceManager, 100, 100));
+	e2->addComponent(a);
+	e2->addComponent(new PositionComponent(200, 400));
+	m_animationSystem.addEntity(e2);
+	m_renderSystem.addEntity(e2);
 }
 
 Game::~Game()
@@ -150,7 +172,7 @@ void Game::run()
 		{
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
-			update();
+			update(timeSinceLastUpdate);
 		}
 		render();
 	}
@@ -229,7 +251,7 @@ void Game::processEvents()
 	}
 }
 
-void Game::update()
+void Game::update(const float & dt)
 {
 	switch (m_gameState)
 	{
@@ -247,6 +269,7 @@ void Game::update()
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_body2->GetPosition().x * WORLD_SCALE, m_body2->GetPosition().y * WORLD_SCALE), 0);
 			inputHandler->update();
+			m_animationSystem.update(dt / 1000);
 		}
 		break;
 	case Options:

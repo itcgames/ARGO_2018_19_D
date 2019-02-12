@@ -6,10 +6,12 @@
     <ClCompile Include="ConcreteCommand.cpp" />
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
+    <ClCompile Include="ECS\Systems\AnimationSystem.cpp" />
     <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="Factories\CharacterFactory.cpp" />
+    <ClCompile Include="FSM\Animation.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Level\Level.cpp" />
@@ -20,16 +22,12 @@
     <ClCompile Include="Menu\LevelSelectMenu.cpp" />
     <ClCompile Include="Menu\MainMenu.cpp" />
     <ClCompile Include="Menu\OptionsMenu.cpp" />
+    <ClCompile Include="Menu\Screen.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
-    <ClCompile Include="ECS\Systems\AnimationSystem.cpp" />
-    <ClCompile Include="FSM\Animation.cpp" />
-    <ClCompile Include="ECS\Components\BodyComponent.cpp" />
-    <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
-    <ClCompile Include="Menu\Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -41,12 +39,17 @@
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />
     <ClInclude Include="ECS\Entities\Entity.h" />
+    <ClInclude Include="ECS\Systems\AnimationSystem.h" />
     <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\Systems\System.h" />
     <ClInclude Include="Factories\CharacterFactory.h" />
     <ClInclude Include="Factories\Factory.h" />
+    <ClInclude Include="FSM\Animation.h" />
+    <ClInclude Include="FSM\AnimationState.h" />
+    <ClInclude Include="FSM\IdleState.h" />
     <ClInclude Include="FSM\IState.h" />
+    <ClInclude Include="FSM\WalkingState.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Level\Level.h" />
@@ -57,6 +60,7 @@
     <ClInclude Include="Menu\LevelSelectMenu.h" />
     <ClInclude Include="Menu\MainMenu.h" />
     <ClInclude Include="Menu\OptionsMenu.h" />
+    <ClInclude Include="Menu\Screen.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />
@@ -65,14 +69,5 @@
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
-    <ClInclude Include="ECS\Systems\AnimationSystem.h" />
-    <ClInclude Include="FSM\Animation.h" />
-    <ClInclude Include="FSM\AnimationState.h" />
-    <ClInclude Include="FSM\IdleState.h" />
-    <ClInclude Include="FSM\WalkingState.h" />
-    <ClInclude Include="ECS\Components\BodyComponent.h" />
-    <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
-    <ClInclude Include="FSM\IState.h" />
-    <ClInclude Include="Menu\Screen.h" />
   </ItemGroup>
 </Project>
