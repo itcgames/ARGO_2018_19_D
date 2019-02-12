@@ -21,7 +21,7 @@ void ControlSystem::update()
 			b2Vec2 currentVelocity = body->GetLinearVelocity();
 			if (m_jump)
 			{
-				body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+				body->SetLinearVelocity(b2Vec2(currentVelocity.x, -20));
 				currentVelocity.y = -35;
 			}
 			if (m_moveRight)
