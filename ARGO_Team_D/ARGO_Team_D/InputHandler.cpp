@@ -18,22 +18,30 @@ void InputHandler::handleKeyboardInput(SDL_Event theEvent)
 	case SDL_KEYDOWN:
 		if (theEvent.key.keysym.sym ==  SDLK_RIGHT || theEvent.key.keysym.sym == SDLK_d)
 		{
-			rightPressed = true;
+			m_rightPressed = true;
 		}
 		if (theEvent.key.keysym.sym == SDLK_LEFT || theEvent.key.keysym.sym == SDLK_a)
 		{
-			leftPressed = true;
+			m_leftPressed = true;
+		}
+		if (theEvent.key.keysym.sym == SDLK_UP || theEvent.key.keysym.sym == SDLK_w)
+		{
+			m_upPressed = true;
 		}
 		break;
 
 	case SDL_KEYUP:
 		if (theEvent.key.keysym.sym == SDLK_RIGHT || theEvent.key.keysym.sym == SDLK_d)
 		{
-			rightPressed = false;
+			m_rightPressed = false;
 		}
 		if (theEvent.key.keysym.sym == SDLK_LEFT || theEvent.key.keysym.sym == SDLK_a)
 		{
-			leftPressed = false;
+			m_leftPressed = false;
+		}
+		if (theEvent.key.keysym.sym == SDLK_UP || theEvent.key.keysym.sym == SDLK_w)
+		{
+			m_upPressed = false;
 		}
 		break;
 	}
@@ -93,18 +101,18 @@ void InputHandler::handleControllerInput(SDL_Event theEvent)
 				//Left of dead zone
 				if (theEvent.jaxis.value < -JOYSTICK_DEAD_ZONE)
 				{
-					leftPressed = true;
+					m_leftPressed = true;
 				}
 				//Right of dead zone
 				else if (theEvent.jaxis.value > JOYSTICK_DEAD_ZONE)
 				{
-					rightPressed = true;
+					m_rightPressed = true;
 				}
 				else
 				{
 					//xDir = 0;
-					rightPressed = false;
-					leftPressed = false;
+					m_rightPressed = false;
+					m_leftPressed = false;
 				}
 			}
 			//Y axis motion
@@ -132,12 +140,12 @@ void InputHandler::handleControllerInput(SDL_Event theEvent)
 				if (theEvent.jaxis.value > TRIGGER_DEAD_ZONE)
 				{
 					SDL_HapticRumblePlay(gControllerHaptic, 1.0, UINT32_MAX);
-					cntrlPressed = true;
+					m_ctrlPressed = true;
 				}
 				else
 				{
 					SDL_HapticRumbleStop(gControllerHaptic);
-					cntrlPressed = false;
+					m_ctrlPressed = false;
 				}
 				
 			}
@@ -152,19 +160,24 @@ void InputHandler::handleControllerInput(SDL_Event theEvent)
 
 void InputHandler::update()
 {
-	if (rightPressed)
+	if (m_rightPressed)
 	{
 		m_moveRight->execute();
 		//std::cout << "Moving Right" << std::endl;
 	}
-	if (leftPressed)
+	if (m_leftPressed)
 	{
 		m_moveLeft->execute();
 		//std::cout << "Moving Left" << std::endl;
 	}
-	if (cntrlPressed)
+	if (m_ctrlPressed)
 	{
 		m_fire->execute();
 		//std::cout << "Firing" << std::endl;
+	}
+	if (m_upPressed)
+	{
+		m_jump->execute();
+		std::cout << "Jumping" << std::endl;
 	}
 }

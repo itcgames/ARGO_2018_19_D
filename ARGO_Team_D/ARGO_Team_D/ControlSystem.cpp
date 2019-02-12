@@ -9,35 +9,50 @@ ControlSystem::~ControlSystem()
 {
 }
 
+void ControlSystem::addEntity(Entity * e)
+{
+	std::vector<std::string> allowedTypes{ "Body" , "Animation"};
+	auto comps = e->getComponentsOfType(allowedTypes);
+	if (comps.size() >= allowedTypes.size() - 1)
+	{
+		ControlComponents c;
+		c.body = dynamic_cast<BodyComponent*>(comps["Body"]); 
+		c.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
+		m_components.push_back(c);
+		m_entityList.push_back(e);
+	}
+}
+
 void ControlSystem::update()
 {
-	std::vector<string> allowedTypes = { "Body" , "Animation"};
-	for (auto &e : m_entityList)
+	for (auto & cc : m_components)
 	{
-		auto comps = e->getComponentsOfType(allowedTypes);
-		BodyComponent * bodyComp = dynamic_cast<BodyComponent *>(comps["Body"]);
-		AnimationComponent * aComp = dynamic_cast<AnimationComponent *>(comps["Animation"]);
-		if (bodyComp != nullptr)
+		BodyComponent * body = cc.body;
+		if (body != nullptr)
 		{
-			b2Body * body = bodyComp->getBody();
-			b2Vec2 currentVelocity = body->GetLinearVelocity();
+			b2Body * b2Body = body->getBody();
+			b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
+			if (m_jump)
+			{
+				b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -20));
+				currentVelocity.y = -35;
+			}
 			if (m_moveRight)
 			{
-				body->SetLinearVelocity(b2Vec2(15, currentVelocity.y));
+				b2Body->SetLinearVelocity(b2Vec2(15, currentVelocity.y));
+				currentVelocity.x = 15;
 			}
 			else if (m_moveLeft)
 			{
-				body->SetLinearVelocity(b2Vec2(-15, currentVelocity.y));
-			}
-			else if (m_jump)
-			{
-				body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+				b2Body->SetLinearVelocity(b2Vec2(-15, currentVelocity.y));
+				currentVelocity.x = -15;
 			}
 			else
 			{
-				body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
+				b2Body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
+				currentVelocity.x = 0;
 			}
-			m_moveRight = false, m_moveLeft = false, m_jump = false;
+			m_moveRight = false, m_moveLeft = false, m_jump = false, m_fire = false;
 		}
 	}
 }
@@ -59,21 +74,17 @@ void ControlSystem::jump()
 
 void ControlSystem::fire()
 {
-	std::cout << "I'm firing" << std::endl;
+	m_fire = true;
 }
 
 void ControlSystem::processInput(SDL_Event & event)
 {
 	if (event.type == SDL_KEYDOWN) {
-		std::vector<string> allowedTypes = {"Animation" };
-		for (auto &e : m_entityList)
+		std::vector<string> allowedTypes = {"Body", "Animation" };
+		for (auto & cc : m_components)
 		{
-			auto comps = e->getComponentsOfType(allowedTypes);
-			if (comps.size() == allowedTypes.size()) {
-				AnimationComponent * aComp = dynamic_cast<AnimationComponent *>(comps["Animation"]);
-
-				aComp->handleInput(event);
-			}
+			if (cc.animation)
+				cc.animation->handleInput(event);
 		}
 	}
 }

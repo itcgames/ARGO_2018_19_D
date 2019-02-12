@@ -257,7 +257,7 @@ void Level::createBody(float x, float y, float width)
 	pb->body = m_refWorld.CreateBody(&pb->bodyDef);
 	pb->shape.SetAsBox((width / 2.f) / m_worldScale, (m_tileHeight / 2.f) / m_worldScale);
 	pb->fixture.density = 1.f;
-	pb->fixture.friction = 0.1f;
+	pb->fixture.friction = 0.f;
 	pb->fixture.shape = &pb->shape;
 	pb->body->CreateFixture(&pb->fixture);
 	pb->body->SetFixedRotation(true);
