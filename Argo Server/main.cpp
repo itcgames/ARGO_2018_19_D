@@ -33,7 +33,11 @@ void main()
 	// Bind the ip address and port to a socket
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
+<<<<<<< HEAD
 	hint.sin_port = htons(8080);
+=======
+	hint.sin_port = htons(port);
+>>>>>>> fd840e649da1595e1a21f0c4860639d9596a8862
 	hint.sin_addr.S_un.S_addr = INADDR_ANY; // Could also use inet_pton .... 
 	bind(listening, (sockaddr*)&hint, sizeof(hint));
 
