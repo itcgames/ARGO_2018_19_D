@@ -225,7 +225,7 @@ void Game::render()
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
 
-	SDL_SetRenderDrawColor(m_renderer, 125, 125, 125, 255);
+	SDL_SetRenderDrawColor(m_renderer, 0, 255, 255, 255);
 
 	SDL_RenderClear(m_renderer);
 
