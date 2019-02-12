@@ -8,6 +8,10 @@ Game::Game() :
 	m_camera(m_windowWidth, m_windowHeight),
 	m_physicsSystem(WORLD_SCALE)
 {
+	if (m_client.init()) {
+		cout << "Client Created" << endl;
+	}
+
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
 		std::cout << "Failed to initialise SDL" << std::endl;
@@ -182,6 +186,8 @@ void Game::processEvents()
 
 void Game::update()
 {
+	parseNetworkData(m_client.processMessage(m_client.Receive()));
+
 	switch (m_gameState)
 	{
 	case Menu:
@@ -397,4 +403,17 @@ int Game::test_haptic(SDL_Joystick * joystick) {
 	SDL_HapticClose(haptic);
 
 	return 0; // Success
+}
+
+void Game::parseNetworkData(std::map<std::string, int> parsedMessage)
+{
+	for (auto const& pair : parsedMessage) {
+
+		auto key = pair.first;
+		auto value = pair.second;
+
+		if (key == "ID") {
+			m_client.setID(value);
+		}
+	}
 }

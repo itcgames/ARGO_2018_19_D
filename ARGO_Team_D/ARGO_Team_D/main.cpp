@@ -25,6 +25,15 @@
 
 int main(int argc, char* argv[])
 {
+	WSAData data;
+	WORD ver = MAKEWORD(2, 2);
+	int wsResult = WSAStartup(ver, &data);
+	if (wsResult != 0)
+	{
+		cerr << "Can't start Winsock, Err #" << wsResult << endl;
+		return 0;
+	}
+
 
 	Game game;
 	game.run();

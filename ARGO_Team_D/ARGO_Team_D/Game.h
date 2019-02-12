@@ -27,6 +27,7 @@
 #include "Utils/VectorAPI.h"
 #include "Camera.h"
 #include <SDL_haptic.h>
+#include "Client/Client.h"
 
 class MainMenu;
 class OptionsMenu;
@@ -125,5 +126,9 @@ private:
 	OptionsMenu * m_options;
 	CreditScreen * m_credits;
 	LevelSelectMenu * m_levelSelect;
+
+	// Networking
+	Client m_client;
+	void parseNetworkData(std::map<std::string, int> parsedMessage);
 };
 #endif // !GAME_H
