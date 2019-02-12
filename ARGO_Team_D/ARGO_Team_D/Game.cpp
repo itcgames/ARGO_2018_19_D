@@ -94,6 +94,7 @@ Game::Game() :
 
 	texture = m_resourceManager->getImageResource("test");
 	square = m_resourceManager->getImageResource("testsquare");
+	bulletTexture = m_resourceManager->getImageResource("bullet");
 
 	m_testMusic = m_resourceManager->getSoundResource("test");
 	/*if (Mix_PlayMusic(m_testMusic, -1) == -1)
@@ -114,6 +115,25 @@ Game::Game() :
 	level = new Level(m_world, WORLD_SCALE);
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
+
+
+	for (int i = 0; i < 10; i++)
+	{
+		Entity * e = new Entity(500);
+		e->addComponent(new PositionComponent(-10000, -10000));
+		std::string theName = "bullet";
+		e->addComponent(new SpriteComponent(theName, *m_resourceManager, 30, 5));
+		e->addComponent(new VelocityComponent(VectorAPI(0, 0)));
+		e->addComponent(new TimeToLiveComponent(1.0f));
+		m_movementSystem.addEntity(e);
+		m_renderSystem.addEntity(e);
+		m_ttlSystem.addEntity(e);
+		m_bullets.push_back(e);
+	}
+	srand(time(NULL));
+
+
+
 }
 
 Game::~Game()
@@ -173,6 +193,16 @@ void Game::processEvents()
 
 		switch (event.type)
 		{
+		case SDL_MOUSEBUTTONDOWN:
+			switch (m_gameState)
+			{
+			case PlayScreen:
+				fire = true;
+				startTimer = SDL_GetTicks();
+				break;
+			}
+
+
 		case SDL_KEYDOWN:
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
@@ -201,9 +231,20 @@ void Game::update()
 		{
 			m_controlSystem.update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
-			m_physicsSystem.update(); 
+			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);
+			m_movementSystem.update();
+			m_ttlSystem.update();
 			inputHandler->update();
+
+
+			float time = (SDL_GetTicks() - startTimer) / 1000;
+			if (0.1f <= time && fire)
+			{
+				spawnProjectile(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE);
+				startTimer = SDL_GetTicks();
+			}
+
 		}
 		break;
 	case Options:
@@ -333,8 +374,8 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	for (auto i : m_entityList) 
-	{ 
+	for (auto i : m_entityList)
+	{
 		if (i->checkForComponent("Sprite"))
 		{
 			m_renderSystem.addEntity(i);
@@ -365,48 +406,32 @@ void Game::setUpFont() {
 	Sans = TTF_OpenFont(path, 50);
 }
 
-int Game::test_haptic(SDL_Joystick * joystick) {
-	SDL_Haptic *haptic;
-	SDL_HapticEffect effect;
-	int effect_id;
+void Game::spawnProjectile(float x, float y)
+{
+	for (auto &b : m_bullets)
+	{
 
-	// Open the device
-	haptic = SDL_HapticOpenFromJoystick(joystick);
-	if (haptic == NULL) return -1; // Most likely joystick isn't haptic
+		std::vector<std::string> s = { "TimeToLive", "Position", "Velocity" };
+		auto comps = b->getComponentsOfType(s);
+		TimeToLiveComponent * t = dynamic_cast<TimeToLiveComponent*>(comps["TimeToLive"]);
 
-	// See if it can do sine waves
-	//if ((SDL_HapticQuery(haptic) & SDL_HAPTIC_SINE) == 0) {
-	//	SDL_HapticClose(haptic); // No sine effect
-	//	return -1;
-	//}
+		if (!t->isActive())
+		{
+			t->setActive(true);
+			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
+			p->setPosition(VectorAPI(x, y));
 
-	// Create the effect
-	SDL_memset(&effect, 0, sizeof(SDL_HapticEffect)); // 0 is safe default
-	effect.type = SDL_HAPTIC_SINE;
-	effect.periodic.direction.type = SDL_HAPTIC_POLAR; // Polar coordinates
-	effect.periodic.direction.dir[0] = 18000; // Force comes from south
-	effect.periodic.period = 1000; // 1000 ms
-	effect.periodic.magnitude = 20000; // 20000/32767 strength
-	effect.periodic.length = 5000; // 5 seconds long
-	effect.periodic.attack_length = 1000; // Takes 1 second to get max strength
-	effect.periodic.fade_length = 1000; // Takes 1 second to fade away
+			VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
+			v->setVelocity(VectorAPI(15, ((double)rand() / RAND_MAX) * 2 - 1));
+			t->setTimer(SDL_GetTicks());
+			t->setActive(true);
+			break;
+		}
 
-	// Upload the effect
-	effect_id = SDL_HapticNewEffect(haptic, &effect);
 
-	// Test the effect
-	SDL_HapticRunEffect(haptic, effect_id, 1);
-	SDL_Delay(5000); // Wait for the effect to finish
 
-	// We destroy the effect, although closing the device also does this
-	SDL_HapticDestroyEffect(haptic, effect_id);
-
-	// Close the device
-	SDL_HapticClose(haptic);
-
-	return 0; // Success
+	}
 }
-
 void Game::parseNetworkData(std::map<std::string, int> parsedMessage)
 {
 	for (auto const& pair : parsedMessage) {

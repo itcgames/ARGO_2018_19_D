@@ -29,6 +29,8 @@ private:
 	const int TRIGGER_DEAD_ZONE = 20000;
 	SDL_Joystick* gGameController = NULL;
 	SDL_Haptic* gControllerHaptic = NULL;
+
+	float startTimer;
 };
 
 #endif // !INPUTHANDLER_H

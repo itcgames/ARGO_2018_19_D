@@ -25,11 +25,10 @@
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
     <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="Menu\Screen.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Client\Client.cpp" />
-=======
     <ClCompile Include="Factories\PlayerFactory.cpp" />
->>>>>>> fdef0a4e4223666cceaf727d4490bfc01134062d
+    <ClCompile Include="ECS\Systems\MovementSystem.cpp" />
+    <ClCompile Include="ECS\Systems\TimeToLiveSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -64,11 +63,12 @@
     <ClInclude Include="ECS\Components\BodyComponent.h" />
     <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="Menu\Screen.h" />
-<<<<<<< HEAD
     <ClInclude Include="Client\Client.h" />
     <ClInclude Include="Client\ParseUtils.h" />
-=======
     <ClInclude Include="Factories\PlayerFactory.h" />
->>>>>>> fdef0a4e4223666cceaf727d4490bfc01134062d
+    <ClInclude Include="ECS\Components\VelocityComponent.h" />
+    <ClInclude Include="ECS\Systems\MovementSystem.h" />
+    <ClInclude Include="ECS\Components\TimeToLiveComponent.h" />
+    <ClInclude Include="ECS\Systems\TimeToLiveSystem.h" />
   </ItemGroup>
 </Project>

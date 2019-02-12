@@ -2,6 +2,7 @@
 
 ControlSystem::ControlSystem()
 {
+	allowedTypes = { "Body", "Position" };
 }
 
 ControlSystem::~ControlSystem()
@@ -53,6 +54,7 @@ void ControlSystem::update()
 			m_moveRight = false, m_moveLeft = false, m_jump = false, m_fire = false;
 		}
 	}
+
 }
 
 void ControlSystem::moveRight()
@@ -72,5 +74,12 @@ void ControlSystem::jump()
 
 void ControlSystem::fire()
 {
+	//m_game->spawnProjectile()
 	m_fire = true;
+	for (auto &e : m_entityList)
+	{
+		auto comps = e->getComponentsOfType(allowedTypes);
+		PositionComponent * p = dynamic_cast<PositionComponent *>(comps["Position"]);
+		//m_game->spawnProjectile(p->getPosition().x, p->getPosition().y);
+	}
 }

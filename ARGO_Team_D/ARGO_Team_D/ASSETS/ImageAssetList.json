@@ -1,4 +1,5 @@
 {
 	"test": "./ASSETS/IMAGES/test.png",
-	"testsquare": "./ASSETS//IMAGES//TestSquare.png"
+	"testsquare": "./ASSETS//IMAGES//TestSquare.png",
+	"bullet": "./ASSETS//IMAGES//bullet.png"
 }

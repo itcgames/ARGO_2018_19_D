@@ -36,4 +36,5 @@ void RenderSystem::render(SDL_Renderer* renderer, Camera & camera)
 		dest.h = s->m_height;
 		SDL_RenderCopyEx(renderer, s->getTexture(), NULL, &dest, s->m_angle, s->m_center, s->m_flip);
 	}
+	
 }

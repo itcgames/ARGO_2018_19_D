@@ -7,6 +7,8 @@
 #include "ECS/Systems/System.h"
 #include "ECS/Components/BodyComponent.h"
 #include "Utils/VectorAPI.h"
+#include <functional>   // std::function, std::negate
+#include"../ECS/Components/PositionComponent.h"
 
 struct ControlComponents
 {
@@ -23,12 +25,14 @@ public:
 	void moveLeft();
 	void jump();
 	void fire();
+
 private:
 	bool m_moveRight;
 	bool m_moveLeft;
 	bool m_jump;
 	bool m_fire;
 	std::vector<ControlComponents> m_components;
+	std::vector<string> allowedTypes;
 };
 
 

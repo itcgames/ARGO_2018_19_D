@@ -9,11 +9,13 @@ InputHandler::InputHandler(ControlSystem & system, SDL_Joystick& controller, SDL
 	m_moveLeft = new MoveLeftCommand(m_controlSystem);
 	m_fire = new FireCommand(m_controlSystem);
 	m_jump = new JumpCommand(m_controlSystem);
+
+	startTimer = SDL_GetTicks();
 }
 
 void InputHandler::handleKeyboardInput(SDL_Event theEvent)
 {
-	switch (theEvent.type) 
+	switch (theEvent.type)
 	{
 	case SDL_KEYDOWN:
 		if (theEvent.key.keysym.sym ==  SDLK_RIGHT || theEvent.key.keysym.sym == SDLK_d)
@@ -147,7 +149,7 @@ void InputHandler::handleControllerInput(SDL_Event theEvent)
 					SDL_HapticRumbleStop(gControllerHaptic);
 					m_ctrlPressed = false;
 				}
-				
+
 			}
 			else if (theEvent.jaxis.axis == 2)
 			{
@@ -163,17 +165,17 @@ void InputHandler::update()
 	if (m_rightPressed)
 	{
 		m_moveRight->execute();
-		std::cout << "Moving Right" << std::endl;
 	}
 	if (m_leftPressed)
 	{
 		m_moveLeft->execute();
-		std::cout << "Moving Left" << std::endl;
 	}
-	if (m_ctrlPressed)
+
+	float time = (SDL_GetTicks() - startTimer) / 1000;
+	if (0.1f <= time && m_ctrlPressed)
 	{
 		m_fire->execute();
-		std::cout << "Firing" << std::endl;
+		startTimer = SDL_GetTicks();
 	}
 	if (m_upPressed)
 	{
