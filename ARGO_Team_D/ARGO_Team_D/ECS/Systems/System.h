@@ -8,7 +8,7 @@
 /// </summary>
 class System {
 public:
-	void addEntity(Entity * en) { m_entityList.push_back(en); }
+	virtual void addEntity(Entity * en) { m_entityList.push_back(en); }
 
 protected:
 	vector<Entity*> m_entityList;

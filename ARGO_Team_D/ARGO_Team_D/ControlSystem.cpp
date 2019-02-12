@@ -8,38 +8,49 @@ ControlSystem::~ControlSystem()
 {
 }
 
+void ControlSystem::addEntity(Entity * e)
+{
+	std::vector<std::string> allowedTypes{ "Body" };
+	auto comps = e->getComponentsOfType(allowedTypes);
+	if (comps.size() == allowedTypes.size())
+	{
+		ControlComponents c;
+		c.body = dynamic_cast<BodyComponent*>(comps["Body"]);
+		m_components.push_back(c);
+		m_entityList.push_back(e);
+	}
+}
+
 void ControlSystem::update()
 {
-	std::vector<string> allowedTypes = { "Body" };
-	for (auto &e : m_entityList)
+	for (auto & cc : m_components)
 	{
-		auto comps = e->getComponentsOfType(allowedTypes);
-		BodyComponent * bodyComp = dynamic_cast<BodyComponent *>(comps["Body"]);
-		if (bodyComp != nullptr)
+		BodyComponent * body = cc.body;
+		if (body != nullptr)
 		{
-			b2Body * body = bodyComp->getBody();
-			b2Vec2 currentVelocity = body->GetLinearVelocity();
+			b2Body * b2Body = body->getBody();
+			b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
 			if (m_jump)
 			{
-				body->SetLinearVelocity(b2Vec2(currentVelocity.x, -20));
+				b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -20));
 				currentVelocity.y = -35;
 			}
 			if (m_moveRight)
 			{
-				body->SetLinearVelocity(b2Vec2(15, currentVelocity.y));
+				b2Body->SetLinearVelocity(b2Vec2(15, currentVelocity.y));
 				currentVelocity.x = 15;
 			}
 			else if (m_moveLeft)
 			{
-				body->SetLinearVelocity(b2Vec2(-15, currentVelocity.y));
+				b2Body->SetLinearVelocity(b2Vec2(-15, currentVelocity.y));
 				currentVelocity.x = -15;
 			}
 			else
 			{
-				body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
+				b2Body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
 				currentVelocity.x = 0;
 			}
-			m_moveRight = false, m_moveLeft = false, m_jump = false;
+			m_moveRight = false, m_moveLeft = false, m_jump = false, m_fire = false;
 		}
 	}
 }
@@ -61,5 +72,5 @@ void ControlSystem::jump()
 
 void ControlSystem::fire()
 {
-	std::cout << "I'm firing" << std::endl;
+	m_fire = true;
 }
