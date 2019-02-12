@@ -5,22 +5,13 @@
 
 class WalkingState : public AnimationState {
 public:
-	WalkingState() {};
-	~WalkingState() {};
+	WalkingState();
+	~WalkingState();
 
-	void onEntry(Animation * a)  override {
-		a->setPrevious(a->getCurrent());
-		a->setCurrent(this);
-	};
-	void onExit(Animation * a)  override {
-		a->setPrevious(this);
-		a->setCurrent(a->getPrevious());
-	};
+	void onEntry(Animation * a)  override;
+	void onExit(Animation * a)  override;
 
-	AnimationState * handle(Animation * a, AnimationState*s) override {
-
-	}
+	AnimationState * handle(Animation * a, SDL_Event & e) override;
 };
-
 
 #endif //!WALKINGSTATE_H

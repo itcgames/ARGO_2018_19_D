@@ -5,21 +5,13 @@
 
 class IdleState : public AnimationState {
 public:
-	IdleState() {};
-	~IdleState() {};
+	IdleState();
+	~IdleState();
 
-	void onEntry(Animation * a)  override {
-		a->setPrevious(a->getCurrent());
-		a->setCurrent(this);
-	};
-	void onExit(Animation * a)  override {
-		a->setPrevious(this);
-		a->setCurrent(a->getPrevious());
-	};
+	void onEntry(Animation * a)  override;
+	void onExit(Animation * a)  override;
 
-	AnimationState * handle(Animation * a, AnimationState*s) override {
-
-	}
+	AnimationState * handle(Animation * a, SDL_Event & e) override;
 };
 
 #endif //!IDLESTATE_H

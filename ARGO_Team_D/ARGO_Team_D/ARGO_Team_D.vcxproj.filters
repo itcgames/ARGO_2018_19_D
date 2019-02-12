@@ -28,6 +28,8 @@
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
+    <ClCompile Include="FSM\WalkingState.cpp" />
+    <ClCompile Include="FSM\IdleState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />

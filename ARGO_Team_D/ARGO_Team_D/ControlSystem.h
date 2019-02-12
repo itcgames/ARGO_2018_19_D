@@ -17,6 +17,8 @@ public:
 	void moveLeft();
 	void jump();
 	void fire();
+
+	void processInput(SDL_Event & e);
 private:
 	bool m_moveRight;
 	bool m_moveLeft;

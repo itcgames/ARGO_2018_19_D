@@ -137,17 +137,18 @@ Game::Game() :
 		SDL_Rect frame = { i * 86, 0, 86, 86 };
 		frames.push_back(frame);
 	}
-	a->addAnimation("Test", frames, 1, 1);
+	a->addAnimation("Idle", frames, 1, 1, true);
 
 	frames.clear();
 	for (int i = 0; i < 5; ++i) {
 		SDL_Rect frame = { i * 86, 86, 86, 86 };
 		frames.push_back(frame);
 	}
-	a->addAnimation("Test2", frames, 1, 1, true);
+	a->addAnimation("Walking", frames, 1, 1, true);
 	e2->addComponent(new SpriteComponent("TestAnimation", *m_resourceManager, 100, 100));
 	e2->addComponent(a);
 	e2->addComponent(new PositionComponent(200, 400));
+	m_controlSystem.addEntity(e2);
 	m_animationSystem.addEntity(e2);
 	m_renderSystem.addEntity(e2);
 }
@@ -193,6 +194,7 @@ void Game::processEvents()
 		case PlayScreen:
 			inputHandler->handleKeyboardInput(event);
 			inputHandler->handleControllerInput(event);
+			m_controlSystem.processInput(event);
 			break;
 		case Options:
 			m_options->handleInput(event);

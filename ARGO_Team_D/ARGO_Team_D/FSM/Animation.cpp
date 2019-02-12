@@ -4,6 +4,8 @@
 
 Animation::Animation()
 {
+	m_current = new IdleState();
+	m_previous = m_current;
 }
 
 Animation::~Animation()
@@ -30,7 +32,10 @@ void Animation::setPrevious(AnimationState * s)
 	m_previous = s;
 }
 
-void Animation::handle(AnimationState * s)
+void Animation::handle(SDL_Event & e)
 {
-	AnimationState * state = m_current->handle(this, s);
+	AnimationState * state = m_current->handle(this, e);
+	if (nullptr != state) {
+		state->onEntry(this);
+	}
 }

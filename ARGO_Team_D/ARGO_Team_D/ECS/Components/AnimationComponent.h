@@ -3,6 +3,7 @@
 
 #include "Components.h"
 #include "../Utils/VectorAPI.h"
+#include "../FSM/Animation.h"
 
 #include <SDL.h>
 #include <map>
@@ -26,6 +27,10 @@ public:
 	};
 
 	void update(const float dt) {
+		if (m_animation.getCurrent()->m_name != m_animation.getPrevious()->m_name) {
+			startAnimation(m_animation.getCurrent()->m_name);
+			m_animation.setPrevious(m_animation.getCurrent());
+		}
 		auto & currAnimation = m_animations[m_currentAnimation];
 		currAnimation.m_timer += dt;
 		if (currAnimation.active && currAnimation.m_timer > currAnimation.m_frameStep * (currAnimation.m_currentFrame + 1)) {
@@ -62,8 +67,10 @@ public:
 	};
 
 	void start() {
-		m_animations[m_currentAnimation].active = true;
-		m_animations[m_currentAnimation].m_currentFrame = 0;
+		auto & currAnimation = m_animations[m_currentAnimation];
+		currAnimation.active = true;
+		currAnimation.m_currentFrame = 0;
+		currAnimation.m_timer = 0;
 	};
 
 	void stop() {
@@ -81,9 +88,14 @@ public:
 		m_currentAnimation = animationName;
 		start();
 	};
+
+	void handleInput(SDL_Event & e) {
+		m_animation.handle(e);
+	};
 private:
 	std::string m_currentAnimation;
 	std::map<std::string, AnimationData> m_animations;
+	Animation m_animation;
 };
 
 #endif //!ANIMATIONCOMPONENT_H
