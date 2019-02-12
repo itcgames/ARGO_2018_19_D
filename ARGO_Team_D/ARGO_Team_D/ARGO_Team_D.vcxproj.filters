@@ -26,6 +26,7 @@
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
     <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="Menu\Screen.cpp" />
+    <ClCompile Include="Client\Client.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -61,5 +62,7 @@
     <ClInclude Include="ECS\Components\BodyComponent.h" />
     <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="Menu\Screen.h" />
+    <ClInclude Include="Client\Client.h" />
+    <ClInclude Include="Client\ParseUtils.h" />
   </ItemGroup>
 </Project>
