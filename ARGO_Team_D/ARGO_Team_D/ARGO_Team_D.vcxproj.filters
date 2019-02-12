@@ -27,6 +27,9 @@
     <ClCompile Include="Utils\MathUtils.cpp" />
     <ClCompile Include="ECS\Systems\AnimationSystem.cpp" />
     <ClCompile Include="FSM\Animation.cpp" />
+    <ClCompile Include="ECS\Components\BodyComponent.cpp" />
+    <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="Menu\Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h" />
@@ -70,5 +73,6 @@
     <ClInclude Include="ECS\Components\BodyComponent.h" />
     <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="FSM\IState.h" />
+    <ClInclude Include="Menu\Screen.h" />
   </ItemGroup>
 </Project>
