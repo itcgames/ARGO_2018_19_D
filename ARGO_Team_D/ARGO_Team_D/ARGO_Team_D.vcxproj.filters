@@ -34,6 +34,8 @@
     <ClCompile Include="Factories\PlayerFactory.cpp" />
     <ClCompile Include="FSM\WalkingState.cpp" />
     <ClCompile Include="FSM\IdleState.cpp" />
+    <ClCompile Include="ECS\Systems\MovementSystem.cpp" />
+    <ClCompile Include="ECS\Systems\TimeToLiveSystem.cpp" />
     <ClCompile Include="Utils\ContactListener.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +83,10 @@
     <ClInclude Include="Client\Client.h" />
     <ClInclude Include="Client\ParseUtils.h" />
     <ClInclude Include="Factories\PlayerFactory.h" />
+    <ClInclude Include="ECS\Components\VelocityComponent.h" />
+    <ClInclude Include="ECS\Systems\MovementSystem.h" />
+    <ClInclude Include="ECS\Components\TimeToLiveComponent.h" />
+    <ClInclude Include="ECS\Systems\TimeToLiveSystem.h" />
     <ClInclude Include="Utils\ContactListener.h" />
   </ItemGroup>
 </Project>

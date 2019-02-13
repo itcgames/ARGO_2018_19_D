@@ -45,4 +45,5 @@ void PhysicsSystem::update()
 		p->setX(currentPos.x * m_worldScale - (dimensions.x / 2.f));
 		p->setY(currentPos.y * m_worldScale - (dimensions.y / 2.f));
 	}
+	
 }
