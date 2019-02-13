@@ -92,6 +92,16 @@ public:
 	void handleInput(SDL_Event & e) {
 		m_animation.handle(e);
 	};
+
+	void setLooping(std::string name,bool looping) {
+		if (!name.empty())
+		{
+			m_animations[name].looping = looping;
+		}
+		else {
+			m_animations[m_currentAnimation].looping = looping;
+		}
+	}
 private:
 	std::string m_currentAnimation;
 	std::map<std::string, AnimationData> m_animations;
