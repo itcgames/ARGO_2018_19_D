@@ -157,10 +157,6 @@ Game::Game() :
 	m_renderSystem.addEntity(e2);
 }
 
-
-
-}
-
 Game::~Game()
 {
 }
