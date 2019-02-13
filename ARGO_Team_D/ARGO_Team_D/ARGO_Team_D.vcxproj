@@ -175,6 +175,7 @@
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
+    <ClCompile Include="Utils\ContactListener.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
   </ItemGroup>
@@ -222,6 +223,7 @@
     <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />
+    <ClInclude Include="Utils\ContactListener.h" />
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
   </ItemGroup>

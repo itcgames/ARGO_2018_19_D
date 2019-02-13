@@ -34,9 +34,9 @@ void ControlSystem::update()
 		{
 			b2Body * b2Body = body->getBody();
 			b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
-			if (m_jump)
+			if (m_jump && body->isOnGround())
 			{
-				b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -20));
+				b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
 				currentVelocity.y = -35;
 			}
 			if (m_moveRight)

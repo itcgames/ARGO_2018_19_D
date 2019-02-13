@@ -122,6 +122,7 @@ private:
 	// Box2D
 	b2Vec2 m_gravity;
 	b2World m_world;
+	BodyContactListener m_contactListener;
 
 	// Level
 	Level * level;

@@ -9,6 +9,7 @@ Game::Game() :
 	m_camera(m_windowWidth, m_windowHeight),
 	m_physicsSystem(WORLD_SCALE)
 {
+	m_world.SetContactListener(&m_contactListener);
 	if (m_client.init()) {
 		cout << "Client Created" << endl;
 	}
@@ -120,7 +121,7 @@ Game::Game() :
 
 	for (int i = 0; i < 30; i++)
 	{
-		Entity * e = new Entity(500);
+		Entity * e = new Entity();
 		e->addComponent(new PositionComponent(-10000, -10000));
 		std::string theName = "bullet";
 		e->addComponent(new SpriteComponent(theName, *m_resourceManager, 30, 5));
@@ -134,7 +135,7 @@ Game::Game() :
 	m_controlSystem.bindBullets(m_bullets);
 	srand(time(NULL));
 
-	Entity * e2 = new Entity(1);
+	Entity * e2 = new Entity();
 	AnimationComponent * a = new AnimationComponent();
 	std::vector<SDL_Rect> frames;
 	for (int i = 0; i < 5; ++i) {
@@ -390,7 +391,7 @@ void Game::fade()
 void Game::initialiseEntities()
 {
 	// Init Player
-	Entity * e = m_playerFactory->create(1, VectorAPI(150, 0));
+	Entity * e = m_playerFactory->create(VectorAPI(150, 0));
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
 	m_player = e;

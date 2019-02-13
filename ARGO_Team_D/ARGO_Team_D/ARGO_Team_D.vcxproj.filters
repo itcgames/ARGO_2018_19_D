@@ -2,15 +2,21 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Client\Client.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
     <ClCompile Include="ECS\Systems\AnimationSystem.cpp" />
+    <ClCompile Include="ECS\Systems\MovementSystem.cpp" />
     <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="FSM\Animation.cpp" />
+    <ClCompile Include="FSM\IdleState.cpp" />
+    <ClCompile Include="FSM\WalkingState.cpp" />
+    <ClCompile Include="Factories\PlayerFactory.cpp" />
+    <ClCompile Include="ECS\Systems\TimeToLiveSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Level\Level.cpp" />
@@ -25,6 +31,7 @@
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
+    <ClCompile Include="Utils\ContactListener.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
@@ -36,8 +43,11 @@
     <ClCompile Include="FSM\IdleState.cpp" />
     <ClCompile Include="ECS\Systems\MovementSystem.cpp" />
     <ClCompile Include="ECS\Systems\TimeToLiveSystem.cpp" />
+    <ClCompile Include="Utils\ContactListener.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Client\Client.h" />
+    <ClInclude Include="Client\ParseUtils.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="ConcreteCommand.h" />
     <ClInclude Include="ECS\Components\AnimationComponent.h" />
@@ -46,11 +56,16 @@
     <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />
+    <ClInclude Include="ECS\Components\TimeToLiveComponent.h" />
+    <ClInclude Include="ECS\Components\VelocityComponent.h" />
     <ClInclude Include="ECS\Entities\Entity.h" />
     <ClInclude Include="ECS\Systems\AnimationSystem.h" />
+    <ClInclude Include="ECS\Systems\MovementSystem.h" />
     <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\Systems\System.h" />
+    <ClInclude Include="Factories\PlayerFactory.h" />
+    <ClInclude Include="ECS\Systems\TimeToLiveSystem.h" />
     <ClInclude Include="Factories\Factory.h" />
     <ClInclude Include="FSM\Animation.h" />
     <ClInclude Include="FSM\AnimationState.h" />
@@ -73,6 +88,7 @@
     <ClInclude Include="ControlSystem.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />
+    <ClInclude Include="Utils\ContactListener.h" />
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
@@ -87,5 +103,6 @@
     <ClInclude Include="ECS\Components\TimeToLiveComponent.h" />
     <ClInclude Include="ECS\Systems\TimeToLiveSystem.h" />
     <ClInclude Include="ECS\Components\GunComponent.h" />
+	<ClInclude Include="Utils\ContactListener.h" />
   </ItemGroup>
 </Project>
