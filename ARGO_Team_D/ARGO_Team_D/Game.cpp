@@ -130,6 +130,7 @@ Game::Game() :
 		m_ttlSystem.addEntity(e);
 		m_bullets.push_back(e);
 	}
+	m_controlSystem.bindBullets(m_bullets);
 	srand(time(NULL));
 
 
@@ -197,8 +198,7 @@ void Game::processEvents()
 			switch (m_gameState)
 			{
 			case PlayScreen:
-				fire = true;
-				startTimer = SDL_GetTicks();
+				m_camera.m_shaking = true;
 				break;
 			}
 
@@ -236,15 +236,6 @@ void Game::update()
 			m_movementSystem.update();
 			m_ttlSystem.update();
 			inputHandler->update();
-
-
-			float time = (SDL_GetTicks() - startTimer) / 1000;
-			if (0.1f <= time && fire)
-			{
-				spawnProjectile(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE);
-				startTimer = SDL_GetTicks();
-			}
-
 		}
 		break;
 	case Options:
@@ -422,13 +413,11 @@ void Game::spawnProjectile(float x, float y)
 			p->setPosition(VectorAPI(x, y));
 
 			VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
-			v->setVelocity(VectorAPI(15, ((double)rand() / RAND_MAX) * 2 - 1));
+			v->setVelocity(VectorAPI(30, ((double)rand() / RAND_MAX) * 2 - 1));
 			t->setTimer(SDL_GetTicks());
 			t->setActive(true);
 			break;
 		}
-
-
 
 	}
 }

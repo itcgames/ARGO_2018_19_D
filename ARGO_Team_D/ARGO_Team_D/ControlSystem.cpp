@@ -3,6 +3,7 @@
 ControlSystem::ControlSystem()
 {
 	allowedTypes = { "Body", "Position" };
+	direction = 1;
 }
 
 ControlSystem::~ControlSystem()
@@ -51,6 +52,11 @@ void ControlSystem::update()
 				b2Body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
 				currentVelocity.x = 0;
 			}
+
+			if (m_fire)
+			{
+				spawnProjectile(b2Body->GetPosition().x * 30.0f, b2Body->GetPosition().y * 30.0f);
+			}
 			m_moveRight = false, m_moveLeft = false, m_jump = false, m_fire = false;
 		}
 	}
@@ -60,11 +66,13 @@ void ControlSystem::update()
 void ControlSystem::moveRight()
 {
 	m_moveRight = true;
+	direction = 1;
 }
 
 void ControlSystem::moveLeft()
 {
 	m_moveLeft = true;
+	direction = -1;
 }
 
 void ControlSystem::jump()
@@ -74,12 +82,34 @@ void ControlSystem::jump()
 
 void ControlSystem::fire()
 {
-	//m_game->spawnProjectile()
-	m_fire = true;
-	for (auto &e : m_entityList)
+	m_fire = true;	
+}
+
+void ControlSystem::bindBullets(std::vector<Entity*>& bullets)
+{
+	m_bullets = bullets;
+}
+
+void ControlSystem::spawnProjectile(float x, float y)
+{
+	for (auto &b : m_bullets)
 	{
-		auto comps = e->getComponentsOfType(allowedTypes);
-		PositionComponent * p = dynamic_cast<PositionComponent *>(comps["Position"]);
-		//m_game->spawnProjectile(p->getPosition().x, p->getPosition().y);
+
+		std::vector<std::string> s = { "TimeToLive", "Position", "Velocity" };
+		auto comps = b->getComponentsOfType(s);
+		TimeToLiveComponent * t = dynamic_cast<TimeToLiveComponent*>(comps["TimeToLive"]);
+
+		if (!t->isActive())
+		{
+			t->setActive(true);
+			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
+			p->setPosition(VectorAPI(x, y));
+
+			VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
+			v->setVelocity(VectorAPI(30 * direction, ((double)rand() / RAND_MAX) * 2 - 1));
+			t->setTimer(SDL_GetTicks());
+			t->setActive(true);
+			break;
+		}
 	}
 }
