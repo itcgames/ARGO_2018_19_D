@@ -11,12 +11,14 @@
 #include "../Components/Components.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/SpriteComponent.h"
+#include "../Components/AnimationComponent.h"
 #include "../Utils/VectorAPI.h"
 
 struct RenderComponents
 {
 	PositionComponent * position;
 	SpriteComponent * sprite;
+	AnimationComponent * animation;
 };
 
 /// <summary>

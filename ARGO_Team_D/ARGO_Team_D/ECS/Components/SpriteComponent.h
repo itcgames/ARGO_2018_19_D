@@ -31,6 +31,7 @@ public:
 	float m_angle;
 	SDL_Point * m_center;
 	SDL_RendererFlip m_flip;
+	SDL_Rect m_srcRect;
 private:
 	std::string m_name;
 	SDL_Texture * m_texture;

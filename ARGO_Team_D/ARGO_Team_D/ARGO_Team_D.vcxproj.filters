@@ -7,10 +7,19 @@
     <ClCompile Include="ConcreteCommand.cpp" />
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="ControlSystem.cpp" />
     <ClCompile Include="Factories\PlayerFactory.cpp" />
+=======
+    <ClCompile Include="ECS\Systems\AnimationSystem.cpp" />
+    <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
+    <ClCompile Include="ControlSystem.cpp" />
+    <ClCompile Include="Factories\CharacterFactory.cpp" />
+    <ClCompile Include="FSM\Animation.cpp" />
+>>>>>>> aa35614ed53c58432999ef6000165dde2c64e77d
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Level\Level.cpp" />
@@ -27,7 +36,17 @@
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="ECS\Systems\NetworkingSystem.cpp" />
+=======
+    <ClCompile Include="ECS\Components\BodyComponent.cpp" />
+    <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="Menu\Screen.cpp" />
+    <ClCompile Include="Client\Client.cpp" />
+    <ClCompile Include="Factories\PlayerFactory.cpp" />
+    <ClCompile Include="FSM\WalkingState.cpp" />
+    <ClCompile Include="FSM\IdleState.cpp" />
+>>>>>>> aa35614ed53c58432999ef6000165dde2c64e77d
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -41,11 +60,20 @@
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />
     <ClInclude Include="ECS\Entities\Entity.h" />
+<<<<<<< HEAD
+=======
+    <ClInclude Include="ECS\Systems\AnimationSystem.h" />
+>>>>>>> aa35614ed53c58432999ef6000165dde2c64e77d
     <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\Systems\System.h" />
     <ClInclude Include="Factories\PlayerFactory.h" />
     <ClInclude Include="Factories\Factory.h" />
+    <ClInclude Include="FSM\Animation.h" />
+    <ClInclude Include="FSM\AnimationState.h" />
+    <ClInclude Include="FSM\IdleState.h" />
+    <ClInclude Include="FSM\IState.h" />
+    <ClInclude Include="FSM\WalkingState.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Level\Level.h" />
@@ -65,6 +93,15 @@
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
+<<<<<<< HEAD
     <ClInclude Include="ECS\Systems\NetworkingSystem.h" />
+=======
+    <ClInclude Include="ECS\Components\BodyComponent.h" />
+    <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
+    <ClInclude Include="Menu\Screen.h" />
+    <ClInclude Include="Client\Client.h" />
+    <ClInclude Include="Client\ParseUtils.h" />
+    <ClInclude Include="Factories\PlayerFactory.h" />
+>>>>>>> aa35614ed53c58432999ef6000165dde2c64e77d
   </ItemGroup>
 </Project>
