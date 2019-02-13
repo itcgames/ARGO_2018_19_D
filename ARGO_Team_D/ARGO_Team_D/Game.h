@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <functional>
+#include "Utils/ContactListener.h"
 
 class ControlSystem;
 class MainMenu;
