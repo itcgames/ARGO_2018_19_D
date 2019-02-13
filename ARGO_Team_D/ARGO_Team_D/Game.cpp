@@ -9,14 +9,8 @@ Game::Game() :
 	m_camera(m_windowWidth, m_windowHeight),
 	m_physicsSystem(WORLD_SCALE)
 {
-	if (m_client.init()) {
-		cout << "Client Created" << endl;
-	}
-	else {
-		std::cout << "Couldnt Connect" << std::endl;
-	}
-
-	m_network = NetworkingSystem(&m_client);
+	m_network = NetworkingSystem();
+	m_network.initClientLocalClient();
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -230,7 +224,13 @@ void Game::processEvents()
 
 void Game::update(const float & dt)
 {
-	m_network.parseNetworkData(m_client.processMessage(m_client.Receive()));
+	if (!m_network.getHost())
+	{
+		m_network.updateFromHost();
+	}
+	else {
+		m_network.updateClients();
+	}
 
 	switch (m_gameState)
 	{
@@ -257,8 +257,19 @@ void Game::update(const float & dt)
 	case LevelSelect:
 		m_levelSelect->update();
 		break;
+	case Multiplayer:
+		m_network.updateFromHost();
+		break;
 	default:
 		break;
+	}
+
+	if (!m_network.getHost())
+	{
+		m_network.sendToHost();
+	}
+	else {
+		m_network.sendToClients();
 	}
 }
 
@@ -384,11 +395,6 @@ void Game::initialiseSystems()
 		if (i->checkForComponent("Body"))
 		{
 			m_physicsSystem.addEntity(i);
-		}
-
-		if (!i->checkForComponent("Control"))
-		{
-			m_network.addEntity(i);
 		}
 	}
 }

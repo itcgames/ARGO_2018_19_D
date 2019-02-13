@@ -3,13 +3,13 @@
 #include <string>
 #include <sstream>
 
-#pragma comment(lib, "ws2_32.lib")
+#pragma comment (lib, "ws2_32.lib")
 
 using namespace std;
 
 void main()
 {
-	static int playerID = 1;
+	static int playerID = 0;
 	int port = 8080;
 
 	// Initialze winsock
@@ -76,10 +76,15 @@ void main()
 				// Add the new connection to the list of connected clients
 				FD_SET(client, &master);
 
-				string welcomeMsg = "ID: " + to_string(playerID);
-				playerID++;
-				send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
-
+				if (playerID % 4 == 0) {
+					string welcomeMsg = "ID: " + to_string(playerID) + ", " + "Host: " + to_string(1);
+					send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
+				}
+				else {
+					string welcomeMsg = "ID: " + to_string(playerID) + ", " + "Host: " + to_string(0);;
+					playerID++;
+					send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
+				}
 			}
 			else // It's an inbound message
 			{

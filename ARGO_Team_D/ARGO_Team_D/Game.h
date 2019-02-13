@@ -28,7 +28,6 @@
 #include "Utils/VectorAPI.h"
 #include "Camera.h"
 #include <SDL_haptic.h>
-#include "Client/Client.h"
 #include "ECS/Systems/NetworkingSystem.h"
 
 class MainMenu;
@@ -41,8 +40,10 @@ enum State {
 	PlayScreen,
 	Options,
 	Credits,
-	LevelSelect
+	LevelSelect,
+	Multiplayer
 };
+
 using namespace std;
 
 class Game
@@ -132,6 +133,5 @@ private:
 
 	// Networking
 	NetworkingSystem m_network;
-	Client m_client;
 };
 #endif // !GAME_H

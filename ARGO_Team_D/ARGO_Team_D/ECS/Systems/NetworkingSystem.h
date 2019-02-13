@@ -3,6 +3,7 @@
 
 #include "System.h"
 #include "..//Client/Client.h"
+#include <iostream>
 
 /// <summary>
 /// Networking system controls positions of all entities.
@@ -10,13 +11,18 @@
 class NetworkingSystem : public System
 {
 public:
-	NetworkingSystem() {};
-	NetworkingSystem(Client * client);
-	void update();
+	NetworkingSystem();
+	void initClientLocalClient();
+	void updateFromHost();
+	void updateClients();
+	void sendToHost();
+	void sendToClients();
 	void parseNetworkData(std::map<std::string, int> parsedMessage);
+	void parseNetworkDataStr(std::map<std::string, std::string> parsedMessage);
+	bool getHost() { return m_client.getHost(); }
 
 private:
-	Client * m_client;
+	Client m_client;
 };
 
 #endif // !NETWORKINSYSTEM_H

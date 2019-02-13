@@ -212,6 +212,8 @@
     <ClInclude Include="Menu\MainMenu.h" />
     <ClInclude Include="Menu\OptionsMenu.h" />
     <ClInclude Include="Menu\Screen.h" />
+    <ClInclude Include="Observers\Observer.h" />
+    <ClInclude Include="Observers\Subject.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />
