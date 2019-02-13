@@ -8,6 +8,11 @@
 #include "ECS/Components/BodyComponent.h"
 #include "ECS/Components/AnimationComponent.h"
 #include "Utils/VectorAPI.h"
+#include <functional>   // std::function, std::negate
+#include "../ECS/Components/PositionComponent.h"
+#include "ECS/Entities/Entity.h"
+#include "ECS/Components/TimeToLiveComponent.h"
+#include "ECS/Components/VelocityComponent.h"
 
 struct ControlComponents {
 	BodyComponent * body;
@@ -26,12 +31,21 @@ public:
 	void fire();
 
 	void processInput(SDL_Event & e);
+	void bindBullets(std::vector<Entity *> &bullets);
+
+	void spawnProjectile(float x, float y);
+
 private:
 	bool m_moveRight;
 	bool m_moveLeft;
 	bool m_jump;
 	bool m_fire;
 	std::vector<ControlComponents> m_components;
+	std::vector<string> allowedTypes;
+
+	std::vector<Entity *> m_bullets;
+
+	int direction;
 };
 
 

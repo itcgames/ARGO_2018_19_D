@@ -7,7 +7,7 @@
 #include "../Components/Components.h"
 #include <map>
 #include <algorithm>
-
+#include<iostream>
 using namespace std;
 
 /// <summary>
@@ -19,7 +19,7 @@ public:
 	int id;
 
 	Entity(int id) {};
-	virtual ~Entity() {};
+	virtual ~Entity() { for (auto &c : m_components) { delete c;}};
 
 	void addComponent(Component * c) { m_components.push_back(c); }
 	void removeComponent(Component * c) {
