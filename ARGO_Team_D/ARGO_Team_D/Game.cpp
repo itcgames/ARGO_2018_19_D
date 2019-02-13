@@ -121,7 +121,7 @@ Game::Game() :
 
 	for (int i = 0; i < 10; i++)
 	{
-		Entity * e = new Entity(500);
+		Entity * e = new Entity();
 		e->addComponent(new PositionComponent(-10000, -10000));
 		std::string theName = "bullet";
 		e->addComponent(new SpriteComponent(theName, *m_resourceManager, 30, 5));
