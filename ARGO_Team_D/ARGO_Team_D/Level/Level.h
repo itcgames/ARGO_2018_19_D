@@ -3,6 +3,7 @@
 
 #include <tmxlite/Map.hpp>
 #include <tmxlite/TileLayer.hpp>
+#include <tmxlite/Object.hpp>
 #include <SDL.h>
 #include <map>
 #include <Box2D/Box2D.h>
@@ -52,6 +53,8 @@ public:
 	std::vector<std::vector<TileData*>> m_tiles;
 	tmx::Map m_map;
 	std::vector<PhysicsBody *> m_physicsBodies;
+	SDL_Rect m_goal;
+	VectorAPI m_startPos;
 };
 
 #endif // !LEVEL_H

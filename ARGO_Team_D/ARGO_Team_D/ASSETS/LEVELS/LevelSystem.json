@@ -1,5 +1,6 @@
 {
-	"LevelSystem" : [
-		"./ASSETS/LEVELS/Level1.tmx"
-	]
+  "LevelSystem": [
+    "./ASSETS/LEVELS/Tutorial1.tmx",
+    "./ASSETS/LEVELS/Level1.tmx"
+  ]
 }

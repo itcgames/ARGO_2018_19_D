@@ -1,4 +1,7 @@
 #include "LevelManager.h"
+#include "../ECS/Components/PositionComponent.h"
+#include "../ECS/Components/SpriteComponent.h"
+#include "../ECS/Components/BodyComponent.h"
 
 LevelManager::LevelManager()
 {
@@ -38,4 +41,34 @@ void LevelManager::parseLevelSystem(const std::string & filepath, b2World & worl
 		m_levels[i] = new Level(world, worldScale);
 	}
 	levelFile.close();
+}
+
+void LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale)
+{
+	std::vector<std::string> allowedTypes = {"Position", "Sprite", "Body"};
+	auto comps = e->getComponentsOfType(allowedTypes);
+	if (comps.size() == allowedTypes.size()) {
+		auto pos = dynamic_cast<PositionComponent *>(comps["Position"]);
+		auto sprite = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
+		auto body = dynamic_cast<BodyComponent*>(comps["Body"]);
+		auto p = pos->getPosition();
+		auto goal = m_levels[m_currentLevel]->m_goal;
+		if (p.x + sprite->m_width > goal.x
+			&& p.x < goal.x + goal.w
+			&& p.y + sprite->m_height > goal.y
+			&& p.y <  goal.y + goal.h) {
+			m_levels[m_currentLevel]->clearPhysicsBodies();
+
+			if (m_currentLevel != m_levels.size() - 1) {
+				m_currentLevel++;
+			}
+			else {
+				m_currentLevel = 0;
+			}
+			loadCurrentLevel(rm);
+			auto startPos = m_levels[m_currentLevel]->m_startPos;
+			pos->setPosition(startPos);
+			body->getBody()->SetTransform(b2Vec2(startPos.x / worldScale, startPos.y / worldScale), 0);
+		}
+	}
 }

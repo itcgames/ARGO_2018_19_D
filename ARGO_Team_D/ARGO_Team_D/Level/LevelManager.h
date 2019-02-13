@@ -10,6 +10,7 @@
 #include "../Resource Manager/ResourceManager.h"
 #include "../Camera.h"
 #include "Level.h"
+#include "../ECS/Entities/Entity.h"
 
 class LevelManager {
 public:
@@ -19,6 +20,7 @@ public:
 	void render(SDL_Renderer * renderer, Camera & camera);
 	void loadCurrentLevel(ResourceManager & resourceManager);
 	void parseLevelSystem(const std::string & filepath, b2World & world, const float worldScale);
+	void checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale);
 protected:
 	std::vector<std::string> m_levelPaths;
 	std::vector<Level*> m_levels;

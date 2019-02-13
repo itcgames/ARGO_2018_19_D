@@ -21,6 +21,14 @@ Level::~Level()
 /// <returns></returns>
 bool Level::load(const std::string filepath, ResourceManager * rManager)
 {
+	for (auto & row : m_tiles) {
+		for (auto tile : row) {
+			delete tile;
+			tile = nullptr;
+		}
+	}
+	m_physicsBodies.clear();
+
 	if (m_map.load(filepath)) {
 		tmx::Vector2u tileCount = m_map.getTileCount();
 		m_rows = tileCount.y;
@@ -157,6 +165,9 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 	{
 		float xPos, yPos, width = 0;
 		bool bodyStarted = false;
+		if (y == 26) {
+			std::cout << std::endl;
+		}
 		for (auto x = 0; x < m_cols; ++x)
 		{
 			if (nullptr != m_tiles[y][x])
@@ -171,6 +182,10 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 				else
 				{
 					width += m_tileWidth;
+				}
+				if (x == m_cols - 1) {
+					bodyStarted = false;
+					createBody(xPos, yPos, width);
 				}
 			}
 			else if(bodyStarted)
@@ -195,9 +210,15 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 
 	std::cout << "Name: " << object_layer->getName();
 	for (auto & object : layer_objects) {
-		if (object.getName() != "Example") {
-			uint32_t object_uid = object.getUID();
-			const tmx::FloatRect object_aabb = object.getAABB();
+		std::string name = object.getType();
+		if (name == "PlayerSpawn") {
+			auto pos = object.getPosition();
+			m_startPos.x = pos.x;
+			m_startPos.y = pos.y;
+		}
+		else if (name == "Goal") {
+			auto rect = object.getAABB();
+			m_goal = { (int)rect.left, (int)rect.top, (int)rect.width, (int)rect.height };
 		}
 	}
 }

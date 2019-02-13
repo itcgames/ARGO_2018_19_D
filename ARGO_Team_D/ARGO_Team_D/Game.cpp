@@ -272,6 +272,8 @@ void Game::update(const float & dt)
 			m_ttlSystem.update();
 			inputHandler->update();
 			m_animationSystem.update(dt / 1000);
+			m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE);
+			std::cout << m_playerBody->getBody()->GetTransform().p.x  * WORLD_SCALE<< std::endl;
 		}
 		break;
 	case Options:
