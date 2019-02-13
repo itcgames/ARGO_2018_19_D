@@ -112,9 +112,7 @@ Game::Game() :
 	initialiseSystems();
 	setUpFont();
 
-	level = new Level(m_world, WORLD_SCALE);
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
-	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
 
 	Entity * e2 = new Entity(1);
 	AnimationComponent * a = new AnimationComponent();
@@ -137,6 +135,7 @@ Game::Game() :
 	m_controlSystem.addEntity(e2);
 	m_animationSystem.addEntity(e2);
 	m_renderSystem.addEntity(e2);
+	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE);
 }
 
 Game::~Game()
@@ -279,7 +278,7 @@ void Game::render()
 		break;
 	case PlayScreen:
 		m_renderSystem.render(m_renderer, m_camera);
-		level->render(m_renderer, m_camera);
+		m_levelManager.render(m_renderer, m_camera);
 		break;
 	case Options:
 		m_options->draw();

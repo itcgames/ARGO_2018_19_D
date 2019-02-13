@@ -17,7 +17,7 @@
 #include "Resource Manager/ResourceManager.h"
 #include "ControlSystem.h"
 #include <Box2D\Box2D.h>
-#include "Level/Level.h"
+#include "Level/LevelManager.h"
 #include "Factories/Factory.h"
 #include "Factories/PlayerFactory.h"
 #include "Menu/Button.h"
@@ -54,6 +54,11 @@ public:
 	void setGameState(State state);
 	void fadeToState(State state);
 	void fade();
+	// Level
+	LevelManager m_levelManager;
+
+	// Resources
+	ResourceManager * m_resourceManager;
 private:
 	void processEvents();
 	void update(const float & dt);
@@ -98,9 +103,6 @@ private:
 	SDL_Joystick* gGameController = NULL;
 	SDL_Haptic* gControllerHaptic = NULL;
 
-	// Resources
-	ResourceManager * m_resourceManager;
-
 	// Test - TO BE REMOVED
 	SDL_Texture * texture;
 	SDL_Texture * square;
@@ -109,9 +111,6 @@ private:
 	// Box2D
 	b2Vec2 m_gravity;
 	b2World m_world;
-
-	// Level
-	Level * level;
 
 	// Scene Transitions
 	SDL_Rect m_transitionScreen;
