@@ -21,6 +21,7 @@ struct TileData {
 	b2Body * body = nullptr;
 	b2PolygonShape shape;
 	b2FixtureDef fixture;
+	bool destructible;
 };
 
 struct PhysicsBody {

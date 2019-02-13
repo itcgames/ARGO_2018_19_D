@@ -101,6 +101,16 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 	//std::cout << "Got all tiles" << std::endl;
 
 	//For every tile at poistion do something
+	auto props = tile_layer->getProperties();
+	bool destructible = std::find_if(props.begin(), props.end(), [](tmx::Property & p) {
+		if (p.getName() == "Destructible") {
+			if (p.getBoolValue()) {
+				return true;
+			}
+		}
+		return false;
+
+	}) != props.end();
 	int count = 0;
 	for (auto y = 0; y < m_rows; ++y) {
 		for (auto x = 0; x < m_cols; ++x) {
@@ -156,6 +166,7 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 			t->srcX = region_x;
 			t->srcY = region_y;
 			t->texture = m_tilesets.at(tset_gid);
+			t->destructible = destructible;
 			m_tiles[y][x] = t;
 			//t->m_index = tile_index;
 			count++;
