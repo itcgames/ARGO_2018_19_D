@@ -28,6 +28,7 @@
 #include "Camera.h"
 #include <SDL_haptic.h>
 #include "Client/Client.h"
+#include "ECS/Systems/NetworkingSystem.h"
 
 class MainMenu;
 class OptionsMenu;
@@ -128,7 +129,7 @@ private:
 	LevelSelectMenu * m_levelSelect;
 
 	// Networking
+	NetworkingSystem m_network;
 	Client m_client;
-	void parseNetworkData(std::map<std::string, int> parsedMessage);
 };
 #endif // !GAME_H

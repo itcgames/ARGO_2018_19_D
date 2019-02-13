@@ -2,11 +2,15 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Client\Client.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="ConcreteCommand.cpp" />
+    <ClCompile Include="ECS\Components\BodyComponent.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
+    <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="ControlSystem.cpp" />
+    <ClCompile Include="Factories\PlayerFactory.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Level\Level.cpp" />
@@ -17,31 +21,30 @@
     <ClCompile Include="Menu\LevelSelectMenu.cpp" />
     <ClCompile Include="Menu\MainMenu.cpp" />
     <ClCompile Include="Menu\OptionsMenu.cpp" />
+    <ClCompile Include="Menu\Screen.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
-    <ClCompile Include="ECS\Components\BodyComponent.cpp" />
-    <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
-    <ClCompile Include="Menu\Screen.cpp" />
-<<<<<<< HEAD
-    <ClCompile Include="Client\Client.cpp" />
-=======
-    <ClCompile Include="Factories\PlayerFactory.cpp" />
->>>>>>> fdef0a4e4223666cceaf727d4490bfc01134062d
+    <ClCompile Include="ECS\Systems\NetworkingSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Client\Client.h" />
+    <ClInclude Include="Client\ParseUtils.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="ConcreteCommand.h" />
     <ClInclude Include="ECS\Components\AnimationComponent.h" />
+    <ClInclude Include="ECS\Components\BodyComponent.h" />
     <ClInclude Include="ECS\Components\Components.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />
     <ClInclude Include="ECS\Entities\Entity.h" />
+    <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\Systems\System.h" />
+    <ClInclude Include="Factories\PlayerFactory.h" />
     <ClInclude Include="Factories\Factory.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputHandler.h" />
@@ -53,6 +56,7 @@
     <ClInclude Include="Menu\LevelSelectMenu.h" />
     <ClInclude Include="Menu\MainMenu.h" />
     <ClInclude Include="Menu\OptionsMenu.h" />
+    <ClInclude Include="Menu\Screen.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ControlSystem.h" />
@@ -61,14 +65,6 @@
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
-    <ClInclude Include="ECS\Components\BodyComponent.h" />
-    <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
-    <ClInclude Include="Menu\Screen.h" />
-<<<<<<< HEAD
-    <ClInclude Include="Client\Client.h" />
-    <ClInclude Include="Client\ParseUtils.h" />
-=======
-    <ClInclude Include="Factories\PlayerFactory.h" />
->>>>>>> fdef0a4e4223666cceaf727d4490bfc01134062d
+    <ClInclude Include="ECS\Systems\NetworkingSystem.h" />
   </ItemGroup>
 </Project>
