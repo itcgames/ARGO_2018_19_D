@@ -9,9 +9,13 @@ PlayerFactory::PlayerFactory(std::string spriteId, VectorAPI dimensions, Resourc
 {
 }
 
-Entity * PlayerFactory::create(int entityId, VectorAPI pos)
+Entity * PlayerFactory::create(VectorAPI pos)
 {
-	Entity * entity = new Entity(entityId);
+	Entity * e1 = new Entity();
+	Entity * e2 = new Entity();
+	Entity * e3 = new Entity();
+
+	Entity * entity = new Entity();
 	entity->addComponent(new PositionComponent(pos));
 	entity->addComponent(new SpriteComponent(m_spriteId, *m_resourceManager, m_dimensions.x, m_dimensions.y));
 	entity->addComponent(new BodyComponent(pos.x, pos.y, m_dimensions.x, m_refWorld, WORLD_SCALE));

@@ -10,6 +10,8 @@
 
 using namespace std;
 
+static int entityIdCounter = 0;
+
 /// <summary>
 /// innnterface for entities.
 /// entitys shared variables
@@ -18,7 +20,7 @@ class Entity {
 public:
 	int id;
 
-	Entity(int id) {};
+	Entity() : id(entityIdCounter++) {};
 	virtual ~Entity() {};
 
 	void addComponent(Component * c) { m_components.push_back(c); }
@@ -53,5 +55,5 @@ private:
 protected:
 
 };
-#endif // !ENTITY_H
 
+#endif // !ENTITY_H

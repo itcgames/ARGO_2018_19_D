@@ -321,7 +321,7 @@ void Game::fade()
 void Game::initialiseEntities()
 {
 	// Init Player
-	Entity * e = m_playerFactory->create(1, VectorAPI(150, 0));
+	Entity * e = m_playerFactory->create(VectorAPI(150, 0));
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
 	m_player = e;
