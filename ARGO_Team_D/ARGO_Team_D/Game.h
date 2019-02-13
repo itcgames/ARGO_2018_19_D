@@ -29,6 +29,7 @@
 #include "Camera.h"
 #include <SDL_haptic.h>
 #include "Client/Client.h"
+#include "Utils/ContactListener.h"
 
 class MainMenu;
 class OptionsMenu;
@@ -109,6 +110,7 @@ private:
 	// Box2D
 	b2Vec2 m_gravity;
 	b2World m_world;
+	BodyContactListener m_contactListener;
 
 	// Level
 	Level * level;

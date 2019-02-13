@@ -9,6 +9,7 @@ Game::Game() :
 	m_camera(m_windowWidth, m_windowHeight),
 	m_physicsSystem(WORLD_SCALE)
 {
+	m_world.SetContactListener(&m_contactListener);
 	if (m_client.init()) {
 		cout << "Client Created" << endl;
 	}
@@ -116,7 +117,7 @@ Game::Game() :
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
 	level->load("ASSETS/LEVELS/Level1.tmx", m_resourceManager);
 
-	Entity * e2 = new Entity(1);
+	Entity * e2 = new Entity();
 	AnimationComponent * a = new AnimationComponent();
 	std::vector<SDL_Rect> frames;
 	for (int i = 0; i < 5; ++i) {

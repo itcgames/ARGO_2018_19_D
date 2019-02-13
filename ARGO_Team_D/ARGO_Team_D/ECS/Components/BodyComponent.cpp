@@ -13,7 +13,8 @@ BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world
 	: m_refWorld(world),
 	m_worldScale(worldScale),
 	m_isCircle(false),
-	m_dimensions(w, h)
+	m_dimensions(w, h),
+	m_onGround(false)
 {
 	float halfWidth = w / 2.f;
 	float halfHeight = h / 2.f;
@@ -35,7 +36,8 @@ BodyComponent::BodyComponent(float x, float y, float rad, b2World & world, float
 	: m_refWorld(world),
 	m_worldScale(worldScale),
 	m_isCircle(true),
-	m_dimensions(rad, rad)
+	m_dimensions(rad, rad),
+	m_onGround(false)
 {
 	float halfRad = rad / 2.f;
 	b2CircleShape * circleShape = new b2CircleShape();
@@ -76,9 +78,18 @@ bool BodyComponent::isCircle()
 /// Function used to get the dimensions of a box2D body
 /// </summary>
 /// <returns>VectorAPI containing width and height of Box2D body</returns>
-VectorAPI BodyComponent::getDimesnions()
+VectorAPI BodyComponent::getDimensions()
 {
 	return m_dimensions;
+}
+
+/// <summary>
+/// Function used to check whether the Box2D body is currently on the ground
+/// </summary>
+/// <returns>Bool representing whether the body is on the ground</returns>
+bool BodyComponent::isOnGround()
+{
+	return m_onGround;
 }
 
 /// <summary>
@@ -103,4 +114,28 @@ void BodyComponent::init(float x, float y, float w, float h)
 	m_fixtureDef.shape = m_shape;
 	m_body->CreateFixture(&m_fixtureDef);
 	m_body->SetFixedRotation(true);
+
+	// Sensor checks if the body is on the ground
+	m_groundSensorShape = new b2PolygonShape();
+	m_groundSensorShape->SetAsBox((halfWidth / m_worldScale) / 2.f, (halfHeight / m_worldScale) / 2.f, b2Vec2(0, halfHeight / m_worldScale), 0);
+	m_groundFixtureDef.shape = m_groundSensorShape;
+	m_groundFixtureDef.isSensor = true;
+	b2Fixture * footSensorFixture = m_body->CreateFixture(&m_groundFixtureDef);
+	footSensorFixture->SetUserData(this);
+}
+
+/// <summary>
+/// Function used by Box2D to inform Body Component that it's on the ground
+/// </summary>
+void BodyComponent::groundContactStart()
+{
+	m_onGround = true;
+}
+
+/// <summary>
+/// Function used by Box2D to inform Body Component that it's not on the ground
+/// </summary>
+void BodyComponent::groundContactEnd()
+{
+	m_onGround = false;
 }
