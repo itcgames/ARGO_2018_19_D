@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "ECS/Components/AnimationComponent.h"
 
 const float WORLD_SCALE = 30.f;
 
@@ -133,6 +134,29 @@ Game::Game() :
 	m_controlSystem.bindBullets(m_bullets);
 	srand(time(NULL));
 
+	Entity * e2 = new Entity(1);
+	AnimationComponent * a = new AnimationComponent();
+	std::vector<SDL_Rect> frames;
+	for (int i = 0; i < 5; ++i) {
+		SDL_Rect frame = { i * 86, 0, 86, 86 };
+		frames.push_back(frame);
+	}
+	a->addAnimation("Idle", frames, 1, 1, true);
+
+	frames.clear();
+	for (int i = 0; i < 5; ++i) {
+		SDL_Rect frame = { i * 86, 86, 86, 86 };
+		frames.push_back(frame);
+	}
+	a->addAnimation("Walking", frames, 1, 1, true);
+	e2->addComponent(new SpriteComponent("TestAnimation", *m_resourceManager, 100, 100));
+	e2->addComponent(a);
+	e2->addComponent(new PositionComponent(200, 400));
+	m_controlSystem.addEntity(e2);
+	m_animationSystem.addEntity(e2);
+	m_renderSystem.addEntity(e2);
+}
+
 
 
 }
@@ -157,7 +181,7 @@ void Game::run()
 		{
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
-			update();
+			update(timeSinceLastUpdate);
 		}
 		render();
 	}
@@ -178,6 +202,7 @@ void Game::processEvents()
 		case PlayScreen:
 			inputHandler->handleKeyboardInput(event);
 			inputHandler->handleControllerInput(event);
+			m_controlSystem.processInput(event);
 			break;
 		case Options:
 			m_options->handleInput(event);
@@ -206,6 +231,21 @@ void Game::processEvents()
 		case SDL_KEYDOWN:
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
+			if (event.key.keysym.sym == SDLK_RETURN) {
+				m_camera.m_shaking = true;
+			}
+			if (event.key.keysym.sym == SDLK_SPACE) {
+				VectorAPI scale = m_camera.m_scale;
+				scale += 0.1f;
+				m_camera.setScale(scale);
+				SDL_RenderSetScale(m_renderer, m_camera.m_scale.x, m_camera.m_scale.y);
+			}
+			if (event.key.keysym.sym == SDLK_BACKSPACE) {
+				VectorAPI scale = m_camera.m_scale;
+				scale -= 0.1f;
+				m_camera.setScale(scale);
+				SDL_RenderSetScale(m_renderer, m_camera.m_scale.x, m_camera.m_scale.y);
+			}
 			break;
 		case SDL_QUIT:
 			m_quit = true;
@@ -217,7 +257,7 @@ void Game::processEvents()
 	}
 }
 
-void Game::update()
+void Game::update(const float & dt)
 {
 	parseNetworkData(m_client.processMessage(m_client.Receive()));
 
@@ -236,6 +276,7 @@ void Game::update()
 			m_movementSystem.update();
 			m_ttlSystem.update();
 			inputHandler->update();
+			m_animationSystem.update(dt / 1000);
 		}
 		break;
 	case Options:

@@ -9,6 +9,7 @@
 #include "ECS/Entities/Entity.h"
 #include "ECS/Systems/RenderSystem.h"
 #include "ECS/Systems/PhysicsSystem.h"
+#include "ECS/Systems/AnimationSystem.h"
 #include "ECS/Components/PositionComponent.h"
 #include "ECS/Components/SpriteComponent.h"
 #include <tmxlite/Map.hpp>
@@ -65,7 +66,7 @@ public:
 	void spawnProjectile(float x, float y);
 private:
 	void processEvents();
-	void update();
+	void update(const float & dt);
 	void render();
 	void initialiseEntities();
 	void initialiseSystems();
@@ -100,6 +101,7 @@ private:
 	ControlSystem m_controlSystem;
 	MovementSystem m_movementSystem;
 	TimeToLiveSystem m_ttlSystem;
+	AnimationSystem m_animationSystem;
 
 	// Input
 	InputHandler * inputHandler;

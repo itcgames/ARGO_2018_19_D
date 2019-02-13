@@ -6,6 +6,7 @@
 #include "ECS/Components/Components.h"
 #include "ECS/Systems/System.h"
 #include "ECS/Components/BodyComponent.h"
+#include "ECS/Components/AnimationComponent.h"
 #include "Utils/VectorAPI.h"
 #include <functional>   // std::function, std::negate
 #include "../ECS/Components/PositionComponent.h"
@@ -13,9 +14,9 @@
 #include "ECS/Components/TimeToLiveComponent.h"
 #include "ECS/Components/VelocityComponent.h"
 
-struct ControlComponents
-{
+struct ControlComponents {
 	BodyComponent * body;
+	AnimationComponent * animation;
 };
 
 class ControlSystem : public System {
@@ -28,6 +29,8 @@ public:
 	void moveLeft();
 	void jump();
 	void fire();
+
+	void processInput(SDL_Event & e);
 	void bindBullets(std::vector<Entity *> &bullets);
 
 	void spawnProjectile(float x, float y);

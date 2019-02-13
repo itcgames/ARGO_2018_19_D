@@ -3,13 +3,15 @@
 #include <cmath>
 #include <iostream>
 
-Camera::Camera(const int windowWidth, const int windowHeight)
+Camera::Camera(const int windowWidth, const int windowHeight) :
+	m_scale(1,1),
+	m_bounds({ 0,0, windowWidth, windowHeight }),
+	m_originalSize(windowWidth, windowHeight)
 {
 	m_viewOffset = 0;
 	m_weight = 1;
 	m_maxOffset = 3;
 	m_shake = 0.1;
-	m_bounds = { 0,0,windowWidth, windowHeight };
 }
 
 void Camera::update(const VectorAPI & boundPosition, const float & rotation)
@@ -50,6 +52,20 @@ void Camera::setSize(const VectorAPI & size)
 void Camera::setBounds(const SDL_Rect & bounds)
 {
 	m_bounds = bounds;
+}
+
+void Camera::setScale(const VectorAPI & scale)
+{
+	m_scale = scale;
+	m_bounds.x /= m_scale.x;
+	m_bounds.y /= m_scale.y;
+	m_bounds.w = m_originalSize.x / m_scale.x;
+	m_bounds.h = m_originalSize.y / m_scale.y;
+}
+
+VectorAPI Camera::getOriginalSize()
+{
+	return m_originalSize;
 }
 
 SDL_Rect Camera::getBounds()

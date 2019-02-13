@@ -1,4 +1,5 @@
 #include "ControlSystem.h"
+#include "ECS/Components/AnimationComponent.h"
 
 ControlSystem::ControlSystem()
 {
@@ -12,12 +13,13 @@ ControlSystem::~ControlSystem()
 
 void ControlSystem::addEntity(Entity * e)
 {
-	std::vector<std::string> allowedTypes{ "Body" };
+	std::vector<std::string> allowedTypes{ "Body" , "Animation"};
 	auto comps = e->getComponentsOfType(allowedTypes);
-	if (comps.size() == allowedTypes.size())
+	if (comps.size() >= allowedTypes.size() - 1)
 	{
 		ControlComponents c;
-		c.body = dynamic_cast<BodyComponent*>(comps["Body"]);
+		c.body = dynamic_cast<BodyComponent*>(comps["Body"]); 
+		c.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
 		m_components.push_back(c);
 		m_entityList.push_back(e);
 	}
@@ -110,6 +112,18 @@ void ControlSystem::spawnProjectile(float x, float y)
 			t->setTimer(SDL_GetTicks());
 			t->setActive(true);
 			break;
+		}
+	}
+}
+
+void ControlSystem::processInput(SDL_Event & event)
+{
+	if (event.type == SDL_KEYDOWN) {
+		std::vector<string> allowedTypes = {"Body", "Animation" };
+		for (auto & cc : m_components)
+		{
+			if (cc.animation)
+				cc.animation->handleInput(event);
 		}
 	}
 }
