@@ -15,5 +15,6 @@ Entity * PlayerFactory::create(int entityId, VectorAPI pos)
 	entity->addComponent(new PositionComponent(pos));
 	entity->addComponent(new SpriteComponent(m_spriteId, *m_resourceManager, m_dimensions.x, m_dimensions.y));
 	entity->addComponent(new BodyComponent(pos.x, pos.y, m_dimensions.x, m_refWorld, WORLD_SCALE));
+	entity->addComponent(new GunComponent(0));
 	return entity;
 }

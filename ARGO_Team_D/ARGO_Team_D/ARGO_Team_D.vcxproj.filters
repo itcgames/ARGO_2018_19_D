@@ -10,7 +10,6 @@
     <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="ControlSystem.cpp" />
-    <ClCompile Include="Factories\CharacterFactory.cpp" />
     <ClCompile Include="FSM\Animation.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputHandler.cpp" />
@@ -87,5 +86,6 @@
     <ClInclude Include="ECS\Systems\MovementSystem.h" />
     <ClInclude Include="ECS\Components\TimeToLiveComponent.h" />
     <ClInclude Include="ECS\Systems\TimeToLiveSystem.h" />
+    <ClInclude Include="ECS\Components\GunComponent.h" />
   </ItemGroup>
 </Project>

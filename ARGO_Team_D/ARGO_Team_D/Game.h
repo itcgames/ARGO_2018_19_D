@@ -28,11 +28,12 @@
 #include "Utils/VectorAPI.h"
 #include "Camera.h"
 #include "Client/Client.h"
-#include<SDL_haptic.h>
-#include"ECS/Systems/MovementSystem.h"
-#include"ECS/Components/VelocityComponent.h"
-#include"ECS/Components/TimeToLiveComponent.h"
-#include"ECS/Systems/TimeToLiveSystem.h"
+#include <SDL_haptic.h>
+#include "ECS/Systems/MovementSystem.h"
+#include "ECS/Components/VelocityComponent.h"
+#include "ECS/Components/TimeToLiveComponent.h"
+#include "ECS/Systems/TimeToLiveSystem.h"
+#include "ECS/Components/GunComponent.h"
 #include <stdlib.h>
 #include <time.h>
 #include <functional>

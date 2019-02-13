@@ -186,6 +186,7 @@
     <ClInclude Include="ECS\Components\AnimationComponent.h" />
     <ClInclude Include="ECS\Components\BodyComponent.h" />
     <ClInclude Include="ECS\Components\Components.h" />
+    <ClInclude Include="ECS\Components\GunComponent.h" />
     <ClInclude Include="ECS\Components\HealthComponent.h" />
     <ClInclude Include="ECS\Components\PositionComponent.h" />
     <ClInclude Include="ECS\Components\SpriteComponent.h" />

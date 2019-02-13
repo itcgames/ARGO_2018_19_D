@@ -32,9 +32,19 @@ public:
 	SDL_Point * m_center;
 	SDL_RendererFlip m_flip;
 	SDL_Rect m_srcRect;
+
+	void setRender(bool b)
+	{
+		m_render = b;
+	}
+	bool getRender()
+	{
+		return m_render;
+	}
 private:
 	std::string m_name;
 	SDL_Texture * m_texture;
+	bool m_render = true;
 };
 
 #endif //!SPRITECOMPONENT_H
