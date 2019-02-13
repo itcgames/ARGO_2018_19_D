@@ -163,17 +163,17 @@ void InputHandler::update()
 	if (m_rightPressed)
 	{
 		m_moveRight->execute();
-		std::cout << "Moving Right" << std::endl;
+		//std::cout << "Moving Right" << std::endl;
 	}
 	if (m_leftPressed)
 	{
 		m_moveLeft->execute();
-		std::cout << "Moving Left" << std::endl;
+		//std::cout << "Moving Left" << std::endl;
 	}
 	if (m_ctrlPressed)
 	{
 		m_fire->execute();
-		std::cout << "Firing" << std::endl;
+		//std::cout << "Firing" << std::endl;
 	}
 	if (m_upPressed)
 	{
