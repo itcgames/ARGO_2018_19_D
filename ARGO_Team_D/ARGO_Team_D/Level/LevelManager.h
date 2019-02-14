@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include <Box2D/Box2D.h>
 #include "nlohmann/json.hpp"
 
@@ -18,13 +19,15 @@ public:
 	~LevelManager();
 	void update(const float dt);
 	void render(SDL_Renderer * renderer, Camera & camera);
-	void loadCurrentLevel(ResourceManager & resourceManager);
-	void parseLevelSystem(const std::string & filepath, b2World & world, const float worldScale);
-	void checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale);
+	void loadCurrentLevel(ResourceManager & resourceManager, SDL_Renderer * renderer);
+	void parseLevelSystem(const std::string & filepath, b2World & world, const float worldScale, TTF_Font * font);
+	void checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale, SDL_Renderer * renderer);
 protected:
+	TTF_Font * m_font;
 	std::vector<std::string> m_levelPaths;
 	std::vector<Level*> m_levels;
 	int m_currentLevel;
+
 };
 
 #endif

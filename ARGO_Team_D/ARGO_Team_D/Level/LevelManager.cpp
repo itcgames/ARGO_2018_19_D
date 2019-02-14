@@ -21,12 +21,12 @@ void LevelManager::render(SDL_Renderer * renderer, Camera & camera)
 	m_levels[m_currentLevel]->render(renderer, camera);
 }
 
-void LevelManager::loadCurrentLevel(ResourceManager & resourceManager)
+void LevelManager::loadCurrentLevel(ResourceManager & resourceManager, SDL_Renderer * renderer)
 {
-	m_levels[m_currentLevel]->load(m_levelPaths[m_currentLevel], &resourceManager);
+	m_levels[m_currentLevel]->load(m_levelPaths[m_currentLevel], &resourceManager, renderer);
 }
 
-void LevelManager::parseLevelSystem(const std::string & filepath, b2World & world, const float worldScale)
+void LevelManager::parseLevelSystem(const std::string & filepath, b2World & world, const float worldScale, TTF_Font * font)
 {
 	using json = nlohmann::json;
 	std::ifstream levelFile(filepath);
@@ -38,12 +38,12 @@ void LevelManager::parseLevelSystem(const std::string & filepath, b2World & worl
 	}
 	m_levels.resize(m_levelPaths.size());
 	for (int i = 0; i < m_levelPaths.size(); ++i) {
-		m_levels[i] = new Level(world, worldScale);
+		m_levels[i] = new Level(world, worldScale, font);
 	}
 	levelFile.close();
 }
 
-void LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale)
+void LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale, SDL_Renderer * renderer)
 {
 	std::vector<std::string> allowedTypes = {"Position", "Sprite", "Body"};
 	auto comps = e->getComponentsOfType(allowedTypes);
@@ -65,7 +65,7 @@ void LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const
 			else {
 				m_currentLevel = 0;
 			}
-			loadCurrentLevel(rm);
+			loadCurrentLevel(rm, renderer);
 			auto startPos = m_levels[m_currentLevel]->m_startPos;
 			pos->setPosition(startPos);
 			body->getBody()->SetTransform(b2Vec2(startPos.x / worldScale, startPos.y / worldScale), 0);

@@ -2,9 +2,10 @@
 #include <iostream>
 
 
-Level::Level(b2World & world, float worldScale)
+Level::Level(b2World & world, float worldScale, TTF_Font * font)
 	: m_refWorld(world),
-	m_worldScale(worldScale)
+	m_worldScale(worldScale),
+	m_font(font)
 {
 }
 
@@ -19,7 +20,7 @@ Level::~Level()
 /// <param name="filepath">Filepath for the level file</param>
 /// <param name="rManager">Pointer to the resource manager to handle texture loading</param>
 /// <returns></returns>
-bool Level::load(const std::string filepath, ResourceManager * rManager)
+bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Renderer * renderer)
 {
 	for (auto & row : m_tiles) {
 		for (auto tile : row) {
@@ -70,7 +71,7 @@ bool Level::load(const std::string filepath, ResourceManager * rManager)
 				continue;
 			case tmx::Layer::Type::Object:
 				std::cout << "Object Layer: " << layerNum << std::endl;
-				parseTMXObjectLayer(layer, layerNum);
+				parseTMXObjectLayer(layer, layerNum, renderer);
 				continue;
 			case tmx::Layer::Type::Image:
 				std::cout << "Image Layer" << layerNum++ << std::endl;
@@ -214,22 +215,58 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 /// </summary>
 /// <param name="layer"></param>
 /// <param name="layerNum"></param>
-void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int layerNum)
+void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int layerNum, SDL_Renderer * renderer)
 {
 	auto* object_layer = dynamic_cast<const tmx::ObjectGroup*>(layer.get());
 	auto & layer_objects = object_layer->getObjects();
 
 	std::cout << "Name: " << object_layer->getName();
 	for (auto & object : layer_objects) {
-		std::string name = object.getType();
-		if (name == "PlayerSpawn") {
+		std::string type = object.getType();
+		if (type == "PlayerSpawn") {
 			auto pos = object.getPosition();
 			m_startPos.x = pos.x;
 			m_startPos.y = pos.y;
 		}
-		else if (name == "Goal") {
+		else if (type == "Goal") {
 			auto rect = object.getAABB();
 			m_goal = { (int)rect.left, (int)rect.top, (int)rect.width, (int)rect.height };
+		}
+		else if (type == "TutorialTrigger") {
+			auto rect = object.getAABB();
+			auto rotation = object.getRotation();
+			TutorialTrigger t(
+				rect.left / m_worldScale,
+				rect.top / m_worldScale,
+				rect.width / m_worldScale,
+				rect.height / m_worldScale,
+				rotation, 
+				m_worldScale,
+				m_refWorld
+			);
+			m_tutorials.push_back(t);
+		}
+		else if (type == "TutorialPoint") {
+			auto & props = object.getProperties();
+			auto id = std::find_if(props.begin(), props.end(), [](const tmx::Property & p) {
+				return p.getName() == "RelativeTriggerID";
+			});
+			if (id != props.end()) {
+				auto & tutorial = m_tutorials.at(id->getIntValue() - 1);
+				auto & bounds = tutorial.bounds;
+
+				auto loadedBounds = object.getAABB();
+				bounds = { (int)loadedBounds.left, (int)loadedBounds.top, (int)loadedBounds.width, (int)loadedBounds.height };
+
+				auto message = std::find_if(props.begin(), props.end(), [](const tmx::Property & p) {
+					return p.getName() == "Message";
+				});
+				tutorial.message = message->getStringValue();
+				SDL_Color col = { 255,0,0,255 };
+				tutorial.messageSurface = TTF_RenderText_Blended_Wrapped(m_font, tutorial.message.c_str(), col, bounds.w);
+				tutorial.messageTexture = SDL_CreateTextureFromSurface(renderer, tutorial.messageSurface);
+				std::cout << "Tutorial: " << id->getIntValue() << " Message: " << tutorial.message << std::endl;
+			}
 		}
 	}
 }
@@ -272,6 +309,17 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 			}
 		}
 	}
+	Uint8 r = 0, g = 0, b = 0, a = 0;
+	SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+	for (auto & tutorial : m_tutorials) {
+		SDL_Rect rect = tutorial.bounds;
+		rect.x -= bounds.x;
+		rect.y -= bounds.y;
+		SDL_RenderCopy(renderer, tutorial.messageTexture, NULL, &rect);
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		SDL_RenderDrawRect(renderer, &rect);
+	}
+	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	//std::cout << tileD << "/" << tileC << " tiles Shown with bounds of: " << bounds.x << "," << bounds.y  << "," << bounds.w << "," << bounds.h << std::endl;
 }
 

@@ -71,6 +71,7 @@ public:
 	ResourceManager * m_resourceManager;
 
 	void spawnProjectile(float x, float y);
+	SDL_Renderer * m_renderer;
 private:
 	void processEvents();
 	void update(const float & dt);
@@ -83,7 +84,6 @@ private:
 
 	// SDL Window
 	SDL_Window * p_window;
-	SDL_Renderer * m_renderer;
 	int m_windowWidth = 1280;
 	int m_windowHeight = 720;
 	bool m_quit = false;

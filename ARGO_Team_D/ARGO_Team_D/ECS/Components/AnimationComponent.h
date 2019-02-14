@@ -35,8 +35,8 @@ public:
 		currAnimation.m_timer += dt;
 		if (currAnimation.active && currAnimation.m_timer > currAnimation.m_frameStep * (currAnimation.m_currentFrame + 1)) {
 			currAnimation.m_currentFrame++;
-			std::cout << "Frame" << currAnimation.m_currentFrame << std::endl;
-			std::cout << currAnimation.m_timer << std::endl;
+			/*std::cout << "Frame" << currAnimation.m_currentFrame << std::endl;
+			std::cout << currAnimation.m_timer << std::endl;*/
 			if (currAnimation.m_currentFrame > currAnimation.frames.size() - 1) {
 				currAnimation.m_currentFrame = 0;
 				if (currAnimation.looping) {

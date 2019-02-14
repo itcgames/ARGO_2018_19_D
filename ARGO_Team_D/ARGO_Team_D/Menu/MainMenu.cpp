@@ -27,7 +27,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::GoToPlay()
 {
-	m_game->m_levelManager.loadCurrentLevel(*m_game->m_resourceManager);
+	m_game->m_levelManager.loadCurrentLevel(*m_game->m_resourceManager, m_game->m_renderer);
 	m_game->fadeToState(State::PlayScreen);
 	for (auto & b : m_buttons)
 	{
