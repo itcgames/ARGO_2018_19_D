@@ -3,7 +3,8 @@
 
 #include"System.h"
 #include"../Components/TimeToLiveComponent.h"
-
+#include"../Components/AnimationComponent.h"
+#include"../Components/SpriteComponent.h"
 class TimeToLiveSystem: public System
 {
 public:

@@ -3,7 +3,7 @@
 
 ControlSystem::ControlSystem()
 {
-	allowedTypes = { "Body", "Position" };
+	allowedTypes = { "Body", "Position", "Gun" };
 	direction = 1;
 }
 
@@ -34,9 +34,9 @@ void ControlSystem::update()
 		{
 			b2Body * b2Body = body->getBody();
 			b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
-			if (m_jump)
+			if (m_jump && body->isOnGround())
 			{
-				b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -20));
+				b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
 				currentVelocity.y = -35;
 			}
 			if (m_moveRight)
@@ -94,26 +94,85 @@ void ControlSystem::bindBullets(std::vector<Entity*>& bullets)
 
 void ControlSystem::spawnProjectile(float x, float y)
 {
-	for (auto &b : m_bullets)
+
+	for (auto &e : m_entityList)
 	{
+		std::vector<std::string> s = { "Gun" };
+		auto comps = e->getComponentsOfType(s);
+		GunComponent * g = dynamic_cast<GunComponent*>(comps["Gun"]);
 
-		std::vector<std::string> s = { "TimeToLive", "Position", "Velocity" };
-		auto comps = b->getComponentsOfType(s);
-		TimeToLiveComponent * t = dynamic_cast<TimeToLiveComponent*>(comps["TimeToLive"]);
-
-		if (!t->isActive())
+		if (g != nullptr)
 		{
-			t->setActive(true);
-			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
-			p->setPosition(VectorAPI(x, y));
+			switch (Gun(g->getGun()))
+			{
+			case MACHINE_GUN:
+				for (auto &b : m_bullets)
+				{
 
-			VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
-			v->setVelocity(VectorAPI(30 * direction, ((double)rand() / RAND_MAX) * 2 - 1));
-			t->setTimer(SDL_GetTicks());
-			t->setActive(true);
-			break;
+					std::vector<std::string> s = { "TimeToLive", "Position", "Velocity" };
+					auto comps = b->getComponentsOfType(s);
+					TimeToLiveComponent * t = dynamic_cast<TimeToLiveComponent*>(comps["TimeToLive"]);
+
+					if (!t->isActive())
+					{
+						t->setActive(true);
+						PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
+						p->setPosition(VectorAPI(x, y));
+
+						VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
+						v->setVelocity(VectorAPI(25 * direction, ((double)rand() / RAND_MAX) * 2 - 1));
+						t->setTimer(SDL_GetTicks());
+						t->setActive(true);
+						break;
+					}
+				}
+				break;
+			case SHOTGUN:
+				for (auto &b : m_bullets)
+				{
+					if (counter < 5)
+					{
+						std::vector<std::string> s = { "TimeToLive", "Position", "Velocity" };
+						auto comps = b->getComponentsOfType(s);
+						TimeToLiveComponent * t = dynamic_cast<TimeToLiveComponent*>(comps["TimeToLive"]);
+
+						if (!t->isActive())
+						{
+							t->setActive(true);
+							PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
+							p->setPosition(VectorAPI(x, y));
+
+							VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
+							if (counter % 2 == 0)
+							{
+								//v->setVelocity(VectorAPI(20 * direction, counter * 5.f));
+								auto vec = VectorAPI(direction, counter * 0.015f).Normalize() * 20.f;
+								v->setVelocity(vec);
+							}
+							else
+							{
+								auto vec = VectorAPI(direction, counter * -0.015f).Normalize() * 20.f;
+								v->setVelocity(vec);
+							}
+
+							t->setTimer(SDL_GetTicks());
+							t->setActive(true);
+						}
+					}
+					else
+					{
+						counter = 0;
+						break;
+					}
+					counter++;
+				}
+				break;
+			}
 		}
+		
+	
 	}
+	
 }
 
 void ControlSystem::processInput(SDL_Event & event)

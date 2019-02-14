@@ -13,6 +13,7 @@
 #include "ECS/Entities/Entity.h"
 #include "ECS/Components/TimeToLiveComponent.h"
 #include "ECS/Components/VelocityComponent.h"
+#include "ECS/Components/GunComponent.h"
 
 struct ControlComponents {
 	BodyComponent * body;
@@ -46,6 +47,10 @@ private:
 	std::vector<Entity *> m_bullets;
 
 	int direction;
+	int counter = 0;
+
+	//test
+	bool shotgun = false;
 };
 
 
