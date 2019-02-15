@@ -73,13 +73,13 @@ void NetworkingSystem::parseNetworkDataStr(std::map<std::string, std::string> pa
 		auto key = pair.first;
 		auto value = pair.second;
 
-		if (key == "Host Says") {
-			cout << value << endl;
+		if (key == "HostSays") {
+			cout << "Host Says: " << value << endl;
 		}
 
 
-		if (key == "Client Says") {
-			cout << value << endl;
+		if (key == "ClientSays") {
+			cout << "Client Says: " << value << endl;
 		}
 	}
 }
