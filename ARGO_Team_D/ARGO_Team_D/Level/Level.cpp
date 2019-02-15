@@ -236,7 +236,7 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 		else if (type == "TutorialTrigger") {
 			auto rect = object.getAABB();
 			auto rotation = object.getRotation();
-			TutorialTrigger t(
+			auto t = new TutorialTrigger(
 				rect.left,
 				rect.top,
 				rect.width,
@@ -253,8 +253,8 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 				return p.getName() == "RelativeTriggerID";
 			});
 			if (id != props.end()) {
-				auto & tutorial = m_tutorials.at(id->getIntValue() - 1);
-				auto & bounds = tutorial.promptBounds;
+				auto tutorial = m_tutorials.at(id->getIntValue() - 1);
+				auto & bounds = tutorial->promptBounds;
 
 				auto loadedBounds = object.getAABB();
 				bounds = { (int)loadedBounds.left, (int)loadedBounds.top, (int)loadedBounds.width, (int)loadedBounds.height };
@@ -262,11 +262,11 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 				auto message = std::find_if(props.begin(), props.end(), [](const tmx::Property & p) {
 					return p.getName() == "Message";
 				});
-				tutorial.message = message->getStringValue();
+				tutorial->message = message->getStringValue();
 				SDL_Color col = { 255,0,0,255 };
-				tutorial.messageSurface = TTF_RenderText_Blended_Wrapped(m_font, tutorial.message.c_str(), col, bounds.w);
-				tutorial.messageTexture = SDL_CreateTextureFromSurface(renderer, tutorial.messageSurface);
-				std::cout << "Tutorial: " << id->getIntValue() << " Message: " << tutorial.message << std::endl;
+				tutorial->messageSurface = TTF_RenderText_Blended_Wrapped(m_font, tutorial->message.c_str(), col, bounds.w);
+				tutorial->messageTexture = SDL_CreateTextureFromSurface(renderer, tutorial->messageSurface);
+				std::cout << "Tutorial: " << id->getIntValue() << " Message: " << tutorial->message << std::endl;
 			}
 		}
 	}
@@ -313,14 +313,14 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 	Uint8 r = 0, g = 0, b = 0, a = 0;
 	SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 	for (auto & tutorial : m_tutorials) {
-		SDL_Rect rect = tutorial.promptBounds;
+		SDL_Rect rect = tutorial->promptBounds;
 		rect.x -= bounds.x;
 		rect.y -= bounds.y;
-		SDL_RenderCopy(renderer, tutorial.messageTexture, NULL, &rect);
+		SDL_RenderCopy(renderer, tutorial->messageTexture, NULL, &rect);
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 		SDL_RenderDrawRect(renderer, &rect);
 
-		SDL_Rect tRect = tutorial.bounds;
+		SDL_Rect tRect = tutorial->bounds;
 		tRect.x -= bounds.x;
 		tRect.y -= bounds.y;
 		SDL_RenderDrawRect(renderer, &tRect);

@@ -200,7 +200,6 @@
     <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
     <ClInclude Include="ECS\Systems\RenderSystem.h" />
     <ClInclude Include="ECS\Systems\System.h" />
-    <ClInclude Include="ECS\Systems\TutorialSystem.h" />
     <ClInclude Include="Factories\PlayerFactory.h" />
     <ClInclude Include="ECS\Systems\TimeToLiveSystem.h" />
     <ClInclude Include="Factories\Factory.h" />

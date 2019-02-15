@@ -87,6 +87,5 @@
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
-    <ClInclude Include="ECS\Systems\TutorialSystem.h" />
   </ItemGroup>
 </Project>

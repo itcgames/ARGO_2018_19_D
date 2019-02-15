@@ -13,8 +13,8 @@
 #include "../Camera.h"
 
 enum _entityCategory {
-	PLAYER,
-	TUTORIAL
+	PLAYER = 0x0001,
+	TUTORIAL = 0x0002
 };
 
 struct TileData {
@@ -49,42 +49,43 @@ struct PhysicsBody {
 	CollisionData data;
 };
 
+struct Bounds {
+	Bounds(std::string name) :data(name, this) {};
+	b2BodyDef bodyDef;
+	b2Body * body = nullptr;
+	b2PolygonShape shape;
+	b2FixtureDef fixture;
+	CollisionData data;
+};
+
 
 struct TutorialTrigger {
 	TutorialTrigger(const float x, const float y, const int w, const int h, const float angle, const float worldScale, b2World & world) :
-		data("TutorialTrigger", this)
-	{
-		float halfWidth = (w / worldScale) / 2.f;
-		float halfHeight = (h / worldScale) / 2.f;
-		bodyDef.position = b2Vec2(((x / worldScale) + halfWidth), ((y / worldScale) + halfHeight));
-		body = world.CreateBody(&bodyDef);
-
-		shape.SetAsBox(halfWidth / worldScale, halfHeight / worldScale);
-
-		fixture.isSensor = true;
-		fixture.filter.categoryBits = _entityCategory::TUTORIAL;
-		fixture.filter.maskBits = _entityCategory::PLAYER;
-		fixture.shape = &shape;
-		data.data = this;
-		fixture.userData = &data;
-
-		body->CreateFixture(&fixture);
-		body->SetTransform(b2Vec2(x, y), angle);
+		pb("TutorialTrigger") {
+		pb.bodyDef.type = b2_staticBody;
+		pb.bodyDef.position = b2Vec2((x + (w / 2.f)) / worldScale, (y + (h / 2.f)) / worldScale);
+		pb.body = world.CreateBody(&pb.bodyDef);
+		pb.shape.SetAsBox((w / 2.f) / worldScale, (h / 2.f) / worldScale);
+		pb.fixture.density = 1.f;
+		pb.fixture.friction = 0.f;
+		pb.fixture.shape = &pb.shape;
+		pb.fixture.isSensor = true;
+		pb.data.tag = "TutorialTrigger";
+		pb.data.data = this;
+		pb.fixture.userData = &pb.data;
+		pb.body->CreateFixture(&pb.fixture);
+		pb.body->SetFixedRotation(true);
 		bounds.x = x;
 		bounds.y = y;
 		bounds.w = w;
 		bounds.h = h;
 	};
-	b2BodyDef bodyDef;
-	b2Body * body = nullptr;
-	b2PolygonShape shape;
-	b2FixtureDef fixture;
+	Bounds pb;
 	SDL_Rect bounds;
 	SDL_Rect promptBounds;
 	std::string message;
 	SDL_Surface * messageSurface;
 	SDL_Texture * messageTexture;
-	CollisionData data;
 };
 class Level {
 public:
@@ -109,7 +110,7 @@ public:
 	std::vector<std::vector<TileData*>> m_tiles;
 	tmx::Map m_map;
 	std::vector<PhysicsBody *> m_physicsBodies;
-	std::vector<TutorialTrigger> m_tutorials;
+	std::vector<TutorialTrigger*> m_tutorials;
 	SDL_Rect m_goal;
 	VectorAPI m_startPos;
 	TTF_Font * m_font;

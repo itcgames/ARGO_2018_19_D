@@ -11,7 +11,6 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 	auto dataB = static_cast<CollisionData*>(contact->GetFixtureB()->GetUserData());
 	// Check if fixture A was a body
 	if (dataA && dataA->tag == "Body") {
-		std::cout << "Entry " << dataA->tag << std::endl;
 		void* bodyUserData = dataA->data;
 		if (bodyUserData)
 		{
@@ -21,7 +20,6 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 	}
 	// Check if fixture B was a body
 	if (dataB && dataB->tag == "Body") {
-		std::cout << "Entry " << dataB->tag << std::endl;
 		void* bodyUserData = dataB->data;
 		if (bodyUserData)
 		{
@@ -30,11 +28,11 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 		}
 	}
 
-	if (dataA && dataA->tag == "TutorialTrigger") {
-		std::cout << "Tutorial trigger A" << std::endl;
+	if (dataA) {
+		std::cout << "Entry " << dataA->tag << std::endl;
 	}
-	if (dataB && dataB->tag == "TutorialTrigger") {
-		std::cout << "Tutorial trigger B" << std::endl;
+	if (dataB) {
+		std::cout << "Entry " << dataB->tag << std::endl;
 	}
 }
 
@@ -48,7 +46,6 @@ void BodyContactListener::EndContact(b2Contact* contact)
 	auto dataA = static_cast<CollisionData*>(contact->GetFixtureA()->GetUserData());
 	auto dataB = static_cast<CollisionData*>(contact->GetFixtureB()->GetUserData());
 	if (dataA && dataA->tag == "Body") {
-		std::cout << "End " << dataA->tag << std::endl;
 		void* bodyUserData = dataA->data;
 		if (bodyUserData)
 		{
@@ -58,7 +55,6 @@ void BodyContactListener::EndContact(b2Contact* contact)
 	}
 	// Check if fixture B was a body
 	if (dataB && dataB->tag == "Body") {
-		std::cout << "End " << dataB->tag << std::endl;
 		void* bodyUserData = dataB->data;
 		if (bodyUserData)
 		{
@@ -67,10 +63,10 @@ void BodyContactListener::EndContact(b2Contact* contact)
 		}
 	}
 
-	if (dataA && dataA->tag == "TutorialTrigger") {
-		std::cout << "Tutorial trigger A" << std::endl;
+	if (dataA) {
+		std::cout << "End " << dataA->tag << std::endl;
 	}
-	if (dataB && dataB->tag == "TutorialTrigger") {
-		std::cout << "Tutorial trigger B" << std::endl;
+	if (dataB) {
+		std::cout << "End " << dataB->tag << std::endl;
 	}
 }
