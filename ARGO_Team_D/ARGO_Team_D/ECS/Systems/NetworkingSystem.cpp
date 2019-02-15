@@ -20,13 +20,13 @@ void NetworkingSystem::initClientLocalClient()
 void NetworkingSystem::updateFromHost()
 {
 	// Update everything from here
-	parseNetworkData(m_client.processMessage(m_client.Receive()));
+	parseNetworkDataStr(m_client.processMessageStr(m_client.Receive()));
 }
 
 void NetworkingSystem::updateClients()
 {
 	// Update client entities from here
-	parseNetworkData(m_client.processMessage(m_client.Receive()));
+	parseNetworkDataStr(m_client.processMessageStr(m_client.Receive()));
 }
 
 void NetworkingSystem::sendToHost()
@@ -34,6 +34,7 @@ void NetworkingSystem::sendToHost()
 	std::string msg;
 	cin >> msg;
 	msg = "Client Says: " + msg;
+
 	//  send own entity back
 	m_client.Send(msg);
 }
@@ -43,6 +44,7 @@ void NetworkingSystem::sendToClients()
 	std::string msg;
 	cin >> msg;
 	msg = "Host Says: " + msg;
+
 	// Send EVERYTHING BACK
 	m_client.Send(msg);
 }
