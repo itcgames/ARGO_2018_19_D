@@ -42,11 +42,15 @@ void RenderSystem::render(SDL_Renderer* renderer, Camera & camera)
 		dest.h = s->m_height;
 
 		AnimationComponent * a = rc.animation;
-		if (a) {
-			SDL_RenderCopyEx(renderer, s->getTexture(), &a->getCurrentFrame(), &dest, s->m_angle, s->m_center, s->m_flip);
-		}
-		else {
-			SDL_RenderCopyEx(renderer, s->getTexture(), NULL, &dest, s->m_angle, s->m_center, s->m_flip);
+		if (s->getRender())
+		{
+			if (a) {
+				SDL_RenderCopyEx(renderer, s->getTexture(), &a->getCurrentFrame(), &dest, s->m_angle, s->m_center, s->m_flip);
+			}
+			else {
+				SDL_RenderCopyEx(renderer, s->getTexture(), NULL, &dest, s->m_angle, s->m_center, s->m_flip);
+			}
 		}
 	}
+	
 }

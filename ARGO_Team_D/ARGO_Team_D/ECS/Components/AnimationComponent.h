@@ -102,10 +102,19 @@ public:
 			m_animations[m_currentAnimation].looping = looping;
 		}
 	}
+	void setRender(bool b) 
+	{
+		m_render = b;
+	}
+	bool getRender()
+	{
+		return m_render;
+	}
 private:
 	std::string m_currentAnimation;
 	std::map<std::string, AnimationData> m_animations;
 	Animation m_animation;
+	bool m_render = true; //bool to indicate if something should be drawn or not
 };
 
 #endif //!ANIMATIONCOMPONENT_H

@@ -27,9 +27,19 @@
 #include "Menu/LevelSelectMenu.h"
 #include "Utils/VectorAPI.h"
 #include "Camera.h"
-#include <SDL_haptic.h>
 #include "ECS/Systems/NetworkingSystem.h"
+#include <SDL_haptic.h>
+#include "ECS/Systems/MovementSystem.h"
+#include "ECS/Components/VelocityComponent.h"
+#include "ECS/Components/TimeToLiveComponent.h"
+#include "ECS/Systems/TimeToLiveSystem.h"
+#include "ECS/Components/GunComponent.h"
+#include <stdlib.h>
+#include <time.h>
+#include <functional>
+#include "Utils/ContactListener.h"
 
+class ControlSystem;
 class MainMenu;
 class OptionsMenu;
 class CreditScreen;
@@ -56,6 +66,8 @@ public:
 	void setGameState(State state);
 	void fadeToState(State state);
 	void fade();
+
+	void spawnProjectile(float x, float y);
 private:
 	void processEvents();
 	void update(const float & dt);
@@ -65,7 +77,6 @@ private:
 	void initialiseFactories();
 	void setUpFont();
 	void quit();
-	int test_haptic(SDL_Joystick * joystick);
 
 	// SDL Window
 	SDL_Window * p_window;
@@ -92,6 +103,8 @@ private:
 	RenderSystem m_renderSystem;
 	PhysicsSystem m_physicsSystem;
 	ControlSystem m_controlSystem;
+	MovementSystem m_movementSystem;
+	TimeToLiveSystem m_ttlSystem;
 	AnimationSystem m_animationSystem;
 
 	// Input
@@ -106,11 +119,13 @@ private:
 	// Test - TO BE REMOVED
 	SDL_Texture * texture;
 	SDL_Texture * square;
+	SDL_Texture * bulletTexture;
 	Mix_Music *	m_testMusic;
-  
+
 	// Box2D
 	b2Vec2 m_gravity;
 	b2World m_world;
+	BodyContactListener m_contactListener;
 
 	// Level
 	Level * level;
@@ -133,5 +148,10 @@ private:
 
 	// Networking
 	NetworkingSystem m_network;
+
+	//bullets
+	std::vector<Entity *> m_bullets;
+	float startTimer;
+	bool fire = false;
 };
 #endif // !GAME_H

@@ -39,10 +39,11 @@ void PhysicsSystem::update()
 		VectorAPI currentPos = p->getPosition();
 		b2Body * body = b->getBody();
 		b2Vec2 bodyPos = body->GetPosition();
-		VectorAPI dimensions = b->getDimesnions();
+		VectorAPI dimensions = b->getDimensions();
 		currentPos.x = bodyPos.x;
 		currentPos.y = bodyPos.y;
 		p->setX(currentPos.x * m_worldScale - (dimensions.x / 2.f));
 		p->setY(currentPos.y * m_worldScale - (dimensions.y / 2.f));
 	}
+	
 }

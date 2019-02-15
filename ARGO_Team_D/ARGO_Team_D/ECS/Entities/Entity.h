@@ -7,8 +7,10 @@
 #include "../Components/Components.h"
 #include <map>
 #include <algorithm>
-
+#include<iostream>
 using namespace std;
+
+static int entityIdCounter = 0;
 
 /// <summary>
 /// innnterface for entities.
@@ -18,8 +20,8 @@ class Entity {
 public:
 	int id;
 
-	Entity(int id) {};
-	virtual ~Entity() {};
+	Entity() : id(entityIdCounter++) {};
+	virtual ~Entity() { for (auto &c : m_components) { delete c; } };
 
 	void addComponent(Component * c) { m_components.push_back(c); }
 	void removeComponent(Component * c) {
@@ -53,5 +55,5 @@ private:
 protected:
 
 };
-#endif // !ENTITY_H
 
+#endif // !ENTITY_H
