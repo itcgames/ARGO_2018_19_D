@@ -123,6 +123,8 @@ void BodyComponent::init(float x, float y, float w, float h)
 	m_groundFixtureDef.shape = m_groundSensorShape;
 	m_groundFixtureDef.isSensor = true;
 	m_groundFixtureDef.userData = &m_data;
+	m_groundFixtureDef.filter.categoryBits = 0x0004;
+	m_groundFixtureDef.filter.maskBits = 0x0008;
 	b2Fixture * footSensorFixture = m_body->CreateFixture(&m_groundFixtureDef);
 	//footSensorFixture->SetUserData(this);
 	footSensorFixture->SetUserData(&m_data);

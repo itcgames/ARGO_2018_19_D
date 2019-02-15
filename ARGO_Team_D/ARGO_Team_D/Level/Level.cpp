@@ -11,6 +11,7 @@ Level::Level(b2World & world, float worldScale, TTF_Font * font)
 
 Level::~Level()
 {
+	unload();
 }
 
 /// <summary>
@@ -22,14 +23,7 @@ Level::~Level()
 /// <returns></returns>
 bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Renderer * renderer)
 {
-	for (auto & row : m_tiles) {
-		for (auto tile : row) {
-			delete tile;
-			tile = nullptr;
-		}
-	}
-	m_physicsBodies.clear();
-	m_tutorials.clear();
+	unload();
 
 	if (m_map.load(filepath)) {
 		tmx::Vector2u tileCount = m_map.getTileCount();
@@ -258,7 +252,7 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 
 				auto loadedBounds = object.getAABB();
 				bounds = { (int)loadedBounds.left, (int)loadedBounds.top, (int)loadedBounds.width, (int)loadedBounds.height };
-
+				tutorial->originalSizeV = VectorAPI(bounds.w, bounds.h);
 				auto message = std::find_if(props.begin(), props.end(), [](const tmx::Property & p) {
 					return p.getName() == "Message";
 				});
@@ -337,7 +331,7 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 /// <param name="t">The width of the body</param>
 void Level::createBody(float x, float y, float width)
 {
-	PhysicsBody  * pb = new PhysicsBody();
+	PhysicsBody  * pb = new PhysicsBody("PhysicsBody");
 	pb->bodyDef.type = b2_staticBody;
 	pb->bodyDef.position = b2Vec2((x + (width / 2.f)) / m_worldScale, (y + (m_tileHeight / 2.f)) / m_worldScale);
 	pb->body = m_refWorld.CreateBody(&pb->bodyDef);
@@ -345,6 +339,7 @@ void Level::createBody(float x, float y, float width)
 	pb->fixture.density = 1.f;
 	pb->fixture.friction = 0.f;
 	pb->fixture.shape = &pb->shape;
+	pb->fixture.filter.categoryBits = 0x0008;
 	pb->data.data = pb;
 	pb->fixture.userData = &pb->data;
 	pb->body->CreateFixture(&pb->fixture);
@@ -362,4 +357,41 @@ void Level::clearPhysicsBodies()
 		m_refWorld.DestroyBody(pb->body);
 	}
 	m_physicsBodies.clear();
+}
+
+void Level::clearTutorials()
+{
+	for (auto tut : m_tutorials)
+	{
+		m_refWorld.DestroyBody(tut->pb.body);
+	}
+	m_tutorials.clear();
+}
+
+void Level::unload()
+{
+	for (auto & row : m_tiles) {
+		for (auto & tile : row) {
+			if (nullptr != tile && nullptr != tile->body) {
+				m_refWorld.DestroyBody(tile->body);
+			}
+		}
+	}
+	m_tiles.clear();
+
+	/*for (auto kv : m_tilesets) {
+		if (nullptr != kv.second) {
+			SDL_DestroyTexture(kv.second);
+		}
+	}*/
+	m_tilesets.clear();
+	clearPhysicsBodies();
+	clearTutorials();
+}
+
+void Level::update()
+{
+	for (auto & tut : m_tutorials) {
+		tut->update();
+	}
 }

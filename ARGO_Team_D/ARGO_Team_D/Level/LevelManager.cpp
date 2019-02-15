@@ -14,6 +14,7 @@ LevelManager::~LevelManager()
 
 void LevelManager::update(const float dt)
 {
+	m_levels[m_currentLevel]->update();
 }
 
 void LevelManager::render(SDL_Renderer * renderer, Camera & camera)
@@ -57,7 +58,7 @@ void LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const
 			&& p.x < goal.x + goal.w
 			&& p.y + sprite->m_height > goal.y
 			&& p.y <  goal.y + goal.h) {
-			m_levels[m_currentLevel]->clearPhysicsBodies();
+			m_levels[m_currentLevel]->unload();
 
 			if (m_currentLevel != m_levels.size() - 1) {
 				m_currentLevel++;

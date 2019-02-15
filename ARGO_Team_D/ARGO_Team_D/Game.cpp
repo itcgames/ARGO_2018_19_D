@@ -273,6 +273,7 @@ void Game::update(const float & dt)
 			m_ttlSystem.update();
 			inputHandler->update();
 			m_animationSystem.update(dt / 1000);
+			m_levelManager.update(dt/1000);
 			m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer);
 		}
 		break;

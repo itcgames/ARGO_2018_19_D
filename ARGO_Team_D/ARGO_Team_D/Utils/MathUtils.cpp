@@ -19,3 +19,13 @@ float mu::radToDegrees(const float rad)
 {
 	return rad * (180.0f / PI);
 }
+
+float mu::lerp(const float start, const float end, const float percent)
+{
+	return (start + percent * (end - start));
+}
+
+VectorAPI mu::lerp(const VectorAPI & start, const VectorAPI & end, float percent)
+{
+	return start + ((end - start) * percent);
+}

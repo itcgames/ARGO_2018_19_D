@@ -20,9 +20,9 @@ Entity * PlayerFactory::create(VectorAPI pos)
 	entity->addComponent(new PositionComponent(pos));
 	entity->addComponent(new SpriteComponent(m_spriteId, *m_resourceManager, m_dimensions.x, m_dimensions.y));
 	auto body = new BodyComponent(pos.x, pos.y, m_dimensions.x, m_refWorld, WORLD_SCALE);
-	b2Filter test;
+	/*b2Filter test;
 	test.categoryBits = 0x0001;
-	body->getBody()->GetFixtureList()[0].SetFilterData(test);
+	body->getBody()->GetFixtureList()[0].SetFilterData(test);*/
 	entity->addComponent(body);
 	entity->addComponent(new GunComponent(0));
 	return entity;

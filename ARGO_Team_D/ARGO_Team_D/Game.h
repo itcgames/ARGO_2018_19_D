@@ -6,6 +6,9 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_haptic.h>
+
+
 #include "ECS/Entities/Entity.h"
 #include "ECS/Systems/RenderSystem.h"
 #include "ECS/Systems/PhysicsSystem.h"
@@ -28,7 +31,6 @@
 #include "Utils/VectorAPI.h"
 #include "Camera.h"
 #include "Client/Client.h"
-#include <SDL_haptic.h>
 #include "ECS/Systems/MovementSystem.h"
 #include "ECS/Components/VelocityComponent.h"
 #include "ECS/Components/TimeToLiveComponent.h"
@@ -150,5 +152,6 @@ private:
 	std::vector<Entity *> m_bullets;
 	float startTimer;
 	bool fire = false;
+	int test;
 };
 #endif // !GAME_H

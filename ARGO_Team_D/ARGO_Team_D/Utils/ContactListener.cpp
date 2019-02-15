@@ -1,5 +1,6 @@
 #include "ContactListener.h"
-#include "../Level/Level.h"
+#include "CollisionData.h"
+#include "TutorialTrigger.h"
 
 /// <summary>
 /// Function triggers whenever two bodies collide
@@ -9,24 +10,39 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 {
 	auto dataA = static_cast<CollisionData*>(contact->GetFixtureA()->GetUserData());
 	auto dataB = static_cast<CollisionData*>(contact->GetFixtureB()->GetUserData());
+	std::cout << "Entry -----------------------------------------" << std::endl;
 	// Check if fixture A was a body
-	if (dataA && dataA->tag == "Body") {
+	if (dataA ) {
+
 		void* bodyUserData = dataA->data;
-		if (bodyUserData)
-		{
-			auto data = static_cast<BodyComponent*>(bodyUserData);
-			data->groundContactStart();
+		if (dataA->tag == "Body") {
+			if (bodyUserData)
+			{
+				auto data = static_cast<BodyComponent*>(bodyUserData);
+				data->groundContactStart();
+			}
+		}
+		else if (dataA->tag == "TutorialTrigger") {
+			auto data = static_cast<TutorialTrigger*>(bodyUserData);
+			data->animateIn();
 		}
 	}
 	// Check if fixture B was a body
-	if (dataB && dataB->tag == "Body") {
+	if (dataB) {
 		void* bodyUserData = dataB->data;
-		if (bodyUserData)
-		{
-			auto data = static_cast<BodyComponent*>(bodyUserData);
-			data->groundContactStart();
+		if (dataB->tag == "Body") {
+			if (bodyUserData)
+			{
+				auto data = static_cast<BodyComponent*>(bodyUserData);
+				data->groundContactStart();
+			}
+		}
+		else if (dataB->tag == "TutorialTrigger") {
+			auto data = static_cast<TutorialTrigger*>(bodyUserData);
+			data->animateIn();
 		}
 	}
+
 
 	if (dataA) {
 		std::cout << "Entry " << dataA->tag << std::endl;
@@ -45,21 +61,36 @@ void BodyContactListener::EndContact(b2Contact* contact)
 	// Check if fixture A was a body
 	auto dataA = static_cast<CollisionData*>(contact->GetFixtureA()->GetUserData());
 	auto dataB = static_cast<CollisionData*>(contact->GetFixtureB()->GetUserData());
-	if (dataA && dataA->tag == "Body") {
+	std::cout << "Exit -----------------------------------------" << std::endl;
+	// Check if fixture A was a body
+	if (dataA) {
+
 		void* bodyUserData = dataA->data;
-		if (bodyUserData)
-		{
-			auto data = static_cast<BodyComponent*>(bodyUserData);
-			data->groundContactEnd();
+		if (dataA->tag == "Body") {
+			if (bodyUserData)
+			{
+				auto data = static_cast<BodyComponent*>(bodyUserData);
+				data->groundContactEnd();
+			}
+		}
+		else if (dataA->tag == "TutorialTrigger") {
+			auto data = static_cast<TutorialTrigger*>(bodyUserData);
+			data->animateOut();
 		}
 	}
 	// Check if fixture B was a body
-	if (dataB && dataB->tag == "Body") {
+	if (dataB) {
 		void* bodyUserData = dataB->data;
-		if (bodyUserData)
-		{
-			auto data = static_cast<BodyComponent*>(bodyUserData);
-			data->groundContactEnd();
+		if (dataB->tag == "Body") {
+			if (bodyUserData)
+			{
+				auto data = static_cast<BodyComponent*>(bodyUserData);
+				data->groundContactEnd();
+			}
+		}
+		else if (dataB->tag == "TutorialTrigger") {
+			auto data = static_cast<TutorialTrigger*>(bodyUserData);
+			data->animateOut();
 		}
 	}
 
