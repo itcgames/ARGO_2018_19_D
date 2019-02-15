@@ -151,6 +151,7 @@
     <ClCompile Include="ConcreteCommand.cpp" />
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
     <ClCompile Include="ECS\Components\PositionComponent.cpp" />
+    <ClCompile Include="ECS\Systems\NetworkingSystem.cpp" />
     <ClCompile Include="ECS\Systems\AnimationSystem.cpp" />
     <ClCompile Include="ECS\Systems\MovementSystem.cpp" />
     <ClCompile Include="ECS\Systems\PhysicsSystem.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="ECS\Components\TimeToLiveComponent.h" />
     <ClInclude Include="ECS\Components\VelocityComponent.h" />
     <ClInclude Include="ECS\Entities\Entity.h" />
+    <ClInclude Include="ECS\Systems\NetworkingSystem.h" />
     <ClInclude Include="ECS\Systems\AnimationSystem.h" />
     <ClInclude Include="ECS\Systems\MovementSystem.h" />
     <ClInclude Include="ECS\Systems\PhysicsSystem.h" />
