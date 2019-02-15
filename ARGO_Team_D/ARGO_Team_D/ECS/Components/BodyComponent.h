@@ -7,6 +7,7 @@
 // Includes
 #include <Box2D/Box2D.h>
 #include "..\Utils\VectorAPI.h"
+#include "../Level/Level.h"
 
 /// <summary>
 /// Box2D Body Component
@@ -46,6 +47,7 @@ private:
 	b2PolygonShape * m_groundSensorShape;
 	b2FixtureDef m_groundFixtureDef;
 	bool m_onGround;
+	CollisionData m_data;
 };
 
 #endif // !BODYCOMPONENT_H

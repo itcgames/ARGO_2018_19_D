@@ -29,6 +29,7 @@ bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Ren
 		}
 	}
 	m_physicsBodies.clear();
+	m_tutorials.clear();
 
 	if (m_map.load(filepath)) {
 		tmx::Vector2u tileCount = m_map.getTileCount();
@@ -236,10 +237,10 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 			auto rect = object.getAABB();
 			auto rotation = object.getRotation();
 			TutorialTrigger t(
-				rect.left / m_worldScale,
-				rect.top / m_worldScale,
-				rect.width / m_worldScale,
-				rect.height / m_worldScale,
+				rect.left,
+				rect.top,
+				rect.width,
+				rect.height,
 				rotation, 
 				m_worldScale,
 				m_refWorld
@@ -253,7 +254,7 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 			});
 			if (id != props.end()) {
 				auto & tutorial = m_tutorials.at(id->getIntValue() - 1);
-				auto & bounds = tutorial.bounds;
+				auto & bounds = tutorial.promptBounds;
 
 				auto loadedBounds = object.getAABB();
 				bounds = { (int)loadedBounds.left, (int)loadedBounds.top, (int)loadedBounds.width, (int)loadedBounds.height };
@@ -312,12 +313,17 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 	Uint8 r = 0, g = 0, b = 0, a = 0;
 	SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
 	for (auto & tutorial : m_tutorials) {
-		SDL_Rect rect = tutorial.bounds;
+		SDL_Rect rect = tutorial.promptBounds;
 		rect.x -= bounds.x;
 		rect.y -= bounds.y;
 		SDL_RenderCopy(renderer, tutorial.messageTexture, NULL, &rect);
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 		SDL_RenderDrawRect(renderer, &rect);
+
+		SDL_Rect tRect = tutorial.bounds;
+		tRect.x -= bounds.x;
+		tRect.y -= bounds.y;
+		SDL_RenderDrawRect(renderer, &tRect);
 	}
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	//std::cout << tileD << "/" << tileC << " tiles Shown with bounds of: " << bounds.x << "," << bounds.y  << "," << bounds.w << "," << bounds.h << std::endl;
@@ -339,6 +345,8 @@ void Level::createBody(float x, float y, float width)
 	pb->fixture.density = 1.f;
 	pb->fixture.friction = 0.f;
 	pb->fixture.shape = &pb->shape;
+	pb->data.data = pb;
+	pb->fixture.userData = &pb->data;
 	pb->body->CreateFixture(&pb->fixture);
 	pb->body->SetFixedRotation(true);
 	m_physicsBodies.push_back(pb);

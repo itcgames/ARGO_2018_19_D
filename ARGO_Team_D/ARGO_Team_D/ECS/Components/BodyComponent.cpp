@@ -14,7 +14,8 @@ BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world
 	m_worldScale(worldScale),
 	m_isCircle(false),
 	m_dimensions(w, h),
-	m_onGround(false)
+	m_onGround(false),
+	m_data("Body", this)
 {
 	float halfWidth = w / 2.f;
 	float halfHeight = h / 2.f;
@@ -37,7 +38,8 @@ BodyComponent::BodyComponent(float x, float y, float rad, b2World & world, float
 	m_worldScale(worldScale),
 	m_isCircle(true),
 	m_dimensions(rad, rad),
-	m_onGround(false)
+	m_onGround(false),
+	m_data("Body", this)
 {
 	float halfRad = rad / 2.f;
 	b2CircleShape * circleShape = new b2CircleShape();
@@ -117,11 +119,13 @@ void BodyComponent::init(float x, float y, float w, float h)
 
 	// Sensor checks if the body is on the ground
 	m_groundSensorShape = new b2PolygonShape();
-	m_groundSensorShape->SetAsBox((halfWidth / m_worldScale) / 2.f, (halfHeight / m_worldScale) / 2.f, b2Vec2(0, halfHeight / m_worldScale), 0);
+	m_groundSensorShape->SetAsBox((halfWidth / m_worldScale) / 2.f, (halfHeight / m_worldScale) / 10.f, b2Vec2(0, halfHeight / m_worldScale), 0);
 	m_groundFixtureDef.shape = m_groundSensorShape;
 	m_groundFixtureDef.isSensor = true;
+	m_groundFixtureDef.userData = &m_data;
 	b2Fixture * footSensorFixture = m_body->CreateFixture(&m_groundFixtureDef);
-	footSensorFixture->SetUserData(this);
+	//footSensorFixture->SetUserData(this);
+	footSensorFixture->SetUserData(&m_data);
 }
 
 /// <summary>

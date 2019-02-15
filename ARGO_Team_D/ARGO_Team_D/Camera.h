@@ -20,7 +20,7 @@ public:
 	VectorAPI m_scale;
 private:
 	SDL_Rect m_bounds;
-	VectorAPI m_originalSize;;
+	VectorAPI m_originalSize;
 	int m_viewOffset;
 	float m_weight;
 	float m_shake;

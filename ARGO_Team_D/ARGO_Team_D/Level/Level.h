@@ -30,18 +30,33 @@ struct TileData {
 	bool destructible;
 };
 
+struct CollisionData {
+	CollisionData(std::string type, void * userdata) :
+		tag(type),
+		data(userdata) {
+
+	};
+	std::string tag;
+	void * data;
+};
+
 struct PhysicsBody {
+	PhysicsBody() : data("PhysicsBody", this) {};
 	b2BodyDef bodyDef;
 	b2Body * body = nullptr;
 	b2PolygonShape shape;
 	b2FixtureDef fixture;
+	CollisionData data;
 };
 
+
 struct TutorialTrigger {
-	TutorialTrigger(const float x, const float y, const int w, const int h, const float angle, const float worldScale, b2World & world) {
-		float halfWidth = w / 2.f;
-		float halfHeight = h / 2.f;
-		bodyDef.position = b2Vec2((x + halfWidth) / worldScale, (y + halfHeight) / worldScale);
+	TutorialTrigger(const float x, const float y, const int w, const int h, const float angle, const float worldScale, b2World & world) :
+		data("TutorialTrigger", this)
+	{
+		float halfWidth = (w / worldScale) / 2.f;
+		float halfHeight = (h / worldScale) / 2.f;
+		bodyDef.position = b2Vec2(((x / worldScale) + halfWidth), ((y / worldScale) + halfHeight));
 		body = world.CreateBody(&bodyDef);
 
 		shape.SetAsBox(halfWidth / worldScale, halfHeight / worldScale);
@@ -50,18 +65,26 @@ struct TutorialTrigger {
 		fixture.filter.categoryBits = _entityCategory::TUTORIAL;
 		fixture.filter.maskBits = _entityCategory::PLAYER;
 		fixture.shape = &shape;
+		data.data = this;
+		fixture.userData = &data;
 
 		body->CreateFixture(&fixture);
 		body->SetTransform(b2Vec2(x, y), angle);
+		bounds.x = x;
+		bounds.y = y;
+		bounds.w = w;
+		bounds.h = h;
 	};
 	b2BodyDef bodyDef;
 	b2Body * body = nullptr;
 	b2PolygonShape shape;
 	b2FixtureDef fixture;
 	SDL_Rect bounds;
+	SDL_Rect promptBounds;
 	std::string message;
 	SDL_Surface * messageSurface;
 	SDL_Texture * messageTexture;
+	CollisionData data;
 };
 class Level {
 public:
