@@ -32,8 +32,7 @@ void NetworkingSystem::updateClients()
 void NetworkingSystem::sendToHost()
 {
 	std::string msg;
-	cin >> msg;
-	msg = "Client Says: " + msg;
+	msg = "ClientSays: " + msg;
 
 	//  send own entity back
 	m_client.Send(msg);
@@ -42,8 +41,7 @@ void NetworkingSystem::sendToHost()
 void NetworkingSystem::sendToClients()
 {
 	std::string msg;
-	cin >> msg;
-	msg = "Host Says: " + msg;
+	msg = "HostSays: " + msg;
 
 	// Send EVERYTHING BACK
 	m_client.Send(msg);
