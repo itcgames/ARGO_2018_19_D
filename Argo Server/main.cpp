@@ -78,6 +78,7 @@ void main()
 
 				if (playerID % 4 == 0) {
 					string welcomeMsg = "ID: " + to_string(playerID) + ", " + "Host: " + to_string(1);
+					playerID++;
 					send(client, welcomeMsg.c_str(), welcomeMsg.size() + 1, 0);
 				}
 				else {
