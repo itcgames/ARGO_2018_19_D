@@ -6,6 +6,7 @@
 #include "..//ECS/Components/PositionComponent.h"
 #include "..//ECS/Components/SpriteComponent.h"
 #include "..//ECS/Components/BodyComponent.h"
+#include "..//ECS/Components/AnimationComponent.h"
 #include "..//ECS/Components/GunComponent.h"
 #include "..//Client/Client.h"
 

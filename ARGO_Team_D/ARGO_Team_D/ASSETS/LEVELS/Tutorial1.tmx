@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="40" height="10" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="17">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="40" height="10" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="19">
  <tileset firstgid="1" name="Temp" tilewidth="64" tileheight="64" tilecount="36" columns="6">
   <image source="../IMAGES/tileset2.png" width="384" height="384"/>
  </tileset>
@@ -8,7 +8,7 @@
 9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,
 9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,
 9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,
-9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,
+9,0,0,0,0,0,0,0,0,0,0,0,0,0,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,
 9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,
 9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,20,20,20,20,20,21,0,0,0,0,0,0,0,0,0,0,0,0,12,
 9,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,20,20,3,8,
@@ -18,24 +18,24 @@
 </data>
  </layer>
  <objectgroup id="5" name="Enemies">
-  <object id="10" type="Enemy" x="1438" y="234">
+  <object id="10" type="GunEnemy" x="1480" y="275">
    <properties>
-    <property name="MaxX" value="0"/>
-    <property name="MinX" value="0"/>
+    <property name="MaxX" value="1700"/>
+    <property name="MinX" value="1300"/>
    </properties>
    <point/>
   </object>
-  <object id="15" type="Enemy" x="1629" y="234">
+  <object id="17" type="GunEnemy" x="960" y="340">
    <properties>
-    <property name="MaxX" value="0"/>
-    <property name="MinX" value="0"/>
+    <property name="MaxX" value="1100"/>
+    <property name="MinX" value="800"/>
    </properties>
    <point/>
   </object>
-  <object id="16" type="Enemy" x="1949" y="368">
+  <object id="18" type="GunEnemy" x="1977" y="400">
    <properties>
-    <property name="MaxX" value="0"/>
-    <property name="MinX" value="0"/>
+    <property name="MaxX" value="2100"/>
+    <property name="MinX" value="1850"/>
    </properties>
    <point/>
   </object>

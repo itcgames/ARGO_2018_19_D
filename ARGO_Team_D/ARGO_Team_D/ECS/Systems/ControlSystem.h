@@ -7,6 +7,7 @@
 #include "../ECS/Components/Components.h"
 #include "../ECS/Systems/System.h"
 #include "../ECS/Components/BodyComponent.h"
+#include "../ECS/Components/SpriteComponent.h"
 #include "../ECS/Components/AnimationComponent.h"
 #include "../ECS/Components/PositionComponent.h"
 #include "../ECS/Entities/Entity.h"
@@ -18,6 +19,7 @@
 struct ControlComponents {
 	BodyComponent * body;
 	AnimationComponent * animation;
+	SpriteComponent * sprite;
 };
 
 class ControlSystem : public System {

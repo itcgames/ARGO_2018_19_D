@@ -25,5 +25,23 @@ Entity * PlayerFactory::create(VectorAPI pos)
 	body->getBody()->GetFixtureList()[0].SetFilterData(test);*/
 	entity->addComponent(body);
 	entity->addComponent(new GunComponent(0));
+
+	AnimationComponent * a = new AnimationComponent();
+	std::vector<SDL_Rect> idleFrames;
+	for (int i = 0; i < 4; ++i) 
+	{
+		SDL_Rect frame = { i * 64, 0, 64, 64 };			
+		idleFrames.push_back(frame);
+	}
+	a->addAnimation("Idle", idleFrames, 1, 2, true);
+	std::vector<SDL_Rect> walkingFrames;
+	for (int i = 0; i < 8; ++i)
+	{
+		SDL_Rect frame = { i * 64, 64, 64, 64 };
+		walkingFrames.push_back(frame);
+	}
+	a->addAnimation("Walking", walkingFrames, 1, 2, true);
+	entity->addComponent(a);
+
 	return entity;
 }

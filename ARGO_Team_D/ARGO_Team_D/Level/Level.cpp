@@ -218,7 +218,9 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 	auto* object_layer = dynamic_cast<const tmx::ObjectGroup*>(layer.get());
 	auto & layer_objects = object_layer->getObjects();
 
-	int enemyCounter = 0;
+	int gunEnemyCounter = 0;
+	int flyEnemyCounter = 0;
+	int bigEnemyCounter = 0;
 
 	std::cout << "Name: " << object_layer->getName();
 	for (auto & object : layer_objects) {
@@ -268,14 +270,40 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 				std::cout << "Tutorial: " << id->getIntValue() << " Message: " << tutorial->message << std::endl;
 			}
 		}
-		else if (type == "Enemy")
+		else if (type.find("Enemy") != std::string::npos)
 		{
 			auto pos = object.getPosition();
-			auto body = m_gunEnemies.at(enemyCounter)->body->getBody();
-			body->SetTransform(b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale), body->GetAngle());
-			m_gunEnemies.at(enemyCounter)->ai->setMovementMarkers(0, 0);
-			m_gunEnemies.at(enemyCounter)->ai->setActivationState(true);
-			++enemyCounter;
+			auto properties = object.getProperties();
+			int min = 0;
+			int max = 0;
+			for (auto & prop : properties)
+			{
+				string name = prop.getName();
+				if (name == "MinX")
+				{
+					min = std::stoi(prop.getStringValue());
+				}
+				else if (name == "MaxX")
+				{
+					max = std::stoi(prop.getStringValue());
+				}
+			}
+			if (type == "GunEnemy")
+			{
+				auto body = m_gunEnemies.at(gunEnemyCounter)->body->getBody();
+				body->SetTransform(b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale), body->GetAngle());
+				m_gunEnemies.at(gunEnemyCounter)->ai->setMovementMarkers(min, max);
+				m_gunEnemies.at(gunEnemyCounter)->ai->setActivationState(true);
+				++gunEnemyCounter;
+			}
+			else if (type == "FlyEnemy")
+			{
+				++flyEnemyCounter;
+			}
+			else if (type == "BigEnemy")
+			{
+				++bigEnemyCounter;
+			}
 		}
 	}
 }

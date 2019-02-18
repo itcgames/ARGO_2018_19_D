@@ -48,4 +48,27 @@ AnimationState * IdleState::handle(Animation * a, SDL_Event & e)
 			break;
 		}
 	}
+	if (e.type == SDL_KEYUP) {
+		switch (e.key.keysym.sym) {
+		case SDLK_RIGHT:
+			//std::cout << "Right" << std::endl;
+			return new WalkingState();
+			break;
+		case SDLK_LEFT:
+			//std::cout << "Left" << std::endl;
+			return new WalkingState();
+			break;
+		case SDLK_a:
+			//std::cout << "Left" << std::endl;
+			return new WalkingState();
+			break;
+		case SDLK_d:
+			//std::cout << "Right" << std::endl;
+			return new WalkingState();
+			break;
+		default:
+			return this;
+			break;
+		}
+	}
 }

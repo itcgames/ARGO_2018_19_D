@@ -21,12 +21,13 @@ struct AiComponents
 class AiSystem : public System
 {
 public:
-	AiSystem(BodyComponent * playerBody);
+	AiSystem(BodyComponent * playerBody, const float SCALE);
 	~AiSystem();
 	void addEntity(Entity * e) override;
 	void update();
 private:
 	BodyComponent * m_playerBody;
+	const float WORLD_SCALE;
 	std::vector<string> m_allowedTypes;
 	std::vector<AiComponents> m_components;
 };

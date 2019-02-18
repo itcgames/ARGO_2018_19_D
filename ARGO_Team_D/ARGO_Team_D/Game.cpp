@@ -125,21 +125,6 @@ Game::Game() :
 	m_controlSystem.bindBullets(m_bullets);
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
-
-	//float enemyX = 100;
-	//float enemyY = 100;
-	//float enemyWidth = 100;
-	//float enemyHeight = 100;
-	//std::string name = "TestAnimation";
-	//Entity * enemy = new Entity();
-	//enemy->addComponent(new BodyComponent(enemyX, enemyY, enemyWidth, enemyHeight, m_world, WORLD_SCALE));
-	//enemy->addComponent(new PositionComponent(enemyX, enemyY));
-	//enemy->addComponent(new SpriteComponent(name, *m_resourceManager, enemyX, enemyY));
-	////enemy->addComponent(new AnimationComponent());
-	//enemy->addComponent(new AiComponent(AiType::EnemyGun, 0, 200));
-	//m_renderSystem.addEntity(enemy);
-	//m_physicsSystem.addEntity(enemy);
-	////m_animationSystem.addEntity(enemy);
 }
 
 Game::~Game()
@@ -162,7 +147,7 @@ void Game::run()
 		{
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
-			update(timeSinceLastUpdate);
+			update(timePerFrame);
 		}
 		render();
 	}
@@ -398,6 +383,7 @@ void Game::initialiseEntities()
 	Entity * e = m_playerFactory->create(VectorAPI(150, 0));
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
+	m_animationSystem.addEntity(e);
 	m_player = e;
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
 	for(int i = 0; i < GUN_ENEMY_COUNT; ++i)
@@ -408,12 +394,14 @@ void Game::initialiseEntities()
 	}
 	for (int i = 0; i < FLY_ENEMY_COUNT; ++i)
 	{
+		// TBI
 		//Enemy * enemy = m_enemyFactory->createFlyEnemy();
 		//m_flyEnemies.push_back(enemy);
 		////m_entityList.push_back(m_flyEnemies.at(i)->entity);
 	}
 	for (int i = 0; i < BIG_ENEMY_COUNT; ++i)
 	{
+		// TBI
 		//Enemy * enemy = m_enemyFactory->createBigEnemy();
 		//m_bigEnemies.push_back(enemy);
 		////m_entityList.push_back(m_bigEnemies.at(i)->entity);
@@ -425,7 +413,7 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	m_aiSystem = new AiSystem(m_playerBody);
+	m_aiSystem = new AiSystem(m_playerBody, WORLD_SCALE);
 	for (auto i : m_entityList)
 	{
 		if (i->checkForComponent("Sprite"))
@@ -445,7 +433,7 @@ void Game::initialiseSystems()
 
 void Game::initialiseFactories()
 {
-	std::string spriteName = "test";
+	std::string spriteName = "Player";
 	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE);
 	m_enemyFactory = new EnemyFactory(m_resourceManager, m_world, WORLD_SCALE);
 }

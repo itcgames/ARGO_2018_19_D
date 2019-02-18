@@ -2,7 +2,7 @@
 
 ControlSystem::ControlSystem()
 {
-	allowedTypes = { "Body", "Position", "Gun" };
+	allowedTypes = { "Body", "Position", "Gun", "Sprite" };
 	direction = 1;
 }
 
@@ -12,13 +12,14 @@ ControlSystem::~ControlSystem()
 
 void ControlSystem::addEntity(Entity * e)
 {
-	std::vector<std::string> allowedTypes{ "Body" , "Animation"};
+	std::vector<std::string> allowedTypes{ "Body" , "Animation", "Sprite"};
 	auto comps = e->getComponentsOfType(allowedTypes);
 	if (comps.size() >= allowedTypes.size() - 1)
 	{
 		ControlComponents c;
 		c.body = dynamic_cast<BodyComponent*>(comps["Body"]); 
 		c.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
+		c.sprite = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
 		m_components.push_back(c);
 		m_entityList.push_back(e);
 	}
@@ -42,11 +43,13 @@ void ControlSystem::update()
 			{
 				b2Body->SetLinearVelocity(b2Vec2(15, currentVelocity.y));
 				currentVelocity.x = 15;
+				cc.sprite->m_flip = SDL_FLIP_NONE;
 			}
 			else if (m_moveLeft)
 			{
 				b2Body->SetLinearVelocity(b2Vec2(-15, currentVelocity.y));
 				currentVelocity.x = -15;
+				cc.sprite->m_flip = SDL_FLIP_HORIZONTAL;
 			}
 			else
 			{
@@ -168,16 +171,12 @@ void ControlSystem::spawnProjectile(float x, float y)
 				break;
 			}
 		}
-		
-	
 	}
-	
 }
 
 void ControlSystem::processInput(SDL_Event & event)
 {
-	if (event.type == SDL_KEYDOWN) {
-		std::vector<string> allowedTypes = {"Body", "Animation" };
+	if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
 		for (auto & cc : m_components)
 		{
 			if (cc.animation)
