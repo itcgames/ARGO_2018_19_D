@@ -43,6 +43,8 @@
 #include <time.h>
 #include <functional>
 #include "Utils/ContactListener.h"
+#include"Particles/Timer.h"
+#include"Particles/Emitter.h"
 
 class ControlSystem;
 class MainMenu;
@@ -58,6 +60,8 @@ enum State {
 	LevelSelect,
 	Multiplayer
 };
+
+const int FRAMES_PER_SECOND = 60;
 
 using namespace std;
 
@@ -166,5 +170,8 @@ private:
 	float startTimer;
 	bool fire = false;
 	int test;
+
+	//PARTICLES
+	Emitter * emitter;
 };
 #endif // !GAME_H

@@ -1,0 +1,147 @@
+#include "Emitter.h"
+
+Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color color ,SDL_Renderer * renderer , bool isBurst)
+{
+	m_rend = renderer;
+
+	m_posX = x;
+	m_posY = y;
+	
+	width = particleWidth;
+	height = particleHeight;
+	
+	m_color = color;
+	emit = true;
+	framesPerEmission = 5;
+	burst = isBurst;
+	looping = false;
+
+	if (!burst)
+	{
+		/*for (int i = 0; i < 1; i++)
+		{
+			m_particles.push_back(new Particle(m_posX, m_posY, width, height, m_color, m_rend));
+		}*/
+	}
+	else
+	{
+		for (int i = 0; i < MAX_PARTICLES; i++)
+		{
+			m_particlesArray[i] = (new Particle(m_posX, m_posY, width, height, m_color, m_rend));
+		}
+	}
+
+	
+}
+
+Emitter::~Emitter()
+{
+	//Delete particles
+	for (int i = 0; i < MAX_PARTICLES; ++i)
+	{
+		delete m_particlesArray[i];
+	}
+
+	for (int i = 0; i < m_particles.size(); ++i)
+	{
+		delete m_particles.at(i);
+	}
+}
+
+void Emitter::update(int positionX, int positionY)
+{
+	m_posX = positionX;
+	m_posY = positionY;
+	if (burst)
+	{
+		for (int i = 0; i < MAX_PARTICLES; i++)
+		{
+			m_particlesArray[i]->update();
+		}
+	}
+	else
+	{
+		for (int i = 0; i < m_particles.size(); i++)
+		{
+			m_particles.at(i)->update();
+		}
+
+		if (emit)
+		{
+
+			counter++;
+			if (counter % framesPerEmission == 0)
+			{
+				m_particles.push_back(new Particle(m_posX, m_posY, width, height, m_color, m_rend));
+				counter = 0;
+			}
+		}
+	}	
+}
+
+void Emitter::draw()
+{
+	drawParticles();
+}
+
+void Emitter::setEmitting(bool b)
+{
+	emit = b;
+}
+
+void Emitter::setFramesPerEmission(int num)
+{
+	framesPerEmission = num;
+}
+
+void Emitter::setLooping(bool b)
+{
+	looping = b;
+}
+
+void Emitter::drawParticles()
+{
+
+	if (burst)
+	{
+		if (looping)
+		{
+			for (int i = 0; i < MAX_PARTICLES; ++i)
+			{
+				if (m_particlesArray[i]->isDead())
+				{
+					delete m_particlesArray[i];
+					m_particlesArray[i] = new Particle(m_posX, m_posY, width, height, m_color, m_rend);
+				}
+			}
+		}
+		
+
+		for (int i = 0; i < MAX_PARTICLES; ++i)
+		{
+			m_particlesArray[i]->draw();
+		}
+	}
+	else
+	{
+		for (int i = 0; i < m_particles.size(); ++i)
+		{
+			if (m_particles[i]->isDead())
+			{
+				delete m_particles.at(i);
+				m_particles.erase(std::remove(m_particles.begin(), m_particles.end(), m_particles.at(i)), m_particles.end());
+			}
+		}
+		//std::cout << m_particles.size() << std::endl;
+		//Show particles
+		for (int i = 0; i < m_particles.size(); ++i)
+		{
+			m_particles.at(i)->draw();
+		}
+	}
+
+
+
+
+	
+}
