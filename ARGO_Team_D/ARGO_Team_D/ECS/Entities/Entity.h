@@ -24,8 +24,13 @@ public:
 	virtual ~Entity() { for (auto &c : m_components) { delete c; } };
 
 	void addComponent(Component * c) { m_components.push_back(c); }
-	void removeComponent(Component * c) {
-		//m_components.erase(std::remove(m_components.begin(), m_components.end(), c), m_components.end());
+	void removeComponent(std::string type) {
+		m_components.erase(std::remove_if(m_components.begin(), m_components.end(), [type](Component * c) {
+			if (c->id == type) {
+				delete c;
+				return true;
+			}
+			return false; }), m_components.end());
 	};
 	vector<Component*> *getComponents() { return &m_components; }
 	std::map<std::string, Component*> getComponentsOfType(const std::vector<std::string> & types) {

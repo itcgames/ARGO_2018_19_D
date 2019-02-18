@@ -19,15 +19,16 @@ void ControlSystem::addEntity(Entity * e)
 		ControlComponents c;
 		c.body = dynamic_cast<BodyComponent*>(comps["Body"]); 
 		c.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
-		m_components.push_back(c);
+		m_components.insert(std::make_pair(e->id, c));
 		m_entityList.push_back(e);
 	}
 }
 
 void ControlSystem::update()
 {
-	for (auto & cc : m_components)
+	for (auto & comp : m_components)
 	{
+		auto & cc = comp.second;
 		BodyComponent * body = cc.body;
 		if (body != nullptr)
 		{
@@ -174,12 +175,24 @@ void ControlSystem::spawnProjectile(float x, float y)
 	
 }
 
+void ControlSystem::removeEntity(const int id)
+{
+	auto comp = m_components.find(id);
+	if (comp != m_components.end()) {
+		m_components.erase(comp);
+	}
+	m_entityList.erase(std::remove_if(m_entityList.begin(), m_entityList.end(), [id](Entity* en) {
+		return en->id == id;
+	}), m_entityList.end());
+}
+
 void ControlSystem::processInput(SDL_Event & event)
 {
 	if (event.type == SDL_KEYDOWN) {
 		std::vector<string> allowedTypes = {"Body", "Animation" };
-		for (auto & cc : m_components)
+		for (auto & comp : m_components)
 		{
+			auto & cc = comp.second;
 			if (cc.animation)
 				cc.animation->handleInput(event);
 		}

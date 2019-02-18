@@ -14,7 +14,7 @@ void RenderSystem::addEntity(Entity * e)
 		c.position = dynamic_cast<PositionComponent*>(comps["Position"]);
 		c.sprite = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
 		c.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
-		m_components.push_back(c);
+		m_components.insert(std::make_pair(e->id, c));
 		m_entityList.push_back(e);
 	}
 }
@@ -26,7 +26,8 @@ void RenderSystem::addEntity(Entity * e)
 void RenderSystem::render(SDL_Renderer* renderer, Camera & camera)
 {
 	SDL_Rect bounds = camera.getBounds();
-	for (auto & rc : m_components) {
+	for (auto & test : m_components) {
+		auto rc = test.second;
 		PositionComponent * p = rc.position;
 		SpriteComponent * s = rc.sprite;
 		VectorAPI pos = p->getPosition();
@@ -53,4 +54,15 @@ void RenderSystem::render(SDL_Renderer* renderer, Camera & camera)
 		}
 	}
 	
+}
+
+void RenderSystem::removeEntity(const int id)
+{
+	auto comp = m_components.find(id);
+	if (comp != m_components.end()) {
+		m_components.erase(comp);
+	}
+	m_entityList.erase(std::remove_if(m_entityList.begin(), m_entityList.end(), [id](Entity* en) {
+		return en->id == id; 
+	}), m_entityList.end());
 }

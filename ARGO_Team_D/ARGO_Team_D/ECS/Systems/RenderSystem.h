@@ -28,11 +28,11 @@ class RenderSystem : public System {
 public:
 	void addEntity(Entity * e) override;
 	void render(SDL_Renderer* renderer, Camera & camera);
-
+	void removeEntity(const int id) override;
 private:
 	SDL_Rect dest;
 	SDL_Rect src;
-	std::vector<RenderComponents> m_components;
+	std::map<int, RenderComponents> m_components;
 };
 
 #endif // !RENDERSYSTEM

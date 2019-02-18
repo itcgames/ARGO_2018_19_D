@@ -125,21 +125,6 @@ Game::Game() :
 	m_controlSystem.bindBullets(m_bullets);
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
-
-	//float enemyX = 100;
-	//float enemyY = 100;
-	//float enemyWidth = 100;
-	//float enemyHeight = 100;
-	//std::string name = "TestAnimation";
-	//Entity * enemy = new Entity();
-	//enemy->addComponent(new BodyComponent(enemyX, enemyY, enemyWidth, enemyHeight, m_world, WORLD_SCALE));
-	//enemy->addComponent(new PositionComponent(enemyX, enemyY));
-	//enemy->addComponent(new SpriteComponent(name, *m_resourceManager, enemyX, enemyY));
-	////enemy->addComponent(new AnimationComponent());
-	//enemy->addComponent(new AiComponent(AiType::EnemyGun, 0, 200));
-	//m_renderSystem.addEntity(enemy);
-	//m_physicsSystem.addEntity(enemy);
-	////m_animationSystem.addEntity(enemy);
 }
 
 Game::~Game()
