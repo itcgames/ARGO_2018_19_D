@@ -126,6 +126,10 @@ Game::Game() :
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
+	emitter = new Emitter(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE, 5, 5, SDL_Color{ 106,190,48 }, m_renderer, false);
+
+	emitter->setFramesPerEmission(5);
+
 	//float enemyX = 100;
 	//float enemyY = 100;
 	//float enemyWidth = 100;
@@ -240,6 +244,8 @@ void Game::processEvents()
 
 void Game::update(const float & dt)
 {
+
+
 	if (!m_network.getHost())
 	{
 		m_network.updateFromHost();
@@ -252,6 +258,7 @@ void Game::update(const float & dt)
 	{
 	case Menu:
 		m_menu->update();
+
 		break;
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
@@ -267,6 +274,8 @@ void Game::update(const float & dt)
 			m_animationSystem.update(dt / 1000);
 			m_levelManager.update(dt/1000);
 			m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer);
+			emitter->update((m_playerBody->getBody()->GetPosition().x * WORLD_SCALE)- m_playerBody->getDimensions().x/2 - m_camera.getBounds().x, (m_playerBody->getBody()->GetPosition().y * WORLD_SCALE) + m_playerBody->getDimensions().y/2 - m_camera.getBounds().y);
+			//std::cout << m_playerBody->getBody()->GetPosition().x * WORLD_SCALE << "," << m_playerBody->getBody()->GetPosition().y * WORLD_SCALE << std::endl;
 		}
 		break;
 	case Options:
@@ -292,6 +301,7 @@ void Game::update(const float & dt)
 	else {
 		m_network.sendToClients();
 	}
+
 }
 
 void Game::render()
@@ -314,6 +324,7 @@ void Game::render()
 	case PlayScreen:
 		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
+		emitter->draw();
 		break;
 	case Options:
 		m_options->draw();

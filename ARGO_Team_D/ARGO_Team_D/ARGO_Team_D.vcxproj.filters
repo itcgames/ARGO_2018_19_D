@@ -39,6 +39,9 @@
     <ClCompile Include="Factories\EnemyFactory.cpp" />
     <ClCompile Include="ECS\Systems\AiSystem.cpp" />
     <ClCompile Include="ECS\Components\AiComponent.cpp" />
+    <ClCompile Include="Particles\Emitter.cpp" />
+    <ClCompile Include="Particles\Particle.cpp" />
+    <ClCompile Include="Particles\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -98,5 +101,8 @@
     <ClInclude Include="Factories\EnemyFactory.h" />
     <ClInclude Include="ECS\Systems\AiSystem.h" />
     <ClInclude Include="ECS\Components\AiComponent.h" />
+    <ClInclude Include="Particles\Emitter.h" />
+    <ClInclude Include="Particles\Particle.h" />
+    <ClInclude Include="Particles\Timer.h" />
   </ItemGroup>
 </Project>
