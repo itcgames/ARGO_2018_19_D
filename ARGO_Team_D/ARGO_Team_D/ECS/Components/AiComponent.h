@@ -21,9 +21,6 @@ public:
 	void setMovementMarkers(int min, int max);
 	void setActivationState(bool state);
 	bool getActivationState();
-	void setNewPosition(VectorAPI pos);
-	VectorAPI getPosition();
-	bool getChangePositionStatus();
 	void setDirection(int direction);
 	int getDirection();
 	int getMinX();

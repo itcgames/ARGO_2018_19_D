@@ -271,7 +271,8 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 		else if (type == "Enemy")
 		{
 			auto pos = object.getPosition();
-			m_gunEnemies.at(enemyCounter)->ai->setNewPosition(VectorAPI(pos.x / m_worldScale, pos.y / m_worldScale));
+			auto body = m_gunEnemies.at(enemyCounter)->body->getBody();
+			body->SetTransform(b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale), body->GetAngle());
 			m_gunEnemies.at(enemyCounter)->ai->setMovementMarkers(0, 0);
 			m_gunEnemies.at(enemyCounter)->ai->setActivationState(true);
 			++enemyCounter;
@@ -381,6 +382,29 @@ void Level::clearTutorials()
 	m_tutorials.clear();
 }
 
+void Level::clearEnemies()
+{
+	for (auto enemy : m_gunEnemies)
+	{
+		clearSingleEnemy(enemy);
+	}
+	for (auto enemy : m_flyEnemies)
+	{
+		clearSingleEnemy(enemy);
+	}
+	for (auto enemy : m_bigEnemies)
+	{
+		clearSingleEnemy(enemy);
+	}
+}
+
+void Level::clearSingleEnemy(Enemy * enemy)
+{
+	auto body = enemy->body->getBody();
+	enemy->ai->setActivationState(false);
+	body->SetTransform(b2Vec2(-1000, 0), body->GetAngle());
+}
+
 void Level::unload()
 {
 	for (auto & row : m_tiles) {
@@ -400,6 +424,7 @@ void Level::unload()
 	m_tilesets.clear();
 	clearPhysicsBodies();
 	clearTutorials();
+	clearEnemies();
 }
 
 void Level::update()
