@@ -21,15 +21,16 @@ void AiSystem::addEntity(Entity * e)
 		aiComp.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
 		aiComp.ai = dynamic_cast<AiComponent*>(comps["Ai"]);
 		aiComp.sprite = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
-		m_components.push_back(aiComp);
+		m_components.insert(std::make_pair(e->id, aiComp));
 		m_entityList.push_back(e);
 	}
 }
 
 void AiSystem::update()
 {
-	for (auto & ac : m_components)
+	for (auto & comp : m_components)
 	{
+		auto & ac = comp.second;
 		bool active = ac.ai->getActivationState();
 		auto body = ac.body->getBody();
 		ac.sprite->setRender(active);
@@ -69,4 +70,15 @@ void AiSystem::update()
 			body->SetLinearVelocity(b2Vec2(0, 0));
 		}
 	}
+}
+
+void AiSystem::removeEntity(const int id)
+{
+	auto comp = m_components.find(id);
+	if (comp != m_components.end()) {
+		m_components.erase(comp);
+	}
+	m_entityList.erase(std::remove_if(m_entityList.begin(), m_entityList.end(), [id](Entity* en) {
+		return en->id == id;
+	}), m_entityList.end());
 }

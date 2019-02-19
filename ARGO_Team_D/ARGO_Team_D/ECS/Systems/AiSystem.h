@@ -25,11 +25,12 @@ public:
 	~AiSystem();
 	void addEntity(Entity * e) override;
 	void update();
+	void removeEntity(const int id) override;
 private:
 	BodyComponent * m_playerBody;
 	const float WORLD_SCALE;
 	std::vector<string> m_allowedTypes;
-	std::vector<AiComponents> m_components;
+	std::map<int, AiComponents> m_components;
 };
 
 #endif // !AISYSTEM_H

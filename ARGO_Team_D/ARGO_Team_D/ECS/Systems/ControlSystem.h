@@ -37,13 +37,13 @@ public:
 	void bindBullets(std::vector<Entity *> &bullets);
 
 	void spawnProjectile(float x, float y);
-
+	void removeEntity(const int id) override;
 private:
 	bool m_moveRight;
 	bool m_moveLeft;
 	bool m_jump;
 	bool m_fire;
-	std::vector<ControlComponents> m_components;
+	std::map<int, ControlComponents> m_components;
 	std::vector<string> allowedTypes;
 
 	std::vector<Entity *> m_bullets;

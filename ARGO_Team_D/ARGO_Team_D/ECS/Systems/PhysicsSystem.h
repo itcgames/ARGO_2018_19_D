@@ -26,9 +26,10 @@ public:
 	PhysicsSystem(float worldScale);
 	void addEntity(Entity * e) override;
 	void update();
+	void removeEntity(const int id) override;
 private:
 	float m_worldScale;
-	std::vector<PhysicsComponents> m_components;
+	std::map<int, PhysicsComponents> m_components;
 };
 
 #endif // !PHYSICSSYSTEM_H

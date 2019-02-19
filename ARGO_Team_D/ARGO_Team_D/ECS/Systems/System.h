@@ -9,7 +9,7 @@
 class System {
 public:
 	virtual void addEntity(Entity * en) { m_entityList.push_back(en); }
-
+	virtual void removeEntity(const int id) {};
 protected:
 	vector<Entity*> m_entityList;
 };

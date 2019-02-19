@@ -21,7 +21,7 @@ void PhysicsSystem::addEntity(Entity * e)
 		PhysicsComponents c;
 		c.position = dynamic_cast<PositionComponent*>(comps["Position"]);
 		c.body = dynamic_cast<BodyComponent*>(comps["Body"]);
-		m_components.push_back(c);
+		m_components.insert(std::make_pair(e->id, c));
 		m_entityList.push_back(e);
 	}
 }
@@ -32,8 +32,12 @@ void PhysicsSystem::addEntity(Entity * e)
 /// </summary>
 void PhysicsSystem::update()
 {
-	for (auto & pc : m_components)
+	for (auto & comp : m_components)
 	{
+		if (comp.first == 3) {
+			std::cout << std::endl;
+		}
+		auto & pc = comp.second;
 		PositionComponent * p = pc.position;
 		BodyComponent * b = pc.body;
 		VectorAPI currentPos = p->getPosition();
@@ -45,5 +49,15 @@ void PhysicsSystem::update()
 		p->setX(currentPos.x * m_worldScale - (dimensions.x / 2.f));
 		p->setY(currentPos.y * m_worldScale - (dimensions.y / 2.f));
 	}
-	
+}
+
+void PhysicsSystem::removeEntity(const int id)
+{
+	auto comp = m_components.find(id);
+	if (comp != m_components.end()) {
+		m_components.erase(comp);
+	}
+	m_entityList.erase(std::remove_if(m_entityList.begin(), m_entityList.end(), [id](Entity* en) {
+		return en->id == id;
+	}), m_entityList.end());
 }
