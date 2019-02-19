@@ -145,6 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullets\Bullet.cpp" />
+    <ClCompile Include="Bullets\BulletManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Client\Client.cpp" />
     <ClCompile Include="ECS\Components\AiComponent.cpp" />
@@ -185,6 +187,8 @@
     <ClCompile Include="Utils\MathUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullets\Bullet.h" />
+    <ClInclude Include="Bullets\BulletManager.h" />
     <ClInclude Include="Client\Client.h" />
     <ClInclude Include="Client\ParseUtils.h" />
     <ClInclude Include="ECS\Components\AiComponent.h" />

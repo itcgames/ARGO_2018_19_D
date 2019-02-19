@@ -43,6 +43,7 @@
 #include <time.h>
 #include <functional>
 #include "Utils/ContactListener.h"
+#include "Bullets/BulletManager.h"
 
 class ControlSystem;
 class MainMenu;
@@ -91,8 +92,8 @@ private:
 
 	// SDL Window
 	SDL_Window * p_window;
-	int m_windowWidth = 1280;
-	int m_windowHeight = 720;
+	int m_windowWidth = 1920;
+	int m_windowHeight =1080;
 	bool m_quit = false;
 	TTF_Font* Sans;
 
@@ -166,5 +167,7 @@ private:
 	float startTimer;
 	bool fire = false;
 	int test;
+
+	BulletManager * m_bulletManager;
 };
 #endif // !GAME_H

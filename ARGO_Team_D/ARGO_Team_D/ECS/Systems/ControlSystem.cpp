@@ -20,7 +20,6 @@ void ControlSystem::addEntity(Entity * e)
 		c.body = dynamic_cast<BodyComponent*>(comps["Body"]); 
 		c.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
 		c.sprite = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
-		m_components.push_back(c);
 		m_components.insert(std::make_pair(e->id, c));
 		m_entityList.push_back(e);
 	}

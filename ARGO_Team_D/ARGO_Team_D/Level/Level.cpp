@@ -176,7 +176,7 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 		float xPos, yPos, width = 0;
 		bool bodyStarted = false;
 		if (y == 26) {
-			std::cout << std::endl;
+			//std::cout << std::endl;
 		}
 		for (auto x = 0; x < m_cols; ++x)
 		{
