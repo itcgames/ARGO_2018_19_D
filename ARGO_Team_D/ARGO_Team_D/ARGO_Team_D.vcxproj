@@ -95,6 +95,10 @@
     <PostBuildEvent>
       <Message>DLL Copy</Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy /E /Y "$(ART_ASSETS)" "$(SolutionDir)ARGO_TEAM_D\ASSETS"</Command>
+      <Message>Asset Copy</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -124,7 +128,7 @@
       <SubSystem>Console</SubSystem>
     </Link>
     <PreBuildEvent>
-      <Command>xcopy /E /Y "$(SolutionDir)\dlls\*.dll" "$(OutDir)"</Command>
+      <Command>xcopy /E /Y "$(ART_ASSETS)" "$(SolutionDir)ARGO_TEAM_D\ASSETS"</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>DLL Copy</Message>
@@ -241,6 +245,7 @@
     <ClInclude Include="Systems\System.h" />
     <ClInclude Include="Utils\CollisionData.h" />
     <ClInclude Include="Utils\ContactListener.h" />
+    <ClInclude Include="Utils\Packet.h" />
     <ClInclude Include="Utils\PhysicsBody.h" />
     <ClInclude Include="Utils\TutorialTrigger.h" />
     <ClInclude Include="Utils\VectorAPI.h" />

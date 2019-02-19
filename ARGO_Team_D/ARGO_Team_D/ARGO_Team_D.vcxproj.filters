@@ -100,6 +100,7 @@
     <ClInclude Include="Factories\EnemyFactory.h" />
     <ClInclude Include="ECS\Systems\AiSystem.h" />
     <ClInclude Include="ECS\Components\AiComponent.h" />
+    <ClInclude Include="Utils\Packet.h" />
     <ClInclude Include="Bullets\Bullet.h" />
     <ClInclude Include="Bullets\BulletManager.h" />
   </ItemGroup>
