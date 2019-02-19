@@ -34,9 +34,6 @@ void PhysicsSystem::update()
 {
 	for (auto & comp : m_components)
 	{
-		if (comp.first == 3) {
-			std::cout << std::endl;
-		}
 		auto & pc = comp.second;
 		PositionComponent * p = pc.position;
 		BodyComponent * b = pc.body;
