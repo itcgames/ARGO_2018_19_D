@@ -237,6 +237,7 @@
     <ClInclude Include="Systems\System.h" />
     <ClInclude Include="Utils\CollisionData.h" />
     <ClInclude Include="Utils\ContactListener.h" />
+    <ClInclude Include="Utils\Packet.h" />
     <ClInclude Include="Utils\PhysicsBody.h" />
     <ClInclude Include="Utils\TutorialTrigger.h" />
     <ClInclude Include="Utils\VectorAPI.h" />
