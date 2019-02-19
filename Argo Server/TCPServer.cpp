@@ -75,7 +75,7 @@ void TCPServer::acceptConnections()
 			Packet * p = new Packet();
 			p->playerID = m_numPlayers;
 			p->message = "Joined";
-			send(m_clients[m_numPlayers], (char*)p, sizeof(Packet) + 1, 0);
+			send(m_clients[m_numPlayers], (char*)p, sizeof(struct Packet) + 1, 0);
 			m_numPlayers++;
 			t.detach();
 		}
@@ -85,23 +85,22 @@ void TCPServer::acceptConnections()
 void TCPServer::messageHandler(SOCKET sock, int & playerCount, SOCKET * clients)
 {
 	SOCKET currSock = clients[sock];
+	Packet p;
 	// Loop forever
 	int bytesRead;
 	do {
 		// Allocate memory for a packet
-		Packet * p = new Packet();
-		ZeroMemory(p, sizeof(Packet));
-
 		// Read message into packet struct
-		bytesRead = recv(currSock, (char*)p, sizeof(Packet), 0);
+		bytesRead = recv(currSock, (char*)&p, sizeof(struct Packet), 0);
 		if (bytesRead > 0) {
 			std::cout << "Received " << bytesRead << " bytes from client." << std::endl;
+			std::cout << p.message << std::endl;
 			int sentBytes = 0;
 			bool socketFailure = false;
 			for (int i = 0; i < playerCount; ++i) {
 				SOCKET outputSocket = clients[i];
 				if (outputSocket != clients[i]) {
-					int sentThisIteration = send(outputSocket, (char*)p, sizeof(Packet) + 1, 0);
+					int sentThisIteration = send(outputSocket, (char*)&p, sizeof(struct Packet) + 1, 0);
 					if (sentThisIteration > 0) {
 						std::cout << "Socket thread: " << sock << "sent to" << i << std::endl;
 					}

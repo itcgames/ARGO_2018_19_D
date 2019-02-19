@@ -1,6 +1,7 @@
 #include "Client.h"
 #include "ParseUtils.h"
 #include <iostream>
+#include "../Utils/Packet.h"
 
 Client::Client()
 {
@@ -53,11 +54,15 @@ bool Client::init()
 
 void Client::Send(std::string userInput)
 {
-	if (userInput.size() > 0)		// Make sure the user has typed in something
-	{
-		// Send the text
-		int sendResult = send(sock, userInput.c_str(), userInput.size() + 1, 0);
-	}
+	//if (userInput.size() > 0)		// Make sure the user has typed in something
+	//{
+	//	// Send the text
+	//	int sendResult = send(sock, userInput.c_str(), userInput.size() + 1, 0);
+	//}
+	Packet * p = new Packet();
+	p->message = userInput.size() != 0 ? userInput : "";
+	p->playerID = 10;
+	int sendResult = send(sock, (char*)p, sizeof(struct Packet), 0);
 }
 
 vector<std::string> Client::Receive()
