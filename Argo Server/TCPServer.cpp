@@ -92,6 +92,9 @@ void TCPServer::messageHandler(SOCKET sock, int & playerCount, SOCKET * clients)
 		// Allocate memory for a packet
 		// Read message into packet struct
 		bytesRead = recv(currSock, (char*)&p, sizeof(struct Packet), 0);
+		if (p.playerID == 9) {
+			int test = 0;
+		}
 		if (bytesRead > 0) {
 			std::cout << "Received " << bytesRead << " bytes from client." << std::endl;
 			std::cout << p.message << std::endl;
