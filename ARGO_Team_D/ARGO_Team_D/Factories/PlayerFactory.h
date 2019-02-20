@@ -8,13 +8,14 @@
 #include "..//ECS/Components/BodyComponent.h"
 #include "..//ECS/Components/AnimationComponent.h"
 #include "..//ECS/Components/GunComponent.h"
+#include "..//ECS/Components/ParticleEffectsComponent.h"
 #include "..//Client/Client.h"
 
 
 class PlayerFactory
 {
 public:
-	PlayerFactory(std::string spriteId, VectorAPI dimensions, ResourceManager * rm, b2World & world, const float SCALE);
+	PlayerFactory(std::string spriteId, VectorAPI dimensions, ResourceManager * rm, b2World & world, const float SCALE, SDL_Renderer * rend);
 	Entity * create(VectorAPI pos);
 
 private:
@@ -23,6 +24,7 @@ private:
 	const float WORLD_SCALE;
 	std::string m_spriteId;
 	VectorAPI m_dimensions;
+	SDL_Renderer * m_renderer;
 };
 
 #endif // !PLAYERFACTORY_H

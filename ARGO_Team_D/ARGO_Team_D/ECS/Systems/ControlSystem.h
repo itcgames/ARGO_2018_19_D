@@ -13,10 +13,12 @@
 #include "../ECS/Entities/Entity.h"
 #include "../Utils/VectorAPI.h"
 #include "../Bullets/BulletManager.h"
+#include "../ECS/Components/ParticleEffectsComponent.h"
 
 struct ControlComponents {
 	BodyComponent * body;
 	AnimationComponent * animation;
+	ParticleEffectsComponent * part;
 	SpriteComponent * sprite;
 };
 

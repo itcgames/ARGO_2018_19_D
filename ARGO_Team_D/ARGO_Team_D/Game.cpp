@@ -102,6 +102,8 @@ Game::Game() :
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 
+	m_particleSystem = new ParticleSystem(m_camera);
+
 	initialiseFactories();
 	initialiseEntities();
 	initialiseSystems();
@@ -126,6 +128,22 @@ Game::Game() :
 	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
+
+
+	//float enemyX = 100;
+	//float enemyY = 100;
+	//float enemyWidth = 100;
+	//float enemyHeight = 100;
+	//std::string name = "TestAnimation";
+	//Entity * enemy = new Entity();
+	//enemy->addComponent(new BodyComponent(enemyX, enemyY, enemyWidth, enemyHeight, m_world, WORLD_SCALE));
+	//enemy->addComponent(new PositionComponent(enemyX, enemyY));
+	//enemy->addComponent(new SpriteComponent(name, *m_resourceManager, enemyX, enemyY));
+	////enemy->addComponent(new AnimationComponent());
+	//enemy->addComponent(new AiComponent(AiType::EnemyGun, 0, 200));
+	//m_renderSystem.addEntity(enemy);
+	//m_physicsSystem.addEntity(enemy);
+	////m_animationSystem.addEntity(enemy);
 }
 
 Game::~Game()
@@ -227,6 +245,8 @@ void Game::processEvents()
 
 void Game::update(const float & dt)
 {
+
+
 	if (!m_network.getHost())
 	{
 		m_network.updateFromHost();
@@ -239,6 +259,7 @@ void Game::update(const float & dt)
 	{
 	case Menu:
 		m_menu->update();
+
 		break;
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
@@ -256,6 +277,7 @@ void Game::update(const float & dt)
 			m_animationSystem.update(dt / 1000);
 			m_levelManager.update(dt/1000);
 			m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer);
+			m_particleSystem->update();
 		}
 		break;
 	case Options:
@@ -281,6 +303,7 @@ void Game::update(const float & dt)
 	else {
 		m_network.sendToClients();
 	}
+
 }
 
 void Game::render()
@@ -303,6 +326,7 @@ void Game::render()
 	case PlayScreen:
 		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
+		m_particleSystem->draw();
 		m_bulletManager->render(m_renderer, m_camera);
 		break;
 	case Options:
@@ -388,6 +412,7 @@ void Game::initialiseEntities()
 	Entity * e = m_playerFactory->create(VectorAPI(150, 0));
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
+	m_particleSystem->addEntity(e);
 	m_animationSystem.addEntity(e);
 	m_player = e;
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
@@ -439,7 +464,7 @@ void Game::initialiseSystems()
 void Game::initialiseFactories()
 {
 	std::string spriteName = "Player";
-	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE);
+	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE, m_renderer);
 	m_enemyFactory = new EnemyFactory(m_resourceManager, m_world, WORLD_SCALE);
 }
 
