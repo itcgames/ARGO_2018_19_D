@@ -8,13 +8,13 @@
 #include<algorithm>
 
 
-const int MAX_PARTICLES = 100;
+const int MAX_PARTICLES = 50;
 
 class Emitter
 {
 public:
 
-	Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color color, SDL_Renderer * renderer, bool isBurst);
+	Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color color, SDL_Renderer * renderer, bool isBurst, Uint8 alphaDec);
 	~Emitter();
 
 	void update(int positionX, int positionY);
@@ -22,6 +22,11 @@ public:
 	void setEmitting(bool b);
 	void setFramesPerEmission(int num);
 	void setLooping(bool b);
+	void setDirection(int num);
+	int getDirection();
+	void activate(bool b);
+
+	void setAlphaDec(int num);
 private:
 	//Particle* m_particles[MAX_PARTICLES];
 	std::vector<Particle *> m_particles;
@@ -43,6 +48,12 @@ private:
 	bool burst;
 
 	bool looping;
+
+	int dir;
+
+	bool activateBurst;
+
+	Uint8 decrement;
 };
 
 #endif // !EMITTER_H

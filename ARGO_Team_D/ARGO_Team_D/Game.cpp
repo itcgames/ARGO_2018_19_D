@@ -102,6 +102,8 @@ Game::Game() :
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 
+	m_particleSystem = new ParticleSystem(m_camera);
+
 	initialiseFactories();
 	initialiseEntities();
 	initialiseSystems();
@@ -270,6 +272,7 @@ void Game::update(const float & dt)
 			m_animationSystem.update(dt / 1000);
 			m_levelManager.update(dt/1000);
 			m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer);
+			m_particleSystem->update();
 		}
 		break;
 	case Options:
@@ -318,6 +321,7 @@ void Game::render()
 	case PlayScreen:
 		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
+		m_particleSystem->draw();
 		break;
 	case Options:
 		m_options->draw();
@@ -402,6 +406,7 @@ void Game::initialiseEntities()
 	Entity * e = m_playerFactory->create(VectorAPI(150, 0));
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
+	m_particleSystem->addEntity(e);
 	m_player = e;
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
 	for(int i = 0; i < GUN_ENEMY_COUNT; ++i)
@@ -450,7 +455,7 @@ void Game::initialiseSystems()
 void Game::initialiseFactories()
 {
 	std::string spriteName = "test";
-	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE);
+	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE, m_renderer);
 	m_enemyFactory = new EnemyFactory(m_resourceManager, m_world, WORLD_SCALE);
 }
 

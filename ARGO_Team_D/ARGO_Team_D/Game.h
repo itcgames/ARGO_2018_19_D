@@ -45,6 +45,8 @@
 #include "Utils/ContactListener.h"
 #include"Particles/Timer.h"
 #include"Particles/Emitter.h"
+#include"ECS/Components/ParticleEffectsComponent.h"
+#include"ECS/Systems/ParticleSystem.h"
 
 class ControlSystem;
 class MainMenu;
@@ -128,6 +130,7 @@ private:
 	TimeToLiveSystem m_ttlSystem;
 	AnimationSystem m_animationSystem;
 	AiSystem * m_aiSystem;
+	ParticleSystem * m_particleSystem;
 
 	// Input
 	InputHandler * inputHandler;
@@ -173,5 +176,6 @@ private:
 
 	//PARTICLES
 	Emitter * emitter;
+
 };
 #endif // !GAME_H

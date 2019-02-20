@@ -14,13 +14,15 @@ static int particleCount = 0;
 class Particle 
 {
 public:
-	Particle(int x, int y, int width, int height, SDL_Color color ,SDL_Renderer * renderer);
+	Particle(int x, int y, int width, int height, SDL_Color color ,SDL_Renderer * renderer, int dir, bool isBurst, Uint8 dec);
 	~Particle();
 
 	void draw();
 	bool isDead();
 
 	void update();
+
+	void setDecrement(Uint8 num);
 
 private:
 	float m_posX, m_posY;
@@ -38,6 +40,7 @@ private:
 	Uint8 alpha;
 
 	bool dead;
+	Uint8 decrement = 45;
 };
 
 #endif // !PARTICLE_H

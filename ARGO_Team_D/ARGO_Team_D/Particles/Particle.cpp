@@ -1,19 +1,43 @@
 #include "Particle.h"
 
-Particle::Particle(int x, int y, int width, int height, SDL_Color color,SDL_Renderer * renderer)
+Particle::Particle(int x, int y, int width, int height, SDL_Color color,SDL_Renderer * renderer, int dir, bool isBurst, Uint8 dec)
 {
 	m_rend = renderer;
-	m_posX = x;
-	m_posY = y;
+
+	if (!isBurst)
+	{
+		
+	}
+	else
+	{
+		
+	}
+	
 	m_width = width;
 	m_height = height;
-	float speed = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.5f))) + 0.2f;
-	float angle = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2 * acos(-1))));
+	
 	//float angle = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (acos(-1))));
 	//std::cout << angle << std::endl;
 
-	m_velX = speed * cos(angle) - 1.5f;
-	m_velY = speed * sin(angle) - 2.f;
+	if (!isBurst)
+	{
+		m_posX = x; //+ (rand() % 40 + 1) - 20;
+		m_posY = y; //+ (rand() % 40 + 1) - 20;
+		float speed = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.5f))) + 0.2f;
+		float angle = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2 * acos(-1))));
+		m_velX = speed * cos(angle) - (1.5f * dir);
+		m_velY = speed * sin(angle) - 2.f;
+	}
+	else
+	{
+		m_posX = x + (rand() % 40 + 1) - 20;
+		m_posY = y + (rand() % 40 + 1) - 20;
+		float speed = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1.5f))) + 0.8f;
+		float angle = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2 * acos(-1))));
+		m_velX = speed * cos(angle);
+		m_velY = speed * sin(angle) - 4.f;
+	}
+	
 
 	srcrect = { 0, 0, 10, 10 };
 	dstrect = { 0, 0, 10, 10 };
@@ -22,6 +46,7 @@ Particle::Particle(int x, int y, int width, int height, SDL_Color color,SDL_Rend
 	alpha = 255;
 	this->color = { color.r, color.g, color.b, alpha };
 	dead = false;
+	decrement = dec;
 }
 
 Particle::~Particle()
@@ -51,8 +76,6 @@ void Particle::update()
 	m_posY += m_velY;
 
 
-	Uint8 decrement = 45;
-
 	if (m_frame > 15)
 	{
 		//dead = true;
@@ -70,4 +93,9 @@ void Particle::update()
 			}
 		}
 	}
+}
+
+void Particle::setDecrement(Uint8 num)
+{
+	decrement = num;
 }

@@ -42,6 +42,8 @@
     <ClCompile Include="Particles\Emitter.cpp" />
     <ClCompile Include="Particles\Particle.cpp" />
     <ClCompile Include="Particles\Timer.cpp" />
+    <ClCompile Include="ECS\Components\ParticleEffectsComponent.cpp" />
+    <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -107,6 +109,11 @@
     <ClInclude Include="Particles\Emitter.h" />
     <ClInclude Include="Particles\Particle.h" />
     <ClInclude Include="Particles\Timer.h" />
+<<<<<<< HEAD
 >>>>>>> Particles implemented
+=======
+    <ClInclude Include="ECS\Components\ParticleEffectsComponent.h" />
+    <ClInclude Include="ECS\Systems\ParticleSystem.h" />
+>>>>>>> Implemented effects to player
   </ItemGroup>
 </Project>

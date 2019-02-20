@@ -12,13 +12,14 @@ ControlSystem::~ControlSystem()
 
 void ControlSystem::addEntity(Entity * e)
 {
-	std::vector<std::string> allowedTypes{ "Body" , "Animation"};
+	std::vector<std::string> allowedTypes{ "Body" , "Animation", "Particle"};
 	auto comps = e->getComponentsOfType(allowedTypes);
 	if (comps.size() >= allowedTypes.size() - 1)
 	{
 		ControlComponents c;
 		c.body = dynamic_cast<BodyComponent*>(comps["Body"]); 
 		c.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
+		c.part = dynamic_cast<ParticleEffectsComponent*>(comps["Particle"]);
 		m_components.insert(std::make_pair(e->id, c));
 		m_entityList.push_back(e);
 	}
@@ -30,14 +31,26 @@ void ControlSystem::update()
 	{
 		auto & cc = comp.second;
 		BodyComponent * body = cc.body;
+
+		if (cc.part != nullptr)
+		{
+			cc.part->m_emitter.setDirection(direction);
+		}
+
 		if (body != nullptr)
 		{
 			b2Body * b2Body = body->getBody();
 			b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
-			if (m_jump)
+			if (m_jump && body->isOnGround())
 			{
 				b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
 				currentVelocity.y = -35;
+
+
+				/*if (cc.part != nullptr)
+				{
+					cc.part->m_emitterExplos.activate(true);
+				}*/
 			}
 			if (m_moveRight)
 			{

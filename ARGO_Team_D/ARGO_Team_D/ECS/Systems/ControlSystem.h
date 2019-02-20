@@ -14,10 +14,12 @@
 #include "../ECS/Components/VelocityComponent.h"
 #include "../ECS/Components/GunComponent.h"
 #include "../Utils/VectorAPI.h"
+#include "../ECS/Components/ParticleEffectsComponent.h"
 
 struct ControlComponents {
 	BodyComponent * body;
 	AnimationComponent * animation;
+	ParticleEffectsComponent * part;
 };
 
 class ControlSystem : public System {

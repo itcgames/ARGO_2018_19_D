@@ -1,6 +1,6 @@
 #include "Emitter.h"
 
-Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color color ,SDL_Renderer * renderer , bool isBurst)
+Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color color ,SDL_Renderer * renderer , bool isBurst , Uint8 alphaDec)
 {
 	m_rend = renderer;
 
@@ -15,7 +15,9 @@ Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color 
 	framesPerEmission = 5;
 	burst = isBurst;
 	looping = false;
-
+	activateBurst = false;
+	dir = -1;
+	decrement = alphaDec;
 	if (!burst)
 	{
 		/*for (int i = 0; i < 1; i++)
@@ -25,10 +27,10 @@ Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color 
 	}
 	else
 	{
-		for (int i = 0; i < MAX_PARTICLES; i++)
+		/*for (int i = 0; i < MAX_PARTICLES; i++)
 		{
-			m_particlesArray[i] = (new Particle(m_posX, m_posY, width, height, m_color, m_rend));
-		}
+			m_particlesArray[i] = (new Particle(m_posX, m_posY, width, height, m_color, m_rend, dir, burst, decrement));
+		}*/
 	}
 
 	
@@ -52,7 +54,7 @@ void Emitter::update(int positionX, int positionY)
 {
 	m_posX = positionX;
 	m_posY = positionY;
-	if (burst)
+	if (burst && activateBurst)
 	{
 		for (int i = 0; i < MAX_PARTICLES; i++)
 		{
@@ -72,7 +74,7 @@ void Emitter::update(int positionX, int positionY)
 			counter++;
 			if (counter % framesPerEmission == 0)
 			{
-				m_particles.push_back(new Particle(m_posX, m_posY, width, height, m_color, m_rend));
+				m_particles.push_back(new Particle(m_posX, m_posY, width, height, m_color, m_rend, dir, burst ,decrement));
 				counter = 0;
 			}
 		}
@@ -99,6 +101,30 @@ void Emitter::setLooping(bool b)
 	looping = b;
 }
 
+void Emitter::setDirection(int num)
+{
+	dir = num;
+}
+
+int Emitter::getDirection()
+{
+	return dir;
+}
+
+void Emitter::activate(bool b)
+{
+	activateBurst = true;
+	for (int i = 0; i < MAX_PARTICLES; i++)
+	{
+		m_particlesArray[i] = (new Particle(m_posX, m_posY, width, height, m_color, m_rend, dir, burst, decrement));
+	}
+}
+
+void Emitter::setAlphaDec(int num)
+{
+
+}
+
 void Emitter::drawParticles()
 {
 
@@ -108,18 +134,26 @@ void Emitter::drawParticles()
 		{
 			for (int i = 0; i < MAX_PARTICLES; ++i)
 			{
-				if (m_particlesArray[i]->isDead())
+
+				if (m_particlesArray[i] != nullptr)
 				{
-					delete m_particlesArray[i];
-					m_particlesArray[i] = new Particle(m_posX, m_posY, width, height, m_color, m_rend);
+					if (m_particlesArray[i]->isDead())
+					{
+						delete m_particlesArray[i];
+						m_particlesArray[i] = new Particle(m_posX, m_posY, width, height, m_color, m_rend, dir, burst, decrement);
+					}
 				}
+				
 			}
 		}
 		
 
 		for (int i = 0; i < MAX_PARTICLES; ++i)
 		{
-			m_particlesArray[i]->draw();
+			if (activateBurst)
+			{
+				m_particlesArray[i]->draw();
+			}		
 		}
 	}
 	else
@@ -140,8 +174,4 @@ void Emitter::drawParticles()
 		}
 	}
 
-
-
-
-	
 }
