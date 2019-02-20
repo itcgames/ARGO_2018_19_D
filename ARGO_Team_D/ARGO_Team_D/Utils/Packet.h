@@ -9,7 +9,8 @@ enum MessageType {
 	HOSTING,
 	JOINED,
 	POSITION,
-	PLAYER
+	PLAYER,
+	START
 };
 
 struct Packet {

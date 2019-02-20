@@ -99,6 +99,7 @@ private:
 	// ECS Entities
 	std::vector<Entity*> m_entityList;
 	Entity * m_player;
+	std::vector<Entity*> m_otherPlayers;
 	const int GUN_ENEMY_COUNT = 20;
 	const int FLY_ENEMY_COUNT = 20;
 	const int BIG_ENEMY_COUNT = 2;
@@ -166,5 +167,7 @@ private:
 	float startTimer;
 	bool fire = false;
 	int test;
+
+	bool online;
 };
 #endif // !GAME_H

@@ -1,5 +1,6 @@
 #include "NetworkingSystem.h"
 #include "../ECS/Components/PositionComponent.h"
+#include "../ECS/Components/NetworkComponent.h"
 
 NetworkingSystem::NetworkingSystem()
 {
@@ -15,19 +16,44 @@ void NetworkingSystem::initClientLocalClient()
 		std::cout << "-----------------------------------------------------------------------" << std::endl;
 	}
 
-	//parseNetworkData(m_client.processMessage(m_client.Receive()));
-	auto p = m_client.Receive();
-	switch (p->type)
-	{
-	case MessageType::HOSTING:
-		std::cout << "Hosting at : " << p->playerID << std::endl;
+	////parseNetworkData(m_client.processMessage(m_client.Receive()));
+	//auto p = m_client.Receive();
+	//switch (p->type)
+	//{
+	//case MessageType::HOSTING:
+	//	std::cout << "Hosting at : " << p->playerID << std::endl;
+	//	m_client.setHost(1);
+	//	break;
+	//case MessageType::JOINED:
+	//	std::cout << "Player Joined id is: " << p->playerID << std::endl;
+	//	break;
+	//default:
+	//	break;
+	//}
+}
+
+void NetworkingSystem::update()
+{
+	Packet * p = m_client.Receive();
+	if (p->type == MessageType::HOSTING) {
 		m_client.setHost(1);
-		break;
-	case MessageType::JOINED:
-		std::cout << "Player Joined id is: " << p->playerID << std::endl;
-		break;
-	default:
-		break;
+		m_inLobby = true;
+	}
+	else if (p->type == MessageType::JOINED) {
+		m_inLobby = true;
+	}
+	else if (p->type == MessageType::START) {
+		m_inGame = true;
+	}
+	if (m_inGame) {
+		switch (p->type)
+		{
+		case MessageType::PLAYER:
+			std::cout << "Player" << std::endl;
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -43,15 +69,17 @@ void NetworkingSystem::updateClients()
 	// Update client entities from here
 	//parseNetworkDataStr(m_client.processMessageStr(m_client.Receive()));
 	auto p = m_client.Receive();
+	for (auto & player : m_players) {
+
+	}
 }
 
 void NetworkingSystem::sendToHost()
 {
 	for (auto & player : m_players) {
-		std::vector<std::string> allowedTypes = { "Position" };
+		std::vector<std::string> allowedTypes = { "Position" , "Network"};
 		auto comps = player->getComponentsOfType(allowedTypes);
 		Packet * p = new Packet();
-		p->playerID = player->id;
 		p->position = dynamic_cast<PositionComponent*>(comps["Position"])->getPosition();
 		p->type = MessageType::PLAYER;
 		//  send own entity back

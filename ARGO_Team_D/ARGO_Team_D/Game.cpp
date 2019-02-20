@@ -125,6 +125,7 @@ Game::Game() :
 	m_controlSystem.bindBullets(m_bullets);
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
+	online = true;
 }
 
 Game::~Game()
@@ -225,14 +226,6 @@ void Game::processEvents()
 
 void Game::update(const float & dt)
 {
-	if (!m_network.getHost())
-	{
-		m_network.updateFromHost();
-	}
-	else {
-		m_network.updateClients();
-	}
-
 	switch (m_gameState)
 	{
 	case Menu:
@@ -241,6 +234,9 @@ void Game::update(const float & dt)
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
+			if (online) {
+				m_network.update();
+			}
 			m_controlSystem.update();
 			m_aiSystem->update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world

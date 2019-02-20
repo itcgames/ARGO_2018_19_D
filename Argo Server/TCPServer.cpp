@@ -80,6 +80,12 @@ void TCPServer::acceptConnections()
 			t.detach();
 		}
 	}
+	Packet * p = new Packet();
+	p->playerID = MAX_CLIENTS + 1;
+	p->type = MessageType::START;
+	for (auto & client : m_clients) {
+		send(client, (char*)p, sizeof(struct Packet), 0);
+	}
 }
 
 void TCPServer::messageHandler(SOCKET sock, int & playerCount, SOCKET * clients)
@@ -94,7 +100,7 @@ void TCPServer::messageHandler(SOCKET sock, int & playerCount, SOCKET * clients)
 		ZeroMemory(p, sizeof(struct Packet));
 		bytesRead = recv(currSock, (char*)p, sizeof(struct Packet) + 1, 0);
 		if (bytesRead > 0) {
-			std::cout << "Received " << bytesRead << " bytes from client." << std::endl;
+			std::cout << "Received " << bytesRead << " bytes from client id : " << currSock << "." << std::endl;
 			//std::cout << "Player id:" << p.playerID << "Sends: " << p.message << std::endl;
 			int sentBytes = 0;
 			bool socketFailure = false;

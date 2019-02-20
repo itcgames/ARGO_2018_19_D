@@ -4,7 +4,7 @@
 #pragma comment (lib, "ws2_32.lib")
 #include <WS2tcpip.h>
 
-#define MAX_CLIENTS 4
+#define MAX_CLIENTS 2
 
 
 class Server {

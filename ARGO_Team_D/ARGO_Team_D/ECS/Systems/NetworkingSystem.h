@@ -13,6 +13,7 @@ class NetworkingSystem : public System
 public:
 	NetworkingSystem();
 	void initClientLocalClient();
+	void update();
 	void updateFromHost();
 	void updateClients();
 	void sendToHost();
@@ -21,6 +22,8 @@ public:
 	void parseNetworkDataStr(std::map<std::string, std::string> parsedMessage);
 	bool getHost() { return m_client.getHost(); }
 	std::vector<Entity*> m_players;
+	bool m_inLobby = false;
+	bool m_inGame = false;
 private:
 	Client m_client;
 };

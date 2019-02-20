@@ -39,6 +39,7 @@
     <ClCompile Include="Factories\EnemyFactory.cpp" />
     <ClCompile Include="ECS\Systems\AiSystem.cpp" />
     <ClCompile Include="ECS\Components\AiComponent.cpp" />
+    <ClCompile Include="ECS\Components\NetworkComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -99,5 +100,6 @@
     <ClInclude Include="ECS\Systems\AiSystem.h" />
     <ClInclude Include="ECS\Components\AiComponent.h" />
     <ClInclude Include="Utils\Packet.h" />
+    <ClInclude Include="ECS\Components\NetworkComponent.h" />
   </ItemGroup>
 </Project>
