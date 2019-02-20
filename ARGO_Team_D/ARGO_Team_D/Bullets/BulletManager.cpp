@@ -23,24 +23,6 @@ void BulletManager::createBullet(VectorAPI posIn, float speedIn, bool isPlayer)
 
 void BulletManager::update(float dt)
 {
-	// Test Code
-	std::cout << m_bullets.size() << std::endl;
-	if (m_bullets.size() == 0)
-	{
-		createBullet(VectorAPI(-1600, 0), 25, false);
-		createBullet(VectorAPI(-1500, 0), 25, false);
-		createBullet(VectorAPI(-1400, 0), 25, false);
-		createBullet(VectorAPI(-1300, 0), 25, false);
-		createBullet(VectorAPI(-1200, 0), 25, false);
-		createBullet(VectorAPI(-1100, 0), 25, false);
-		createBullet(VectorAPI(-1000, 0), 25, false);
-		createBullet(VectorAPI(-900, 0), 25, false);
-		createBullet(VectorAPI(-800, 0), 25, false);
-		createBullet(VectorAPI(-700, 0), 25, false);
-		createBullet(VectorAPI(-600, 0), 25, false);
-		createBullet(VectorAPI(-500, 0), 25, false);
-		createBullet(VectorAPI(-400, 0), 25, false);
-	}
 	for (int i = 0; i < m_bullets.size(); )
 	{
 		if (!m_bullets.at(i)->isActive())

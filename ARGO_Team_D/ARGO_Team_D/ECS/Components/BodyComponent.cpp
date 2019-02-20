@@ -9,17 +9,19 @@
 /// <param name="h">Height of th entity</param>
 /// <param name="world">Reference to the Box2D world</param>
 /// <param name="worldScale">The scale used for Box2D</param>
-BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world, float worldScale)
+BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world, float worldScale, std::string name)
 	: m_refWorld(world),
 	m_worldScale(worldScale),
 	m_isCircle(false),
 	m_dimensions(w, h),
+	m_bodyData(name, this),
 	m_onGround(false),
 	m_groundData("BodyGround", this),
 	m_leftContact(false),
 	m_leftData("BodyLeft", this),
 	m_rightContact(false),
-	m_rightData("BodyRight", this)
+	m_rightData("BodyRight", this),
+	m_bulletContact(false)
 {
 	float halfWidth = w / 2.f;
 	float halfHeight = h / 2.f;
@@ -37,17 +39,19 @@ BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world
 /// <param name="rad">Radius of the entity</param>
 /// <param name="world">Reference to the Box2D world</param>
 /// <param name="worldScale">The scale used for Box2D</param>
-BodyComponent::BodyComponent(float x, float y, float rad, b2World & world, float worldScale)
+BodyComponent::BodyComponent(float x, float y, float rad, b2World & world, float worldScale, std::string name)
 	: m_refWorld(world),
 	m_worldScale(worldScale),
 	m_isCircle(true),
 	m_dimensions(rad, rad),
+	m_bodyData(name, this),
 	m_onGround(false),
 	m_groundData("BodyGround", this),
 	m_leftContact(false),
 	m_leftData("BodyLeft", this),
 	m_rightContact(false),
-	m_rightData("BodyRight", this)
+	m_rightData("BodyRight", this),
+	m_bulletContact(false)
 {
 	float halfRad = rad / 2.f;
 	b2CircleShape * circleShape = new b2CircleShape();
@@ -140,6 +144,7 @@ void BodyComponent::init(float x, float y, float w, float h)
 	m_fixtureDef.friction = 0.1f;
 	m_fixtureDef.restitution = 0.0f;
 	m_fixtureDef.shape = m_shape;
+	m_fixtureDef.userData = &m_bodyData;
 	m_body->CreateFixture(&m_fixtureDef);
 	m_body->SetFixedRotation(true);
 
@@ -223,4 +228,12 @@ void BodyComponent::rightContactStart()
 void BodyComponent::rightContactEnd()
 {
 	m_rightContact = false;
+}
+
+/// <summary>
+/// Function used by Box2D to inform Body Component that it's contacting a bullet
+/// </summary>
+void BodyComponent::bulletContact()
+{
+	m_bulletContact = true;
 }

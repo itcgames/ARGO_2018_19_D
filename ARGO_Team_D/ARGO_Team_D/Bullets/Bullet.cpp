@@ -29,6 +29,7 @@ Bullet::Bullet(b2World & world, const float SCALE, ResourceManager * resourceMan
 	m_body->SetFixedRotation(true);
 	m_body->SetGravityScale(0); // Ignore Gravity
 
+	// Set the bullet moving
 	m_body->SetLinearVelocity(b2Vec2(m_speed, 0));
 
 	// Texture
@@ -80,7 +81,6 @@ bool Bullet::isActive()
 
 void Bullet::remove()
 {
-	std::cout << "- REMOVING BULLET -" << std::endl;
 	if (m_isActive)
 	{
 		m_isActive = false;
