@@ -1,4 +1,5 @@
 #include "NetworkingSystem.h"
+#include "../ECS/Components/PositionComponent.h"
 
 NetworkingSystem::NetworkingSystem()
 {
@@ -14,42 +15,67 @@ void NetworkingSystem::initClientLocalClient()
 		std::cout << "-----------------------------------------------------------------------" << std::endl;
 	}
 
-	parseNetworkData(m_client.processMessage(m_client.Receive()));
+	//parseNetworkData(m_client.processMessage(m_client.Receive()));
+	auto p = m_client.Receive();
+	switch (p->type)
+	{
+	case MessageType::HOSTING:
+		std::cout << "Hosting at : " << p->playerID << std::endl;
+		m_client.setHost(1);
+		break;
+	case MessageType::JOINED:
+		std::cout << "Player Joined id is: " << p->playerID << std::endl;
+		break;
+	default:
+		break;
+	}
 }
 
 void NetworkingSystem::updateFromHost()
 {
 	// Update everything from here
-	parseNetworkDataStr(m_client.processMessageStr(m_client.Receive()));
+	//parseNetworkDataStr(m_client.processMessageStr(m_client.Receive()));
+	auto p = m_client.Receive();
 }
 
 void NetworkingSystem::updateClients()
 {
 	// Update client entities from here
-	parseNetworkDataStr(m_client.processMessageStr(m_client.Receive()));
+	//parseNetworkDataStr(m_client.processMessageStr(m_client.Receive()));
+	auto p = m_client.Receive();
 }
 
 void NetworkingSystem::sendToHost()
 {
-	std::string msg;
-	msg = "ClientSays: " + msg;
-
-	//  send own entity back
-	m_client.Send(msg);
+	for (auto & player : m_players) {
+		std::vector<std::string> allowedTypes = { "Position" };
+		auto comps = player->getComponentsOfType(allowedTypes);
+		Packet * p = new Packet();
+		p->playerID = player->id;
+		p->position = dynamic_cast<PositionComponent*>(comps["Position"])->getPosition();
+		p->type = MessageType::PLAYER;
+		//  send own entity back
+		m_client.Send(p);
+	}
 }
 
 void NetworkingSystem::sendToClients()
 {
-	std::string msg;
-	msg = "HostSays: " + msg;
-
-	// Send EVERYTHING BACK
-	m_client.Send(msg);
+	for (auto & player : m_players) {
+		std::vector<std::string> allowedTypes = { "Position" };
+		auto comps = player->getComponentsOfType(allowedTypes);
+		Packet * p = new Packet();
+		p->playerID = player->id;
+		p->position = dynamic_cast<PositionComponent*>(comps["Position"])->getPosition();
+		p->type = MessageType::PLAYER;
+		//  send own entity back
+		m_client.Send(p);
+	}
 }
 
 void NetworkingSystem::parseNetworkData(std::map<std::string, int> parsedMessage)
 {
-	for (auto const& pair : parsedMessage) {
+	/*for (auto const& pair : parsedMessage) {
 
 		auto key = pair.first;
 		auto value = pair.second;
@@ -61,7 +87,8 @@ void NetworkingSystem::parseNetworkData(std::map<std::string, int> parsedMessage
 		if (key == "Host") {
 			m_client.setHost(value);
 		}
-	}
+	}*/
+
 }
 
 void NetworkingSystem::parseNetworkDataStr(std::map<std::string, std::string> parsedMessage)

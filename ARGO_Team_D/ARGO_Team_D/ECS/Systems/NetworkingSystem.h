@@ -20,7 +20,7 @@ public:
 	void parseNetworkData(std::map<std::string, int> parsedMessage);
 	void parseNetworkDataStr(std::map<std::string, std::string> parsedMessage);
 	bool getHost() { return m_client.getHost(); }
-
+	std::vector<Entity*> m_players;
 private:
 	Client m_client;
 };

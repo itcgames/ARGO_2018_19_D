@@ -2,6 +2,7 @@
 #include <iostream>
 #include <thread>
 #include "../ARGO_TEAM_D/ARGO_TEAM_D/Utils/Packet.h"
+#include <string>
 
 TCPServer::TCPServer()
 {
@@ -45,7 +46,6 @@ bool TCPServer::closeSock()
 {
 	closesocket(m_listening);
 	Packet * p = new Packet();
-	p->message = "Shutdown";
 	std::cout << "Close sock" << std::endl;
 	for (int i = 0; i < m_numPlayers; ++i) {
 		std::cout << "Client num: " << i << "Shutdown sent" << std::endl;
@@ -74,7 +74,7 @@ void TCPServer::acceptConnections()
 			}, this);
 			Packet * p = new Packet();
 			p->playerID = m_numPlayers;
-			p->message = "Joined";
+			p->type = m_numPlayers == 0 ? MessageType::HOSTING : MessageType::JOINED;
 			send(m_clients[m_numPlayers], (char*)p, sizeof(struct Packet) + 1, 0);
 			m_numPlayers++;
 			t.detach();
@@ -85,25 +85,23 @@ void TCPServer::acceptConnections()
 void TCPServer::messageHandler(SOCKET sock, int & playerCount, SOCKET * clients)
 {
 	SOCKET currSock = clients[sock];
-	Packet p;
+	Packet * p = new Packet();
 	// Loop forever
 	int bytesRead;
 	do {
 		// Allocate memory for a packet
 		// Read message into packet struct
-		bytesRead = recv(currSock, (char*)&p, sizeof(struct Packet), 0);
-		if (p.playerID == 9) {
-			int test = 0;
-		}
+		ZeroMemory(p, sizeof(struct Packet));
+		bytesRead = recv(currSock, (char*)p, sizeof(struct Packet) + 1, 0);
 		if (bytesRead > 0) {
 			std::cout << "Received " << bytesRead << " bytes from client." << std::endl;
-			std::cout << p.message << std::endl;
+			//std::cout << "Player id:" << p.playerID << "Sends: " << p.message << std::endl;
 			int sentBytes = 0;
 			bool socketFailure = false;
 			for (int i = 0; i < playerCount; ++i) {
 				SOCKET outputSocket = clients[i];
 				if (outputSocket != clients[i]) {
-					int sentThisIteration = send(outputSocket, (char*)&p, sizeof(struct Packet) + 1, 0);
+					int sentThisIteration = send(outputSocket, (char*)p, sizeof(struct Packet) + 1, 0);
 					if (sentThisIteration > 0) {
 						std::cout << "Socket thread: " << sock << "sent to" << i << std::endl;
 					}

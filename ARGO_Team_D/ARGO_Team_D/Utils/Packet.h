@@ -4,9 +4,18 @@
 #include <string>
 #include "VectorAPI.h"
 
+enum MessageType {
+	NONE,
+	HOSTING,
+	JOINED,
+	POSITION,
+	PLAYER
+};
+
 struct Packet {
 	int playerID;
-	std::string message;
+	MessageType type;
+	VectorAPI position;
 };
 
 #endif //!PACKET_H

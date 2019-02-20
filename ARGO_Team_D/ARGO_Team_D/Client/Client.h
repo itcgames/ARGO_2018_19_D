@@ -4,6 +4,7 @@
 #include <WS2tcpip.h>
 #include <vector>
 #include <map>
+#include "../Utils/Packet.h"
 
 using namespace std;
 
@@ -14,8 +15,8 @@ public:
 
 	bool init();
 
-	void Send(std::string userInput);
-	vector<std::string> Receive();
+	void Send(Packet * p);
+	Packet *  Receive();
 	map<std::string, int> processMessage(std::vector<std::string> items);
 	map<std::string, std::string> processMessageStr(std::vector<std::string> items);
 	void setID(int newId) { m_networkId = newId; }
@@ -38,6 +39,7 @@ private:
 	int m_networkId = 0;
 	bool m_host = false;
 	char buf[4096];
+	Packet * m_packet;
 };
 
 #endif // !CLIENT

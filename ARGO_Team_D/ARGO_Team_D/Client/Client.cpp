@@ -1,10 +1,10 @@
 #include "Client.h"
 #include "ParseUtils.h"
 #include <iostream>
-#include "../Utils/Packet.h"
 
 Client::Client()
 {
+	m_packet = new Packet();
 }
 
 Client::~Client()
@@ -52,29 +52,33 @@ bool Client::init()
 	return true;
 }
 
-void Client::Send(std::string userInput)
+void Client::Send(Packet * p)
 {
 	//if (userInput.size() > 0)		// Make sure the user has typed in something
 	//{
 	//	// Send the text
 	//	int sendResult = send(sock, userInput.c_str(), userInput.size() + 1, 0);
-	//}
-	Packet * p = new Packet();
-	p->message = userInput.size() != 0 ? userInput : "";
-	p->playerID = 10;
-	int sendResult = send(sock, (char*)p, sizeof(struct Packet), 0);
+	
+	auto size = sizeof(p) + 1;
+	int sendResult = send(sock, (char*)p, size, 0);
+	if (sendResult == WSAEMSGSIZE) {
+		std::cout << "You fucked up" << std::endl;
+	}
 }
 
-vector<std::string> Client::Receive()
+Packet * Client::Receive()
 {
-	ZeroMemory(buf, 4096);
+	/*ZeroMemory(buf, 4096);
 	int bytesReceived = recv(sock, buf, 4096 , 0);
 	std::vector<std::string> items;
 	if (bytesReceived > 0)
 	{
 		items = pu::Split(std::string(buf, 0, bytesReceived), ',');
 	}
-	return items;
+	return items;*/
+	ZeroMemory(m_packet, sizeof(struct Packet));
+	int bytesReceived = recv(sock, (char*)m_packet, sizeof(struct Packet), 0);
+	return m_packet;
 }
 
 void Client::close()

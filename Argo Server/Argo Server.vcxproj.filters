@@ -24,12 +24,21 @@
     <ClCompile Include="TCPServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ARGO_Team_D\ARGO_Team_D\Utils\VectorAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TCPServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ARGO_Team_D\ARGO_Team_D\Utils\Packet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ARGO_Team_D\ARGO_Team_D\Utils\VectorAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

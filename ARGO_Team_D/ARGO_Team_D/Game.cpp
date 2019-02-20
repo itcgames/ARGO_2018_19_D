@@ -384,6 +384,7 @@ void Game::initialiseEntities()
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
 	m_player = e;
+	m_network.m_players.push_back(e);
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
 	for(int i = 0; i < GUN_ENEMY_COUNT; ++i)
 	{

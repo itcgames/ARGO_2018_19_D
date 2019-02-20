@@ -115,11 +115,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ARGO_Team_D\ARGO_Team_D\Utils\VectorAPI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="TCPServer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ARGO_Team_D\ARGO_Team_D\Utils\Packet.h" />
+    <ClInclude Include="..\ARGO_Team_D\ARGO_Team_D\Utils\VectorAPI.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="TCPServer.h" />
   </ItemGroup>
