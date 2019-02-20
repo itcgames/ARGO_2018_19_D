@@ -174,8 +174,5 @@ private:
 	bool fire = false;
 	int test;
 
-	//PARTICLES
-	Emitter * emitter;
-
 };
 #endif // !GAME_H

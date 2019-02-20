@@ -47,10 +47,10 @@ void ControlSystem::update()
 				currentVelocity.y = -35;
 
 
-				/*if (cc.part != nullptr)
+				if (cc.part != nullptr)
 				{
 					cc.part->m_emitterExplos.activate(true);
-				}*/
+				}
 			}
 			if (m_moveRight)
 			{

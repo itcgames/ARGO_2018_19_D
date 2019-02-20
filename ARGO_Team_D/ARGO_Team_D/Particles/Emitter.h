@@ -14,6 +14,7 @@ class Emitter
 {
 public:
 
+
 	Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color color, SDL_Renderer * renderer, bool isBurst, Uint8 alphaDec);
 	~Emitter();
 
@@ -25,7 +26,6 @@ public:
 	void setDirection(int num);
 	int getDirection();
 	void activate(bool b);
-
 	void setAlphaDec(int num);
 private:
 	//Particle* m_particles[MAX_PARTICLES];

@@ -42,8 +42,11 @@
     <ClCompile Include="Particles\Emitter.cpp" />
     <ClCompile Include="Particles\Particle.cpp" />
     <ClCompile Include="Particles\Timer.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="ECS\Components\ParticleEffectsComponent.cpp" />
     <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
+=======
+>>>>>>> 567d381323361f101abc78bea34478284e729e8c
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -104,6 +107,7 @@
     <ClInclude Include="ECS\Systems\AiSystem.h" />
     <ClInclude Include="ECS\Components\AiComponent.h" />
 <<<<<<< HEAD
+<<<<<<< HEAD
     <ClInclude Include="Utils\Packet.h" />
 =======
     <ClInclude Include="Particles\Emitter.h" />
@@ -115,5 +119,10 @@
     <ClInclude Include="ECS\Components\ParticleEffectsComponent.h" />
     <ClInclude Include="ECS\Systems\ParticleSystem.h" />
 >>>>>>> Implemented effects to player
+=======
+    <ClInclude Include="Particles\Emitter.h" />
+    <ClInclude Include="Particles\Particle.h" />
+    <ClInclude Include="Particles\Timer.h" />
+>>>>>>> 567d381323361f101abc78bea34478284e729e8c
   </ItemGroup>
 </Project>

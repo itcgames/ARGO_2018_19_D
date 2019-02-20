@@ -23,7 +23,6 @@ public:
 	void update();
 
 	void setDecrement(Uint8 num);
-
 private:
 	float m_posX, m_posY;
 	float m_velX, m_velY;
@@ -41,6 +40,7 @@ private:
 
 	bool dead;
 	Uint8 decrement = 45;
+
 };
 
 #endif // !PARTICLE_H

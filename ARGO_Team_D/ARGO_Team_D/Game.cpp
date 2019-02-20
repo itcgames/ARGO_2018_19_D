@@ -128,6 +128,7 @@ Game::Game() :
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
+
 	//float enemyX = 100;
 	//float enemyY = 100;
 	//float enemyWidth = 100;

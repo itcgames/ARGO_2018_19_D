@@ -1,21 +1,21 @@
 #include "Particle.h"
 
-Particle::Particle(int x, int y, int width, int height, SDL_Color color,SDL_Renderer * renderer, int dir, bool isBurst, Uint8 dec)
+Particle::Particle(int x, int y, int width, int height, SDL_Color color, SDL_Renderer * renderer, int dir, bool isBurst, Uint8 dec)
 {
 	m_rend = renderer;
 
 	if (!isBurst)
 	{
-		
+
 	}
 	else
 	{
-		
+
 	}
-	
+
 	m_width = width;
 	m_height = height;
-	
+
 	//float angle = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (acos(-1))));
 	//std::cout << angle << std::endl;
 
@@ -37,8 +37,6 @@ Particle::Particle(int x, int y, int width, int height, SDL_Color color,SDL_Rend
 		m_velX = speed * cos(angle);
 		m_velY = speed * sin(angle) - 4.f;
 	}
-	
-
 	srcrect = { 0, 0, 10, 10 };
 	dstrect = { 0, 0, 10, 10 };
 
@@ -48,6 +46,7 @@ Particle::Particle(int x, int y, int width, int height, SDL_Color color,SDL_Rend
 	dead = false;
 	decrement = dec;
 }
+	
 
 Particle::~Particle()
 {
@@ -94,6 +93,7 @@ void Particle::update()
 		}
 	}
 }
+
 
 void Particle::setDecrement(Uint8 num)
 {

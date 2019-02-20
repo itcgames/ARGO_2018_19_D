@@ -18,6 +18,7 @@ Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color 
 	activateBurst = false;
 	dir = -1;
 	decrement = alphaDec;
+
 	if (!burst)
 	{
 		/*for (int i = 0; i < 1; i++)
@@ -27,10 +28,7 @@ Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color 
 	}
 	else
 	{
-		/*for (int i = 0; i < MAX_PARTICLES; i++)
-		{
-			m_particlesArray[i] = (new Particle(m_posX, m_posY, width, height, m_color, m_rend, dir, burst, decrement));
-		}*/
+
 	}
 
 	
@@ -54,6 +52,7 @@ void Emitter::update(int positionX, int positionY)
 {
 	m_posX = positionX;
 	m_posY = positionY;
+
 	if (burst && activateBurst)
 	{
 		for (int i = 0; i < MAX_PARTICLES; i++)
@@ -135,6 +134,7 @@ void Emitter::drawParticles()
 			for (int i = 0; i < MAX_PARTICLES; ++i)
 			{
 
+
 				if (m_particlesArray[i] != nullptr)
 				{
 					if (m_particlesArray[i]->isDead())
@@ -173,5 +173,4 @@ void Emitter::drawParticles()
 			m_particles.at(i)->draw();
 		}
 	}
-
 }
