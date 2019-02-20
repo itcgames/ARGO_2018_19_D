@@ -3,6 +3,7 @@
 
 #include <Box2D/Box2D.h>
 #include "../Utils/VectorAPI.h"
+#include "../Utils/CollisionData.h"
 #include "../Resource Manager/ResourceManager.h"
 #include "../Camera.h"
 
@@ -15,6 +16,7 @@ public:
 	void draw(SDL_Renderer * renderer, Camera & camera);
 	void collide();
 	bool isActive();
+	void remove();
 private:
 	b2World & m_refWorld;
 	const float WORLD_SCALE;
@@ -24,6 +26,7 @@ private:
 	b2BodyDef m_bodyDef;
 	b2Shape * m_shape;
 	b2FixtureDef m_fixtureDef;
+	CollisionData collisionData;
 
 	// Drawables
 	ResourceManager * m_resourceManager;

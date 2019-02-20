@@ -3,6 +3,7 @@
 
 #include <Box2D/Box2D.h>
 #include "../ECS/Components/BodyComponent.h"
+#include "../Bullets/Bullet.h"
 
 /// <summary>
 /// Contact Listener for Box2D bodies, main purpose is to check for grounding

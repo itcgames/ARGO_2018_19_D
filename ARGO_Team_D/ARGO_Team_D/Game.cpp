@@ -122,10 +122,10 @@ Game::Game() :
 		m_ttlSystem.addEntity(e);
 		m_bullets.push_back(e);
 	}
-	m_controlSystem.bindBullets(m_bullets);
+	m_bulletManager = new BulletManager(m_world, WORLD_SCALE, m_resourceManager);
+	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
-	m_bulletManager = new BulletManager(m_world, WORLD_SCALE, m_resourceManager);
 }
 
 Game::~Game()
@@ -138,6 +138,7 @@ void Game::run()
 	float timePerFrame = 1000.f / 60.f;
 	Uint32 timeSinceLastUpdate = 0;
 	Uint32 timeSinceStart = SDL_GetTicks();
+
 	while (!m_quit)
 	{
 		processEvents();
@@ -242,11 +243,10 @@ void Game::update(const float & dt)
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
-			
 			m_controlSystem.update();
 			m_aiSystem->update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
-			m_bulletManager->createBullet(VectorAPI(1000, 1000), 1, false);
+
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);

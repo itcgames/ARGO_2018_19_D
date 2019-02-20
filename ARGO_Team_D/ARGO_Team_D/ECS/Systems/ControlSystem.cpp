@@ -90,89 +90,15 @@ void ControlSystem::fire()
 	m_fire = true;	
 }
 
-void ControlSystem::bindBullets(std::vector<Entity*>& bullets)
+void ControlSystem::bindBullets(BulletManager * bulletManager)
 {
-	m_bullets = bullets;
+	m_bulletManager = bulletManager;
 }
 
 void ControlSystem::spawnProjectile(float x, float y)
 {
-
-	for (auto &e : m_entityList)
-	{
-		std::vector<std::string> s = { "Gun" };
-		auto comps = e->getComponentsOfType(s);
-		GunComponent * g = dynamic_cast<GunComponent*>(comps["Gun"]);
-
-		if (g != nullptr)
-		{
-			switch (Gun(g->getGun()))
-			{
-			case MACHINE_GUN:
-				for (auto &b : m_bullets)
-				{
-
-					std::vector<std::string> s = { "TimeToLive", "Position", "Velocity" };
-					auto comps = b->getComponentsOfType(s);
-					TimeToLiveComponent * t = dynamic_cast<TimeToLiveComponent*>(comps["TimeToLive"]);
-
-					if (!t->isActive())
-					{
-						t->setActive(true);
-						PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
-						p->setPosition(VectorAPI(x, y));
-
-						VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
-						v->setVelocity(VectorAPI(25 * direction, ((double)rand() / RAND_MAX) * 2 - 1));
-						t->setTimer(SDL_GetTicks());
-						t->setActive(true);
-						break;
-					}
-				}
-				break;
-			case SHOTGUN:
-				for (auto &b : m_bullets)
-				{
-					if (counter < 5)
-					{
-						std::vector<std::string> s = { "TimeToLive", "Position", "Velocity" };
-						auto comps = b->getComponentsOfType(s);
-						TimeToLiveComponent * t = dynamic_cast<TimeToLiveComponent*>(comps["TimeToLive"]);
-
-						if (!t->isActive())
-						{
-							t->setActive(true);
-							PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
-							p->setPosition(VectorAPI(x, y));
-
-							VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
-							if (counter % 2 == 0)
-							{
-								//v->setVelocity(VectorAPI(20 * direction, counter * 5.f));
-								auto vec = VectorAPI(direction, counter * 0.015f).Normalize() * 20.f;
-								v->setVelocity(vec);
-							}
-							else
-							{
-								auto vec = VectorAPI(direction, counter * -0.015f).Normalize() * 20.f;
-								v->setVelocity(vec);
-							}
-
-							t->setTimer(SDL_GetTicks());
-							t->setActive(true);
-						}
-					}
-					else
-					{
-						counter = 0;
-						break;
-					}
-					counter++;
-				}
-				break;
-			}
-		}
-	}
+	// Add fire rate
+	m_bulletManager->createBullet(VectorAPI(x + 50 * direction, y), 50 * direction, true);
 }
 
 void ControlSystem::removeEntity(const int id)

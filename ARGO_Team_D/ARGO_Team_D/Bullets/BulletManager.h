@@ -12,7 +12,7 @@ public:
 	void update(float dt);
 	void render(SDL_Renderer * renderer, Camera & camera);
 private:
-	b2World m_refWorld;
+	b2World & m_refWorld;
 	const float WORLD_SCALE;
 	ResourceManager * m_resourceManager;
 	std::vector<Bullet *> m_bullets;

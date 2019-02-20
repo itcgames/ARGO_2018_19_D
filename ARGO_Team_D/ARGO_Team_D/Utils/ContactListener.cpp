@@ -13,7 +13,6 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 	//std::cout << "Entry -----------------------------------------" << std::endl;
 	// Check if fixture A was a body
 	if (dataA ) {
-
 		void* bodyUserData = dataA->data;
 		if (dataA->tag.find("Body") != std::string::npos)
 		{
@@ -34,13 +33,20 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				}
 			}
 		}
-		else if (dataA->tag == "TutorialTrigger") {
+		else if (dataA->tag == "TutorialTrigger") 
+		{
 			auto data = static_cast<TutorialTrigger*>(bodyUserData);
 			data->animateIn();
 		}
+		else if (dataA->tag == "Bullet")
+		{
+			auto data = static_cast<Bullet*>(bodyUserData);
+			data->remove();
+		}
 	}
 	// Check if fixture B was a body
-	if (dataB) {
+	if (dataB) 
+	{
 		void* bodyUserData = dataB->data;
 		if (dataB->tag.find("Body") != std::string::npos)
 		{
@@ -61,9 +67,23 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				}
 			}
 		}
-		else if (dataB->tag == "TutorialTrigger") {
+		else if (dataB->tag == "TutorialTrigger") 
+		{
 			auto data = static_cast<TutorialTrigger*>(bodyUserData);
 			data->animateIn();
+		}
+		else if (dataB->tag == "Bullet")
+		{
+			auto data = static_cast<Bullet*>(bodyUserData);
+			//if(dataA->tag == "Player")
+			//{
+
+			//}
+			//else if (dataA->tag == "Enemy")
+			//{
+
+			//}
+			data->remove();
 		}
 	}
 

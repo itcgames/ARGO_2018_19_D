@@ -11,10 +11,8 @@
 #include "../ECS/Components/AnimationComponent.h"
 #include "../ECS/Components/PositionComponent.h"
 #include "../ECS/Entities/Entity.h"
-#include "../ECS/Components/TimeToLiveComponent.h"
-#include "../ECS/Components/VelocityComponent.h"
-#include "../ECS/Components/GunComponent.h"
 #include "../Utils/VectorAPI.h"
+#include "../Bullets/BulletManager.h"
 
 struct ControlComponents {
 	BodyComponent * body;
@@ -34,7 +32,7 @@ public:
 	void fire();
 
 	void processInput(SDL_Event & e);
-	void bindBullets(std::vector<Entity *> &bullets);
+	void bindBullets(BulletManager * bulletManager);
 
 	void spawnProjectile(float x, float y);
 	void removeEntity(const int id) override;
@@ -46,7 +44,8 @@ private:
 	std::map<int, ControlComponents> m_components;
 	std::vector<string> allowedTypes;
 
-	std::vector<Entity *> m_bullets;
+	//std::vector<Entity *> m_bullets;
+	BulletManager * m_bulletManager;
 
 	int direction;
 	int counter = 0;
