@@ -3,7 +3,7 @@
 Bullet::Bullet(b2World & world, const float SCALE, ResourceManager * resourceManager, VectorAPI posIn, float speedIn, bool isPlayer)
 	: m_refWorld(world),
 	WORLD_SCALE(SCALE),
-	collisionData("Bullet", this),
+	collisionData(isPlayer ? "BulletPlayer" : "BulletEnemy", this),
 	m_resourceManager(resourceManager),
 	m_isActive(true),
 	m_speed(speedIn),
