@@ -29,6 +29,7 @@ void MainMenu::GoToPlay()
 {
 	m_game->m_levelManager.loadCurrentLevel(*m_game->m_resourceManager, m_game->m_renderer);
 	m_game->fadeToState(State::PlayScreen);
+	m_game->m_network.initClientLocalClient(m_game->m_playerFactory);
 	for (auto & b : m_buttons)
 	{
 		b->reset();

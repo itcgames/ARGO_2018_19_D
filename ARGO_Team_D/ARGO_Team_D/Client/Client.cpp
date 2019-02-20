@@ -14,7 +14,7 @@ Client::~Client()
 bool Client::init()
 {
 
-	std::string ipAddress = "149.153.106.150";			// IP Address of the server
+	std::string ipAddress = "149.153.106.101";			// IP Address of the server
 	int port = 8080;
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);

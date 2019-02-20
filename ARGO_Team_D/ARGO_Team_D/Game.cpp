@@ -10,7 +10,6 @@ Game::Game() :
 	m_physicsSystem(WORLD_SCALE)
 {
 	m_network = NetworkingSystem();
-	m_network.initClientLocalClient();
 
 	m_world.SetContactListener(&m_contactListener);
 
@@ -265,14 +264,6 @@ void Game::update(const float & dt)
 	default:
 		break;
 	}
-
-	if (!m_network.getHost())
-	{
-		m_network.sendToHost();
-	}
-	else {
-		m_network.sendToClients();
-	}
 }
 
 void Game::render()
@@ -380,7 +371,7 @@ void Game::initialiseEntities()
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
 	m_player = e;
-	m_network.m_players.push_back(e);
+	m_network.m_player = m_player;
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
 	for(int i = 0; i < GUN_ENEMY_COUNT; ++i)
 	{

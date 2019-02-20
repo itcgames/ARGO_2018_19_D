@@ -167,16 +167,17 @@
 
 int main() {
 	// Loop forever
-	while (true) {
-		TCPServer server;
-		if (server.winSockInit()) {
-			if (server.createSock()) {
-				if (server.bindSock()) {
-					server.acceptConnections();
+
+	TCPServer * server = new TCPServer();
+	if (server->winSockInit()) {
+		if (server->createSock()) {
+			if (server->bindSock()) {
+				while (true) {
+					server->acceptConnections();
 				}
 			}
 		}
-		server.closeSock();
 	}
+	server->closeSock();
 	return 0;
 }

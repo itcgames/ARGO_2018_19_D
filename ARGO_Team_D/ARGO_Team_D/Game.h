@@ -79,6 +79,10 @@ public:
 
 	void spawnProjectile(float x, float y);
 	SDL_Renderer * m_renderer;
+	// Networking
+	NetworkingSystem m_network;
+	PlayerFactory * m_playerFactory;
+
 private:
 	void processEvents();
 	void update(const float & dt);
@@ -111,7 +115,6 @@ private:
 	BodyComponent * m_playerBody;
 
 	// Factories
-	PlayerFactory * m_playerFactory;
 	EnemyFactory * m_enemyFactory;
 
 	// Misc
@@ -158,10 +161,6 @@ private:
 	OptionsMenu * m_options;
 	CreditScreen * m_credits;
 	LevelSelectMenu * m_levelSelect;
-
-	// Networking
-	NetworkingSystem m_network;
-
 	//bullets
 	std::vector<Entity *> m_bullets;
 	float startTimer;

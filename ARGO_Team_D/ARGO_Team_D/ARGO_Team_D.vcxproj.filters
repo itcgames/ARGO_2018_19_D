@@ -101,5 +101,6 @@
     <ClInclude Include="ECS\Components\AiComponent.h" />
     <ClInclude Include="Utils\Packet.h" />
     <ClInclude Include="ECS\Components\NetworkComponent.h" />
+    <ClInclude Include="Factories\ClientPlayerFactory.h" />
   </ItemGroup>
 </Project>

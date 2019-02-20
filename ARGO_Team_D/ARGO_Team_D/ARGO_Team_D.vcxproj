@@ -195,6 +195,7 @@
     <ClInclude Include="ECS\Components\AiComponent.h" />
     <ClInclude Include="ECS\Components\NetworkComponent.h" />
     <ClInclude Include="ECS\Systems\AiSystem.h" />
+    <ClInclude Include="Factories\ClientPlayerFactory.h" />
     <ClInclude Include="Factories\EnemyFactory.h" />
     <ClInclude Include="Input\Command.h" />
     <ClInclude Include="Input\ConcreteCommand.h" />

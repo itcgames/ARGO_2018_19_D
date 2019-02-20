@@ -2,6 +2,8 @@
 #define TCPSERVER_H
 
 #include "Server.h"
+#include <map>
+#include <thread>
 
 class TCPServer : public Server {
 public:
@@ -16,5 +18,6 @@ public:
 	static void messageHandler(SOCKET sock, int & playerCount, SOCKET * clients);
 private:
 	sockaddr_in m_hint;
+	bool m_started = false;
 };
 #endif // !TCPSERVER_H
