@@ -13,12 +13,11 @@ public:
 	Client();
 	~Client();
 
-	bool init();
+	bool init(const std::string ip, const int port);
+	bool Send(Packet * p);
+	Packet * Receive();
+	void close();
 
-	void Send(Packet * p);
-	Packet *  Receive();
-	map<std::string, int> processMessage(std::vector<std::string> items);
-	map<std::string, std::string> processMessageStr(std::vector<std::string> items);
 	void setID(int newId) { m_networkId = newId; }
 	void setHost(int host) {
 		if (host == 1) { 
@@ -28,12 +27,8 @@ public:
 			m_host = false; 
 		}
 	}
-
 	int getNetworkId() { return m_networkId; }
 	bool getHost() { return m_host; }
-
-	void close();
-
 private:
 	SOCKET sock;
 	int m_networkId = 0;

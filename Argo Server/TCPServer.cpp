@@ -31,7 +31,7 @@ bool TCPServer::bindSock()
 	m_hint.sin_family = AF_INET;
 	m_hint.sin_port = htons(port);
 	//hint.sin_addr.S_un.S_addr = INADDR_ANY; // Could also use inet_pton .... 
-	inet_pton(m_hint.sin_family, "149.153.106.101", &m_hint.sin_addr);
+	inet_pton(m_hint.sin_family, "149.153.106.150", &m_hint.sin_addr);
 
 	if (bind(m_listening, (sockaddr*)&m_hint, sizeof(m_hint)) == SOCKET_ERROR) {
 		std::cerr << "Cannot bin sock: " << WSAGetLastError() << std::endl;

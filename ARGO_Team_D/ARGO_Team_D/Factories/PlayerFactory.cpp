@@ -27,3 +27,15 @@ Entity * PlayerFactory::create(VectorAPI pos)
 	entity->addComponent(new GunComponent(0));
 	return entity;
 }
+
+Entity * PlayerFactory::createOnlinePlayer(VectorAPI pos, int id)
+{
+	Entity * entity = new Entity();
+	entity->addComponent(new PositionComponent(pos));
+	entity->addComponent(new SpriteComponent(m_spriteId, *m_resourceManager, m_dimensions.x, m_dimensions.y));
+	auto body = new BodyComponent(pos.x, pos.y, m_dimensions.x, m_refWorld, WORLD_SCALE);
+	entity->addComponent(body);
+	entity->addComponent(new GunComponent(0));
+	entity->addComponent(new NetworkComponent(id));
+	return entity;
+}

@@ -6,11 +6,7 @@
 class NetworkComponent : public Component
 {
 public:
-	NetworkComponent(int netID);
-	int getID();
-private:
-	// Private Members
+	NetworkComponent(int netID) : networkID(netID) { id = "Network"; }
 	int networkID;
 };
-
 #endif // !NETWORKCOMPONENT_H

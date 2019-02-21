@@ -7,6 +7,7 @@
 #include "..//ECS/Components/SpriteComponent.h"
 #include "..//ECS/Components/BodyComponent.h"
 #include "..//ECS/Components/GunComponent.h"
+#include "../ECS/Components/NetworkComponent.h"
 #include "..//Client/Client.h"
 
 
@@ -15,7 +16,7 @@ class PlayerFactory
 public:
 	PlayerFactory(std::string spriteId, VectorAPI dimensions, ResourceManager * rm, b2World & world, const float SCALE);
 	Entity * create(VectorAPI pos);
-
+	Entity * createOnlinePlayer(VectorAPI pos, int id);
 private:
 	ResourceManager * m_resourceManager;
 	b2World & m_refWorld;

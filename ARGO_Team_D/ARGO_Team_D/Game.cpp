@@ -9,8 +9,6 @@ Game::Game() :
 	m_camera(m_windowWidth, m_windowHeight),
 	m_physicsSystem(WORLD_SCALE)
 {
-	m_network = NetworkingSystem();
-
 	m_world.SetContactListener(&m_contactListener);
 
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -259,7 +257,6 @@ void Game::update(const float & dt)
 		m_levelSelect->update();
 		break;
 	case Multiplayer:
-		m_network.updateFromHost();
 		break;
 	default:
 		break;
@@ -370,8 +367,15 @@ void Game::initialiseEntities()
 	Entity * e = m_playerFactory->create(VectorAPI(150, 0));
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
+	m_network.addEntity(e);
 	m_player = e;
-	m_network.m_player = m_player;
+	m_players.push_back(e);
+	for (int i = 0; i < 2; ++i) {
+		Entity * e = m_playerFactory->createOnlinePlayer(VectorAPI(150, 0), -1);
+		m_entityList.push_back(e);
+		m_network.addEntity(e);
+		m_players.push_back(e);
+	}
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
 	for(int i = 0; i < GUN_ENEMY_COUNT; ++i)
 	{

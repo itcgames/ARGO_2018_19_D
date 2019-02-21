@@ -152,7 +152,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Client\Client.cpp" />
     <ClCompile Include="ECS\Components\AiComponent.cpp" />
-    <ClCompile Include="ECS\Components\NetworkComponent.cpp" />
     <ClCompile Include="ECS\Systems\AiSystem.cpp" />
     <ClCompile Include="Factories\EnemyFactory.cpp" />
     <ClCompile Include="Input\Command.cpp" />
@@ -195,7 +194,6 @@
     <ClInclude Include="ECS\Components\AiComponent.h" />
     <ClInclude Include="ECS\Components\NetworkComponent.h" />
     <ClInclude Include="ECS\Systems\AiSystem.h" />
-    <ClInclude Include="Factories\ClientPlayerFactory.h" />
     <ClInclude Include="Factories\EnemyFactory.h" />
     <ClInclude Include="Input\Command.h" />
     <ClInclude Include="Input\ConcreteCommand.h" />

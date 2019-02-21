@@ -103,7 +103,7 @@ private:
 	// ECS Entities
 	std::vector<Entity*> m_entityList;
 	Entity * m_player;
-	std::vector<Entity*> m_otherPlayers;
+	std::vector<Entity*> m_players;
 	const int GUN_ENEMY_COUNT = 20;
 	const int FLY_ENEMY_COUNT = 20;
 	const int BIG_ENEMY_COUNT = 2;
