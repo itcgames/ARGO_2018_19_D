@@ -10,6 +10,7 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 {
 	auto dataA = static_cast<CollisionData*>(contact->GetFixtureA()->GetUserData());
 	auto dataB = static_cast<CollisionData*>(contact->GetFixtureB()->GetUserData());
+
 	// Check if fixture A was a body
 	if (dataA ) {
 		void* bodyUserData = dataA->data;
@@ -39,15 +40,20 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 		}
 		else if (dataA->tag.find("Bullet") != std::string::npos)
 		{
-			std::cout << "Bullet" << std::endl;
 			auto data = static_cast<Bullet*>(bodyUserData);
-			if (dataA->tag == "PlayerBullet")
+			if (dataA->tag == "BulletPlayer" && dataB->tag == "EnemyBody")
 			{
-
+				// Enemy is hit by bullet
+				auto enemy = static_cast<BodyComponent *>(dataB->data);
+				int currentHitCount = enemy->getBulletHitCount();
+				enemy->setBulletHitCount(++currentHitCount);
 			}
-			else if (dataA->tag == "EnemyBullet")
+			else if (dataA->tag == "BulletEnemy" && dataB->tag == "PlayerBody")
 			{
-
+				// Player is hit by bullet
+				auto player = static_cast<BodyComponent *>(dataB->data);
+				int currentHitCount = player->getBulletHitCount();
+				player->setBulletHitCount(++currentHitCount);
 			}
 			data->remove();
 		}
@@ -83,15 +89,20 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 		}
 		else if (dataB->tag.find("Bullet") != std::string::npos)
 		{
-			std::cout << "Bullet" << std::endl;
 			auto data = static_cast<Bullet*>(bodyUserData);
-			if(dataB->tag == "PlayerBullet")
+			if(dataB->tag == "BulletPlayer" && dataA->tag == "EnemyBody")
 			{
-
+				// Enemy is hit by bullet
+				auto enemy = static_cast<BodyComponent *>(dataA->data);
+				int currentHitCount = enemy->getBulletHitCount();
+				enemy->setBulletHitCount(++currentHitCount);
 			}
-			else if (dataB->tag == "EnemyBullet")
+			else if (dataB->tag == "BulletEnemy" && dataA->tag == "PlayerBody")
 			{
-
+				// Player is hit by bullet
+				auto player = static_cast<BodyComponent *>(dataA->data);
+				int currentHitCount = player->getBulletHitCount();
+				player->setBulletHitCount(++currentHitCount);
 			}
 			data->remove();
 		}

@@ -10,6 +10,9 @@
 #include "..\Utils\VectorAPI.h"
 #include "..\Utils\CollisionData.h"
 
+// Debug
+#include <iostream>
+
 /// <summary>
 /// Box2D Body Component
 /// </summary>
@@ -31,7 +34,8 @@ public:
 	void leftContactEnd();
 	void rightContactStart();
 	void rightContactEnd();
-	void bulletContact();
+	int getBulletHitCount();
+	void setBulletHitCount(int count);
 
 private:
 	// Private Functions
@@ -73,7 +77,7 @@ private:
 	CollisionData m_rightData;
 
 	// Bullet
-	bool m_bulletContact;
+	int m_bulletHitCount;
 };
 
 #endif // !BODYCOMPONENT_H

@@ -21,7 +21,7 @@ BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world
 	m_leftData("BodyLeft", this),
 	m_rightContact(false),
 	m_rightData("BodyRight", this),
-	m_bulletContact(false)
+	m_bulletHitCount(0)
 {
 	float halfWidth = w / 2.f;
 	float halfHeight = h / 2.f;
@@ -51,11 +51,10 @@ BodyComponent::BodyComponent(float x, float y, float rad, b2World & world, float
 	m_leftData("BodyLeft", this),
 	m_rightContact(false),
 	m_rightData("BodyRight", this),
-	m_bulletContact(false)
+	m_bulletHitCount(0)
 {
 	float halfRad = rad / 2.f;
 	b2CircleShape * circleShape = new b2CircleShape();
-	//circleShape->m_p.Set(halfRad, halfRad); // DEBUG
 	circleShape->m_radius = halfRad / m_worldScale;
 	m_shape = circleShape;
 	init(x, y, rad, rad);
@@ -231,9 +230,20 @@ void BodyComponent::rightContactEnd()
 }
 
 /// <summary>
-/// Function used by Box2D to inform Body Component that it's contacting a bullet
+/// Function used to check how many times a body has been hit by a bullet
 /// </summary>
-void BodyComponent::bulletContact()
+/// <returns>int bullet hit count</returns>
+int BodyComponent::getBulletHitCount()
 {
-	m_bulletContact = true;
+	return m_bulletHitCount;
+}
+
+/// <summary>
+/// Function allows bullet hit count to be set or reset
+/// </summary>
+/// <param name="count">Desired bullet hit count (generally used as a bullet count reset so 0)</param>
+void BodyComponent::setBulletHitCount(int count)
+{
+	m_bulletHitCount = count;
+	std::cout << m_bodyData.tag << ": " << count << std::endl;
 }
