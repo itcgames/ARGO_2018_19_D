@@ -14,6 +14,8 @@ public:
 	LevelSelectMenu(float width, float height, Game& game, SDL_Renderer * renderer, SDL_Window * window);
 	~LevelSelectMenu();
 	void GoToMenu();
+	void LoadLevel1();
+	void LoadLevel2();
 private:
 	Game * m_game;
 };

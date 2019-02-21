@@ -156,6 +156,7 @@
     <ClCompile Include="ECS\Systems\AiSystem.cpp" />
     <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
     <ClCompile Include="Factories\EnemyFactory.cpp" />
+    <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Input\Command.cpp" />
     <ClCompile Include="Input\ConcreteCommand.cpp" />
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="ECS\Systems\AiSystem.h" />
     <ClInclude Include="ECS\Systems\ParticleSystem.h" />
     <ClInclude Include="Factories\EnemyFactory.h" />
+    <ClInclude Include="Hud.h" />
     <ClInclude Include="Input\Command.h" />
     <ClInclude Include="Input\ConcreteCommand.h" />
     <ClInclude Include="ECS\Components\AnimationComponent.h" />

@@ -128,6 +128,8 @@ Game::Game() :
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
+	m_hud = new Hud(m_camera, *m_renderer, p_window);
+
 
 	//float enemyX = 100;
 	//float enemyY = 100;
@@ -262,6 +264,7 @@ void Game::update(const float & dt)
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
+			
 			m_controlSystem.update();
 			m_aiSystem->update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
@@ -274,6 +277,8 @@ void Game::update(const float & dt)
 			m_levelManager.update(dt/1000);
 			m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer);
 			m_particleSystem->update();
+			m_hud->update();
+			
 		}
 		break;
 	case Options:
@@ -310,7 +315,7 @@ void Game::render()
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
 
-	SDL_SetRenderDrawColor(m_renderer, 0, 255, 255, 255);
+	SDL_SetRenderDrawColor(m_renderer, 0, 120, 200, 255);
 
 	SDL_RenderClear(m_renderer);
 
@@ -323,6 +328,7 @@ void Game::render()
 		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
 		m_particleSystem->draw();
+		m_hud->draw();
 		break;
 	case Options:
 		m_options->draw();
@@ -469,7 +475,7 @@ void Game::setUpFont() {
 	{
 		std::cout << "error error error" << std::endl;
 	}
-	const char *path = "ASSETS\\FONTS\\arial.ttf";
+	const char *path = "ASSETS\\FONTS\\TheBlackFestival.ttf";
 	Sans = TTF_OpenFont(path, 50);
 }
 
@@ -496,4 +502,9 @@ void Game::spawnProjectile(float x, float y)
 		}
 
 	}
+}
+
+void Game::loadAlevel(int num)
+{
+	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
 }

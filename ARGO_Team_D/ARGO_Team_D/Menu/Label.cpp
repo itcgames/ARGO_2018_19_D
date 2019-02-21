@@ -7,8 +7,8 @@ Label::Label(const char * string, int x, int y, int w, int h, SDL_Color color, S
 	{
 		std::cout << "error error error" << std::endl;
 	}
-	const char *path = "ASSETS\\FONTS\\arial.ttf";
-	arial = TTF_OpenFont(path, 50);
+	const char *path = "ASSETS\\FONTS\\BloodBlocks.ttf";
+	arial = TTF_OpenFont(path, 300);
 
 	this->color = color;
 
