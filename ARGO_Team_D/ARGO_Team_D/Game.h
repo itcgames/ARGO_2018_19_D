@@ -47,6 +47,7 @@
 #include"Particles/Emitter.h"
 #include"ECS/Components/ParticleEffectsComponent.h"
 #include"ECS/Systems/ParticleSystem.h"
+#include "Bullets/BulletManager.h"
 #include"Hud.h"
 
 class ControlSystem;
@@ -177,8 +178,7 @@ private:
 	float startTimer;
 	bool fire = false;
 	int test;
-
-
+	BulletManager * m_bulletManager;
 	//hud
 	Hud * m_hud;
 

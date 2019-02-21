@@ -5,9 +5,13 @@
 #include "Components.h"
 
 // Includes
+#include <string>
 #include <Box2D/Box2D.h>
 #include "..\Utils\VectorAPI.h"
 #include "..\Utils\CollisionData.h"
+
+// Debug
+#include <iostream>
 
 /// <summary>
 /// Box2D Body Component
@@ -15,8 +19,8 @@
 class BodyComponent : public Component {
 public:
 	// Public Functions
-	BodyComponent(float x, float y, float w, float h, b2World & world, float worldScale);
-	BodyComponent(float x, float y, float rad, b2World & world, float worldScale);
+	BodyComponent(float x, float y, float w, float h, b2World & world, float worldScale, std::string name);
+	BodyComponent(float x, float y, float rad, b2World & world, float worldScale, std::string name);
 	~BodyComponent();
 	b2Body * getBody();
 	bool isCircle();
@@ -30,6 +34,8 @@ public:
 	void leftContactEnd();
 	void rightContactStart();
 	void rightContactEnd();
+	int getBulletHitCount();
+	void setBulletHitCount(int count);
 
 private:
 	// Private Functions
@@ -48,6 +54,7 @@ private:
 	b2Shape * m_shape;
 	b2FixtureDef m_fixtureDef;
 	VectorAPI m_dimensions;
+	CollisionData m_bodyData;
 
 	// Sensor Bodies
 
@@ -68,6 +75,9 @@ private:
 	b2FixtureDef m_rightFixtureDef;
 	bool m_rightContact;
 	CollisionData m_rightData;
+
+	// Bullet
+	int m_bulletHitCount;
 };
 
 #endif // !BODYCOMPONENT_H

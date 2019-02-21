@@ -124,7 +124,8 @@ Game::Game() :
 		m_ttlSystem.addEntity(e);
 		m_bullets.push_back(e);
 	}
-	m_controlSystem.bindBullets(m_bullets);
+	m_bulletManager = new BulletManager(m_world, WORLD_SCALE, m_resourceManager);
+	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
@@ -157,6 +158,7 @@ void Game::run()
 	float timePerFrame = 1000.f / 60.f;
 	Uint32 timeSinceLastUpdate = 0;
 	Uint32 timeSinceStart = SDL_GetTicks();
+
 	while (!m_quit)
 	{
 		processEvents();
@@ -167,7 +169,7 @@ void Game::run()
 		{
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
-			update(timeSinceLastUpdate);
+			update(timePerFrame);
 		}
 		render();
 	}
@@ -268,6 +270,8 @@ void Game::update(const float & dt)
 			m_controlSystem.update();
 			m_aiSystem->update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+
+			m_bulletManager->update(dt);
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);
 			m_movementSystem.update();
@@ -315,7 +319,7 @@ void Game::render()
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
 
-	SDL_SetRenderDrawColor(m_renderer, 0, 120, 200, 255);
+	SDL_SetRenderDrawColor(m_renderer, 0, 155, 200, 255);
 
 	SDL_RenderClear(m_renderer);
 
@@ -328,6 +332,7 @@ void Game::render()
 		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
 		m_particleSystem->draw();
+		m_bulletManager->render(m_renderer, m_camera);
 		m_hud->draw();
 		break;
 	case Options:
@@ -414,6 +419,7 @@ void Game::initialiseEntities()
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
 	m_particleSystem->addEntity(e);
+	m_animationSystem.addEntity(e);
 	m_player = e;
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
 	for(int i = 0; i < GUN_ENEMY_COUNT; ++i)
@@ -424,12 +430,14 @@ void Game::initialiseEntities()
 	}
 	for (int i = 0; i < FLY_ENEMY_COUNT; ++i)
 	{
+		// TBI
 		//Enemy * enemy = m_enemyFactory->createFlyEnemy();
 		//m_flyEnemies.push_back(enemy);
 		////m_entityList.push_back(m_flyEnemies.at(i)->entity);
 	}
 	for (int i = 0; i < BIG_ENEMY_COUNT; ++i)
 	{
+		// TBI
 		//Enemy * enemy = m_enemyFactory->createBigEnemy();
 		//m_bigEnemies.push_back(enemy);
 		////m_entityList.push_back(m_bigEnemies.at(i)->entity);
@@ -441,7 +449,7 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	m_aiSystem = new AiSystem(m_playerBody);
+	m_aiSystem = new AiSystem(m_playerBody, WORLD_SCALE);
 	for (auto i : m_entityList)
 	{
 		if (i->checkForComponent("Sprite"))
@@ -461,7 +469,7 @@ void Game::initialiseSystems()
 
 void Game::initialiseFactories()
 {
-	std::string spriteName = "test";
+	std::string spriteName = "Player";
 	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE, m_renderer);
 	m_enemyFactory = new EnemyFactory(m_resourceManager, m_world, WORLD_SCALE);
 }

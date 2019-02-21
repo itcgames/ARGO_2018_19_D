@@ -9,7 +9,7 @@ Camera::Camera(const int windowWidth, const int windowHeight) :
 	m_originalSize(windowWidth, windowHeight)
 {
 	m_viewOffset = 0;
-	m_weight = 1;
+	m_weight = 0.08f;
 	m_maxOffset = 3;
 	m_shake = 0.1;
 }
@@ -61,6 +61,7 @@ void Camera::setScale(const VectorAPI & scale)
 	m_bounds.y /= m_scale.y;
 	m_bounds.w = m_originalSize.x / m_scale.x;
 	m_bounds.h = m_originalSize.y / m_scale.y;
+	std::cout << m_scale.x << ", " << m_scale.y << std::endl;
 }
 
 VectorAPI Camera::getOriginalSize()

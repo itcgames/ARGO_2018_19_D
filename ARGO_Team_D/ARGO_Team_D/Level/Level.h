@@ -42,6 +42,8 @@ public:
 	void createBody(float startX, float startY, float width);
 	void clearPhysicsBodies();
 	void clearTutorials();
+	void clearEnemies();
+	void clearSingleEnemy(Enemy * enemy);
 	void unload();
 	void update();
 

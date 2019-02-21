@@ -30,23 +30,6 @@ bool AiComponent::getActivationState()
 	return m_active;
 }
 
-void AiComponent::setNewPosition(VectorAPI pos)
-{
-	m_changePosition = true;
-	m_newPos = pos;
-}
-
-VectorAPI AiComponent::getPosition()
-{
-	m_changePosition = false;
-	return m_newPos;
-}
-
-bool AiComponent::getChangePositionStatus()
-{
-	return m_changePosition;
-}
-
 void AiComponent::setDirection(int direction)
 {
 	m_direction = direction == -1 ? -1 : 1;

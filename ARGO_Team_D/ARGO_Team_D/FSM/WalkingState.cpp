@@ -38,8 +38,22 @@ AnimationState * WalkingState::handle(Animation * a, SDL_Event & e)
 		case SDLK_RIGHT:
 			return this;
 		default:
+			return this;
+		}
+	}
+	else if (e.type == SDL_KEYUP)
+	{
+		switch (e.key.keysym.sym) {
+		case SDLK_d:
 			return new IdleState();
-			break;
+		case SDLK_a:
+			return new IdleState();
+		case SDLK_LEFT:
+			return new IdleState();
+		case SDLK_RIGHT:
+			return new IdleState();
+		default:
+			return this;
 		}
 	}
 }

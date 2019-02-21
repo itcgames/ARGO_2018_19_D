@@ -1,6 +1,8 @@
 #include "AiSystem.h"
 
-AiSystem::AiSystem(BodyComponent * playerBody) : m_playerBody(playerBody)
+AiSystem::AiSystem(BodyComponent * playerBody, const float SCALE) 
+	: m_playerBody(playerBody),
+	WORLD_SCALE(SCALE)
 {
 	m_allowedTypes = { "Body", "Animation", "Ai", "Sprite" };
 }
@@ -29,22 +31,50 @@ void AiSystem::update()
 	for (auto & comp : m_components)
 	{
 		auto & ac = comp.second;
-		bool active = ac.ai->getActivationState();
+
 		auto body = ac.body->getBody();
-		ac.sprite->setRender(active);
-		if (ac.ai->getChangePositionStatus())
+		if (ac.body->getBulletHitCount() > 3)
 		{
-			VectorAPI newPos = ac.ai->getPosition();
-			body->SetTransform(b2Vec2(newPos.x, newPos.y), body->GetAngle());
+			ac.ai->setActivationState(false);
+			ac.body->setBulletHitCount(0); // Reset bullet hit count
+			body->SetTransform(b2Vec2(-1000, 0), body->GetAngle());
 		}
+		bool active = ac.ai->getActivationState();
+		ac.sprite->setRender(active);
 		if (active)
 		{
-			// TBI
+			auto body = ac.body->getBody();
+			auto bodyPos = body->GetPosition();
+			auto bodyVel = body->GetLinearVelocity();
+			int minX = ac.ai->getMinX();
+			int maxX = ac.ai->getMaxX();
+			int direction = ac.ai->getDirection();
+			if(direction < 0)
+			{
+				if ((bodyPos.x ) > minX / WORLD_SCALE)
+				{
+					body->SetLinearVelocity(b2Vec2(-10, bodyVel.y));
+				}
+				else
+				{
+					ac.ai->setDirection(-direction);
+				}
+			}
+			else if(direction > 0)
+			{
+				if ((bodyPos.x) < maxX / WORLD_SCALE)
+				{
+					body->SetLinearVelocity(b2Vec2(10, bodyVel.y));
+				}
+				else
+				{
+					ac.ai->setDirection(-direction);
+				}
+			}
 		}
 		else
 		{
-			//body->SetLinearVelocity(b2Vec2(0, 0));
-			//body->SetTransform(b2Vec2(0, 0), body->GetAngle());
+			body->SetLinearVelocity(b2Vec2(0, 0));
 		}
 	}
 }
