@@ -17,7 +17,7 @@ public:
 
 private:
 	int m_health;
-	int m_lives
+	int m_lives;
 
 };
 
