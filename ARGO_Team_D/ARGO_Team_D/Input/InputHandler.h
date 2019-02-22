@@ -13,6 +13,7 @@ public:
 	void handleKeyboardInput(SDL_Event theEvent);
 	void handleControllerInput(SDL_Event theEvent);
 	void update();
+	bool isPaused();
 private:
 	Command * m_moveRight;
 	Command * m_moveLeft;
@@ -25,6 +26,8 @@ private:
 	bool m_leftPressed = false;
 	bool m_upPressed = false;
 	bool m_ctrlPressed = false;
+
+	bool m_paused = false;
 
 	const int JOYSTICK_DEAD_ZONE = 16000;
 	const int TRIGGER_DEAD_ZONE = 20000;

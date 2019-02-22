@@ -10,6 +10,7 @@
 #include "..//ECS/Components/GunComponent.h"
 #include "..//ECS/Components/ParticleEffectsComponent.h"
 #include "..//Client/Client.h"
+#include "..//ECS/Components/HealthComponent.h"
 
 
 class PlayerFactory

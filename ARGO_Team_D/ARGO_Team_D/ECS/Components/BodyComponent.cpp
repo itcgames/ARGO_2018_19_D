@@ -136,7 +136,8 @@ void BodyComponent::init(float x, float y, float w, float h, bool ignoreGravity)
 	id = "Body";
 	float halfWidth = w / 2.f;
 	float halfHeight = h / 2.f;
-	m_bodyDef.position = b2Vec2((x + halfWidth) / m_worldScale, (y + halfHeight) / m_worldScale);
+	m_initialPosition = b2Vec2((x + halfWidth) / m_worldScale, (y + halfHeight) / m_worldScale);
+	m_bodyDef.position = m_initialPosition;
 	m_bodyDef.type = b2_dynamicBody;
 	m_body = m_refWorld.CreateBody(&m_bodyDef);
 	m_body->SetGravityScale(ignoreGravity ? 0.0f : 1.0f);
@@ -247,4 +248,14 @@ void BodyComponent::setBulletHitCount(int count)
 {
 	m_bulletHitCount = count;
 	std::cout << m_bodyData.tag << ": " << count << std::endl;
+}
+
+void BodyComponent::setInitialPos(b2Vec2 pos)
+{
+	m_initialPosition = pos;
+}
+
+b2Vec2 BodyComponent::getInitialPos()
+{
+	return m_initialPosition;
 }

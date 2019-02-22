@@ -302,7 +302,9 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 			if (type == "GunEnemy")
 			{
 				auto body = m_gunEnemies.at(gunEnemyCounter)->body->getBody();
-				body->SetTransform(b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale), body->GetAngle());
+				b2Vec2 newPos = b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale);
+				body->SetTransform(newPos, body->GetAngle());
+				m_gunEnemies.at(gunEnemyCounter)->body->setInitialPos(newPos);
 				m_gunEnemies.at(gunEnemyCounter)->ai->setMovementMarkers(min, max);
 				m_gunEnemies.at(gunEnemyCounter)->ai->setActivationState(true);
 				++gunEnemyCounter;
@@ -310,7 +312,9 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 			else if (type == "FlyEnemy")
 			{
 				auto body = m_flyEnemies.at(flyEnemyCounter)->body->getBody();
-				body->SetTransform(b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale), body->GetAngle());
+				b2Vec2 newPos = b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale);
+				body->SetTransform(newPos, body->GetAngle());
+				m_flyEnemies.at(flyEnemyCounter)->body->setInitialPos(newPos);
 				m_flyEnemies.at(flyEnemyCounter)->ai->setMovementMarkers(min, max);
 				m_flyEnemies.at(flyEnemyCounter)->ai->setActivationState(true);
 				++flyEnemyCounter;
@@ -318,7 +322,9 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 			else if (type == "BigEnemy")
 			{
 				auto body = m_bigEnemies.at(bigEnemyCounter)->body->getBody();
-				body->SetTransform(b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale), body->GetAngle());
+				b2Vec2 newPos = b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale);
+				body->SetTransform(newPos, body->GetAngle());
+				m_bigEnemies.at(bigEnemyCounter)->body->setInitialPos(newPos);
 				m_bigEnemies.at(bigEnemyCounter)->ai->setMovementMarkers(min, max);
 				m_bigEnemies.at(bigEnemyCounter)->ai->setActivationState(true);
 				++bigEnemyCounter;

@@ -48,7 +48,12 @@
     <ClCompile Include="Bullets\BulletManager.cpp" />
     <ClCompile Include="Observers\LevelData.cpp" />
     <ClCompile Include="Observers\levelObserver.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="AI\PlayerAiSystem.cpp" />
+=======
+    <ClCompile Include="Hud.cpp" />
+    <ClCompile Include="Menu\PauseScreen.cpp" />
+>>>>>>> 7aef16be74b6a5942c8f5603f968be4a964a7aaf
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -116,6 +121,8 @@
     <ClInclude Include="ECS\Systems\ParticleSystem.h" />
     <ClInclude Include="Bullets\Bullet.h" />
     <ClInclude Include="Bullets\BulletManager.h" />
+    <ClInclude Include="Hud.h" />
+    <ClInclude Include="Menu\PauseScreen.h" />
     <ClInclude Include="Observers\LevelData.h" />
     <ClInclude Include="Observers\levelObserver.h" />
     <ClInclude Include="AI\BehaviourTree.h" />

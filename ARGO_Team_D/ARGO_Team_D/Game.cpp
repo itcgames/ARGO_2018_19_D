@@ -101,6 +101,7 @@ Game::Game() :
 	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+	m_pauseScreen = new PauseScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
 
 	m_particleSystem = new ParticleSystem(m_camera);
 
@@ -133,6 +134,24 @@ Game::Game() :
 	srand(time(NULL));
 
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
+
+	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
+
+
+	//float enemyX = 100;
+	//float enemyY = 100;
+	//float enemyWidth = 100;
+	//float enemyHeight = 100;
+	//std::string name = "TestAnimation";
+	//Entity * enemy = new Entity();
+	//enemy->addComponent(new BodyComponent(enemyX, enemyY, enemyWidth, enemyHeight, m_world, WORLD_SCALE));
+	//enemy->addComponent(new PositionComponent(enemyX, enemyY));
+	//enemy->addComponent(new SpriteComponent(name, *m_resourceManager, enemyX, enemyY));
+	////enemy->addComponent(new AnimationComponent());
+	//enemy->addComponent(new AiComponent(AiType::EnemyGun, 0, 200));
+	//m_renderSystem.addEntity(enemy);
+	//m_physicsSystem.addEntity(enemy);
+	////m_animationSystem.addEntity(enemy);
 }
 
 Game::~Game()
@@ -177,7 +196,6 @@ void Game::processEvents()
 		case PlayScreen:
 			inputHandler->handleKeyboardInput(event);
 			inputHandler->handleControllerInput(event);
-			m_controlSystem.processInput(event);
 			break;
 		case Options:
 			m_options->handleInput(event);
@@ -187,6 +205,9 @@ void Game::processEvents()
 			break;
 		case LevelSelect:
 			m_levelSelect->handleInput(event);
+			break;
+		case Pause:
+			m_pauseScreen->handleInput(event);
 			break;
 		default:
 			break;
@@ -199,10 +220,23 @@ void Game::processEvents()
 			{
 			case PlayScreen:
 				m_camera.m_shaking = true;
+				m_gameState = State::Pause;
 				break;
 			}
 
 		case SDL_KEYDOWN:
+
+			switch (m_gameState)
+			{
+			case PlayScreen:
+				if (event.key.keysym.sym == SDLK_q)
+				{
+					m_gameState = State::Pause;
+				}
+				
+				break;
+			}
+
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			if (event.key.keysym.sym == SDLK_RETURN) {
@@ -224,6 +258,21 @@ void Game::processEvents()
 		case SDL_QUIT:
 			m_quit = true;
 			break;
+
+
+		case SDL_JOYBUTTONDOWN:
+			//Play rumble at 75% strenght for 500 milliseconds
+			//SDL_HapticRumblePlay(gControllerHaptic, 0.75, 500);
+			switch (event.jbutton.button)
+			{
+			case 7:
+				//cout << "A button" << endl;
+				if (m_gameState == State::PlayScreen)
+				{
+					m_gameState = State::Pause;
+				}
+				break;
+			}
 		default:
 			m_camera.m_shaking = false;
 			break;
@@ -250,6 +299,7 @@ void Game::update(const float & dt)
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
+			
 			m_controlSystem.update();
 			m_aiSystem->update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
@@ -268,6 +318,8 @@ void Game::update(const float & dt)
 				}	
 			}
 			m_particleSystem->update();
+			m_hud->update();
+			
 		}
 		break;
 	case Options:
@@ -281,6 +333,10 @@ void Game::update(const float & dt)
 		break;
 	case Multiplayer:
 		m_network.updateFromHost();
+		break;
+	case Pause:
+		m_pauseScreen->update();
+		m_pauseScreen->updatePositions();
 		break;
 	default:
 		break;
@@ -318,6 +374,16 @@ void Game::render()
 		m_renderSystem.render(m_renderer, m_camera);
 		m_particleSystem->draw();
 		m_bulletManager->render(m_renderer, m_camera);
+		m_hud->draw();
+		break;
+	case Pause:
+		m_renderSystem.render(m_renderer, m_camera);
+		m_levelManager.render(m_renderer, m_camera);
+		m_renderSystem.render(m_renderer, m_camera);
+		m_particleSystem->draw();
+		m_bulletManager->render(m_renderer, m_camera);
+		m_pauseScreen->drawBackground();
+		m_pauseScreen->draw();
 		break;
 	case Options:
 		m_options->draw();
@@ -411,18 +477,21 @@ void Game::initialiseEntities()
 		Enemy * enemy = m_enemyFactory->createGunEnemy();
 		m_gunEnemies.push_back(enemy);
 		m_entityList.push_back(enemy->entity);
+		m_animationSystem.addEntity(enemy->entity);
 	}
 	for (int i = 0; i < FLY_ENEMY_COUNT; ++i)
 	{
 		Enemy * enemy = m_enemyFactory->createFlyEnemy();
 		m_flyEnemies.push_back(enemy);
 		m_entityList.push_back(m_flyEnemies.at(i)->entity);
+		m_animationSystem.addEntity(enemy->entity);
 	}
 	for (int i = 0; i < BIG_ENEMY_COUNT; ++i)
 	{
 		Enemy * enemy = m_enemyFactory->createBigEnemy();
 		m_bigEnemies.push_back(enemy);
 		m_entityList.push_back(m_bigEnemies.at(i)->entity);
+		m_animationSystem.addEntity(enemy->entity);
 	}
 }
 
@@ -431,7 +500,7 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	m_aiSystem = new AiSystem(m_playerBody, WORLD_SCALE, m_levelData);
+	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData);
 	for (auto i : m_entityList)
 	{
 		if (i->checkForComponent("Sprite"))
@@ -465,7 +534,7 @@ void Game::setUpFont() {
 	{
 		std::cout << "error error error" << std::endl;
 	}
-	const char *path = "ASSETS\\FONTS\\arial.ttf";
+	const char *path = "ASSETS\\FONTS\\TheBlackFestival.ttf";
 	Sans = TTF_OpenFont(path, 50);
 }
 
@@ -492,4 +561,9 @@ void Game::spawnProjectile(float x, float y)
 		}
 
 	}
+}
+
+void Game::loadAlevel(int num)
+{
+	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
 }

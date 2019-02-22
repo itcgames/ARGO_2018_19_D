@@ -1,8 +1,10 @@
 #include "AiSystem.h"
 
-AiSystem::AiSystem(BodyComponent * playerBody, const float SCALE, LevelData* levelData)
-	: m_playerBody(playerBody),
+AiSystem::AiSystem(BulletManager * bulletManager, BodyComponent * playerBody, const float SCALE, LevelData* levelData)
+	: m_bulletManager(bulletManager),
+	m_playerBody(playerBody),
 	WORLD_SCALE(SCALE),
+	DISTANCE_THRESHOLD(7.f),
 	m_levelData(levelData)
 {
 	m_allowedTypes = { "Body", "Animation", "Ai", "Sprite" };
@@ -44,70 +46,16 @@ void AiSystem::update()
 		{
 			bool active = ac.ai->getActivationState();
 			ac.sprite->setRender(active);
-			auto bodyPos = body->GetPosition();
-			auto bodyVel = body->GetLinearVelocity();
-			int minX = ac.ai->getMinX();
-			int maxX = ac.ai->getMaxX();
-			int direction = ac.ai->getDirection();
+			
 			if (active)
 			{
 				if (AiType::EnemyFly == ac.ai->getType())
 				{
-					VectorAPI dir;
-					if (false)
-					{
-
-					}
-					else
-					{
-						if (direction < 0)
-						{
-							if ((bodyPos.x) > minX / WORLD_SCALE)
-							{
-								body->SetLinearVelocity(b2Vec2(-10, 0));
-							}
-							else
-							{
-								ac.ai->setDirection(-direction);
-							}
-						}
-						else if (direction > 0)
-						{
-							if ((bodyPos.x) < maxX / WORLD_SCALE)
-							{
-								body->SetLinearVelocity(b2Vec2(10, 0));
-							}
-							else
-							{
-								ac.ai->setDirection(-direction);
-							}
-						}
-					}
+					handleFlyEnemy(ac);
 				}
 				else
 				{
-					if (direction < 0)
-					{
-						if ((bodyPos.x) > minX / WORLD_SCALE)
-						{
-							body->SetLinearVelocity(b2Vec2(-10, bodyVel.y));
-						}
-						else
-						{
-							ac.ai->setDirection(-direction);
-						}
-					}
-					else if (direction > 0)
-					{
-						if ((bodyPos.x) < maxX / WORLD_SCALE)
-						{
-							body->SetLinearVelocity(b2Vec2(10, bodyVel.y));
-						}
-						else
-						{
-							ac.ai->setDirection(-direction);
-						}
-					}
+					handleGroundEnemy(ac);
 				}
 			}
 			else
@@ -127,5 +75,108 @@ void AiSystem::removeEntity(const int id)
 	m_entityList.erase(std::remove_if(m_entityList.begin(), m_entityList.end(), [id](Entity* en) {
 		return en->id == id;
 	}), m_entityList.end());
+}
+
+void AiSystem::handleGroundEnemy(AiComponents & ac)
+{
+	// Get Variables
+	auto body = ac.body->getBody();
+	auto bodyPos = body->GetPosition();
+	auto bodyVel = body->GetLinearVelocity();
+	int minX = ac.ai->getMinX();
+	int maxX = ac.ai->getMaxX();
+	int direction = ac.ai->getDirection();
+
+	// Process
+	b2Vec2 dist = m_playerBody->getBody()->GetPosition() - bodyPos;
+	if (DISTANCE_THRESHOLD > dist.Length())
+	{
+		body->SetLinearVelocity(b2Vec2(0, 0));
+		ac.animation->handleInput("Idle");
+	}
+	else
+	{
+		if (direction < 0)
+		{
+			if ((bodyPos.x) > minX / WORLD_SCALE)
+			{
+				body->SetLinearVelocity(b2Vec2(-10, bodyVel.y));
+				ac.animation->handleInput("Walking");
+			}
+			else
+			{
+				ac.ai->setDirection(-direction);
+				ac.sprite->m_flip = direction < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+			}
+		}
+		else if (direction > 0)
+		{
+			if ((bodyPos.x) < maxX / WORLD_SCALE)
+			{
+				body->SetLinearVelocity(b2Vec2(10, bodyVel.y));
+				ac.animation->handleInput("Walking");
+			}
+			else
+			{
+				ac.ai->setDirection(-direction);
+				ac.sprite->m_flip = direction < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+			}
+		}
+	}
+}
+
+void AiSystem::handleFlyEnemy(AiComponents & ac)
+{
+	// Get Variables
+	auto body = ac.body->getBody();
+	auto bodyPos = body->GetPosition();
+	auto bodyVel = body->GetLinearVelocity();
+	int minX = ac.ai->getMinX();
+	int maxX = ac.ai->getMaxX();
+	int direction = ac.ai->getDirection();
+
+	// Process
+	b2Vec2 dist = m_playerBody->getBody()->GetPosition() - bodyPos;
+	if (DISTANCE_THRESHOLD > dist.Length())
+	{
+		body->SetLinearVelocity(b2Vec2(0, 0));
+		ac.animation->handleInput("Idle");
+	}
+	else
+	{
+		b2Vec2 newVelocity = b2Vec2(0, ac.body->getInitialPos().y - bodyPos.y);
+		if (direction < 0)
+		{
+			if ((bodyPos.x) > minX / WORLD_SCALE)
+			{
+				newVelocity.x = (minX / WORLD_SCALE) - bodyPos.x;
+				newVelocity.Normalize();
+				newVelocity *= 10.f;
+				body->SetLinearVelocity(newVelocity);
+				ac.animation->handleInput("Walking");
+			}
+			else
+			{
+				ac.ai->setDirection(-direction);
+				ac.sprite->m_flip = direction < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+			}
+		}
+		else if (direction > 0)
+		{
+			if ((bodyPos.x) < maxX / WORLD_SCALE)
+			{
+				newVelocity.x = (maxX / WORLD_SCALE) - bodyPos.x;
+				newVelocity.Normalize();
+				newVelocity *= 10.f;
+				body->SetLinearVelocity(newVelocity);
+				ac.animation->handleInput("Walking");
+			}
+			else
+			{
+				ac.ai->setDirection(-direction);
+				ac.sprite->m_flip = direction < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+			}
+		}
+	}
 }
 

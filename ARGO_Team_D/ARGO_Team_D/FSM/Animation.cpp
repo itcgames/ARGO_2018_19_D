@@ -33,9 +33,9 @@ void Animation::setPrevious(AnimationState * s)
 	m_previous = s;
 }
 
-void Animation::handle(SDL_Event & e)
+void Animation::handle(std::string newState)
 {
-	AnimationState * state = m_current->handle(this, e);
+	AnimationState * state = m_current->handle(this, newState);
 	if (nullptr != state && state != m_current) {
 		std::cout << "Changing state" << std::endl;
 		state->onEntry(this);

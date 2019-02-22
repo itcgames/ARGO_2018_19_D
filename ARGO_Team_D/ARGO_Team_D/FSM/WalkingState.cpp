@@ -13,47 +13,21 @@ WalkingState::~WalkingState()
 
 void WalkingState::onEntry(Animation * a)
 {
-	std::cout << "Entry Walking" << std::endl;
 	a->setPrevious(a->getCurrent());
 	a->setCurrent(this);
 }
 
 void WalkingState::onExit(Animation * a)
 {
-	std::cout << "Exit Walking" << std::endl;
 	a->setPrevious(this);
 	a->setCurrent(a->getPrevious());
 }
 
-AnimationState * WalkingState::handle(Animation * a, SDL_Event & e)
+AnimationState * WalkingState::handle(Animation * a, std::string state)
 {
-	if (e.type == SDL_KEYDOWN) {
-		switch (e.key.keysym.sym) {
-		case SDLK_d:
-			return this;
-		case SDLK_a:
-			return this;
-		case SDLK_LEFT:
-			return this;
-		case SDLK_RIGHT:
-			return this;
-		default:
-			return this;
-		}
-	}
-	else if (e.type == SDL_KEYUP)
+	if ("Idle" == state)
 	{
-		switch (e.key.keysym.sym) {
-		case SDLK_d:
-			return new IdleState();
-		case SDLK_a:
-			return new IdleState();
-		case SDLK_LEFT:
-			return new IdleState();
-		case SDLK_RIGHT:
-			return new IdleState();
-		default:
-			return this;
-		}
+		return new IdleState();
 	}
+	return this;
 }

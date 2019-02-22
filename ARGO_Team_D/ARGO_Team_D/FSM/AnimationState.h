@@ -12,7 +12,7 @@ public:
 	virtual ~AnimationState() {};
 	virtual void onEntry(Animation * a) = 0;
 	virtual void onExit(Animation * a) = 0;
-	virtual AnimationState * handle(Animation * a, SDL_Event & e) = 0;
+	virtual AnimationState * handle(Animation * a, std::string state) = 0;
 	std::string m_name;
 };
 

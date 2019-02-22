@@ -33,7 +33,6 @@ public:
 	void jump();
 	void fire();
 
-	void processInput(SDL_Event & e);
 	void bindBullets(BulletManager * bulletManager);
 
 	void spawnProjectile(float x, float y);

@@ -36,6 +36,8 @@ public:
 	void rightContactEnd();
 	int getBulletHitCount();
 	void setBulletHitCount(int count);
+	void setInitialPos(b2Vec2 pos);
+	b2Vec2 getInitialPos();
 
 private:
 	// Private Functions
@@ -55,6 +57,7 @@ private:
 	b2FixtureDef m_fixtureDef;
 	VectorAPI m_dimensions;
 	CollisionData m_bodyData;
+	b2Vec2 m_initialPosition;
 
 	// Sensor Bodies
 

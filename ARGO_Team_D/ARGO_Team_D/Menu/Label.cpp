@@ -7,8 +7,8 @@ Label::Label(const char * string, int x, int y, int w, int h, SDL_Color color, S
 	{
 		std::cout << "error error error" << std::endl;
 	}
-	const char *path = "ASSETS\\FONTS\\arial.ttf";
-	arial = TTF_OpenFont(path, 50);
+	const char *path = "ASSETS\\FONTS\\BloodBlocks.ttf";
+	arial = TTF_OpenFont(path, 300);
 
 	this->color = color;
 
@@ -33,6 +33,7 @@ Label::Label(const char * string, int x, int y, int w, int h, SDL_Color color, S
 	onScreen = false;
 	isTransitioning = false;
 	percent = 0;
+	doTransition = true;
 }
 
 Label::~Label()
@@ -49,14 +50,25 @@ void Label::draw()
 
 void Label::update()
 {
-	if (onScreen == false && message_rect.x != displayX && message_rect.y != displayY)
+
+	if (doTransition)
 	{
-		Lerp(startPosX, startPosY, displayX, displayY);
-		if (percent >= 1.0f)
+		if (onScreen == false && message_rect.x != displayX && message_rect.y != displayY)
 		{
-			onScreen = true;
-			percent = 0;
+			Lerp(startPosX, startPosY, displayX, displayY);
+			if (percent >= 1.0f)
+			{
+				onScreen = true;
+				percent = 0;
+			}
 		}
+	}
+	else
+	{
+		message_rect.x = displayX;
+		message_rect.y = displayY;
+		message_rect.w = displayWidth;
+		message_rect.h = displayHeight;
 	}
 
 	if (isTransitioning)
@@ -67,7 +79,10 @@ void Label::update()
 
 void Label::transition()
 {
-	Lerp(displayX, displayY, -200, windowHeight / 2);
+	if (doTransition)
+	{
+		Lerp(displayX, displayY, -200, windowHeight / 2);
+	}	
 }
 
 void Label::goToTransition()
@@ -110,4 +125,15 @@ void Label::Lerp(int startPosX, int startPosY, int destX, int destY)
 
 		message_rect.h = (1.0f - percent) * displayHeight + (percent * 0);
 	}
+}
+
+void Label::setPosition(int x, int y)
+{
+	displayX = x;
+	displayY = y;
+}
+
+void Label::doTransitions(bool b)
+{
+	doTransition = b;
 }

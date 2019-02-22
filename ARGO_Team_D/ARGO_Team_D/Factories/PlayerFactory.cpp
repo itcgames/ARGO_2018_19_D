@@ -32,6 +32,7 @@ Entity * PlayerFactory::create(VectorAPI pos)
 	body->getBody()->GetFixtureList()[0].SetFilterData(test);*/
 	entity->addComponent(body);
 	entity->addComponent(new GunComponent(0));
+	entity->addComponent(new HealthComponent(100,3));
 
 	AnimationComponent * a = new AnimationComponent();
 	std::vector<SDL_Rect> idleFrames;

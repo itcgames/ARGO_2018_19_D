@@ -46,29 +46,26 @@ void ControlSystem::update()
 			{
 				b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
 				currentVelocity.y = -35;
-
-
-				/*if (cc.part != nullptr)
-				{
-					cc.part->m_emitterExplos.activate(true);
-				}*/
 			}
 			if (m_moveRight)
 			{
 				b2Body->SetLinearVelocity(b2Vec2(15, currentVelocity.y));
 				currentVelocity.x = 15;
 				cc.sprite->m_flip = SDL_FLIP_NONE;
+				cc.animation->handleInput("Walking");
 			}
 			else if (m_moveLeft)
 			{
 				b2Body->SetLinearVelocity(b2Vec2(-15, currentVelocity.y));
 				currentVelocity.x = -15;
 				cc.sprite->m_flip = SDL_FLIP_HORIZONTAL;
+				cc.animation->handleInput("Walking");
 			}
 			else
 			{
 				b2Body->SetLinearVelocity(b2Vec2(0, currentVelocity.y));
 				currentVelocity.x = 0;
+				cc.animation->handleInput("Idle");
 			}
 
 			if (m_fire)
@@ -78,7 +75,6 @@ void ControlSystem::update()
 			m_moveRight = false, m_moveLeft = false, m_jump = false, m_fire = false;
 		}
 	}
-
 }
 
 void ControlSystem::moveRight()
@@ -123,17 +119,4 @@ void ControlSystem::removeEntity(const int id)
 	m_entityList.erase(std::remove_if(m_entityList.begin(), m_entityList.end(), [id](Entity* en) {
 		return en->id == id;
 	}), m_entityList.end());
-}
-
-void ControlSystem::processInput(SDL_Event & event)
-{
-	if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
-		std::vector<string> allowedTypes = {"Body", "Animation" };
-		for (auto & comp : m_components)
-		{
-			auto & cc = comp.second;
-			if (cc.animation)
-				cc.animation->handleInput(event);
-		}
-	}
 }
