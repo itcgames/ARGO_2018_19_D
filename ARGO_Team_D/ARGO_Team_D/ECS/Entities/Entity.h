@@ -54,6 +54,16 @@ public:
 		return false;
 	}
 
+	Component* getComponent(std::string component) {
+
+		for (auto & comp : m_components) {
+			if (comp->id == component) {
+				return comp;
+			}
+		}
+		return nullptr;
+	};
+
 private:
 	vector<Component*> m_components;
 

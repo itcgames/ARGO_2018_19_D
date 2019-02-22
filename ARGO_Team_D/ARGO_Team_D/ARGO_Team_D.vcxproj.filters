@@ -48,6 +48,7 @@
     <ClCompile Include="Bullets\BulletManager.cpp" />
     <ClCompile Include="Observers\LevelData.cpp" />
     <ClCompile Include="Observers\levelObserver.cpp" />
+    <ClCompile Include="AI\PlayerAiSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -117,5 +118,9 @@
     <ClInclude Include="Bullets\BulletManager.h" />
     <ClInclude Include="Observers\LevelData.h" />
     <ClInclude Include="Observers\levelObserver.h" />
+    <ClInclude Include="AI\BehaviourTree.h" />
+    <ClInclude Include="AI\Actions.h" />
+    <ClInclude Include="AI\PlayerAiSystem.h" />
+    <ClInclude Include="AI\PlayerAiComponent.h" />
   </ItemGroup>
 </Project>

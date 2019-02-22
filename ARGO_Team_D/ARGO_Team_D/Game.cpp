@@ -202,7 +202,6 @@ void Game::processEvents()
 				break;
 			}
 
-
 		case SDL_KEYDOWN:
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
