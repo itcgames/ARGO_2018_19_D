@@ -32,45 +32,23 @@ void NetworkingSystem::update()
 {
 	for (int i = 0; i < m_components.size() - 1; ++i) {
 		Packet * p = m_client.Receive();
-		if (!m_inGame) {
-			if (p->type == MessageType::HOSTING) {
-				std::cout << "You are hosting as" << p->playerID << std::endl;
-				int host = p->playerID;
-				m_localPlayerID = p->playerID;
-				m_inLobby = true;
-				for (auto & entityComps : m_components) {
-					int entityID = entityComps.first;
-					auto & networkingComps = entityComps.second;
-					if (networkingComps.network->networkID == -1) {
-						networkingComps.network->networkID = p->playerID;
-						break;
-					}
-				}
-			}
-			else if (p->type == MessageType::JOINED) {
+			if (p->type == MessageType::JOINED || p->type == MessageType::HOSTING) {
 				std::cout << "Player joined" << p->playerID << std::endl;
-				if (m_client.getHost()) {
+				for (int i = 0; i < p->numOtherPlayers + 1; ++i) {
 					for (auto & entityComps : m_components) {
 						int entityID = entityComps.first;
 						auto & networkingComps = entityComps.second;
 
 						if (networkingComps.network->networkID == -1) {
+							if (m_localPlayerID == -1) {
+								m_localPlayerID = p->playerID;
+							}
 							networkingComps.network->networkID = p->playerID;
 							break;
 						}
 					}
-					m_inLobby = true;
-				}
-				else {
-					m_localPlayerID = p->playerID;
 				}
 			}
-			if (p->type == MessageType::START) {
-				std::cout << "Start" << std::endl;
-				m_inGame = true;
-			}
-		}
-		else {
 			if (p->type == MessageType::PLAYER) {
 				for (auto & entityComps : m_components) {
 					int entityID = entityComps.first;
@@ -83,21 +61,17 @@ void NetworkingSystem::update()
 					}
 				}
 			}
-		}
 	}
-
-	if (m_inGame) {
-		std::cout << "Update" << std::endl;
-		for (auto & entityComps : m_components) {
-			Packet * p = new Packet();
-			int entityID = entityComps.first;
-			auto & networkingComps = entityComps.second;
-			if (networkingComps.network->networkID == m_localPlayerID) {
-				std::cout << "Sending for Local" << std::endl;
-				p->type = MessageType::PLAYER;
-				p->position = networkingComps.position->getPosition();
-				m_client.Send(p);
-			}
+	std::cout << "Update" << std::endl;
+	for (auto & entityComps : m_components) {
+		Packet * p = new Packet();
+		int entityID = entityComps.first;
+		auto & networkingComps = entityComps.second;
+		if (networkingComps.network->networkID == m_localPlayerID) {
+			std::cout << "Sending for Local" << std::endl;
+			p->type = MessageType::PLAYER;
+			p->position = networkingComps.position->getPosition();
+			m_client.Send(p);
 		}
 	}
 }

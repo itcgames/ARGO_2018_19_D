@@ -61,6 +61,12 @@ Packet * Client::Receive()
 {
 	ZeroMemory(m_packet, sizeof(struct Packet));
 	int bytesReceived = recv(sock, (char*)m_packet, sizeof(struct Packet), 0);
+	if (bytesReceived == SOCKET_ERROR) {
+		int error = WSAGetLastError();
+		if (error != WSAEWOULDBLOCK) {
+			std::cout << WSAGetLastError() << std::endl;
+		}
+	}
 	return m_packet;
 }
 

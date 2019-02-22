@@ -5,6 +5,8 @@ using namespace std;
 Server::Server()
 {
 	m_numPlayers = 0;
+	m_clients.resize(MAX_CLIENTS);
+	m_clientAddrs.resize(MAX_CLIENTS);
 }
 
 Server::~Server()

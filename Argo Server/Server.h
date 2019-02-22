@@ -3,8 +3,10 @@
 
 #pragma comment (lib, "ws2_32.lib")
 #include <WS2tcpip.h>
+#include <vector>
+#include "../ARGO_Team_D/ARGO_Team_D/Utils/Packet.h"
 
-#define MAX_CLIENTS 2
+#define MAX_CLIENTS 1
 
 
 class Server {
@@ -22,8 +24,9 @@ protected:
 	WSADATA m_data;
 	WORD m_version;
 	SOCKET m_listening;
-	SOCKET m_clients[MAX_CLIENTS];
-	sockaddr m_clientAddrs[MAX_CLIENTS];
+	
+	std::vector<SOCKET> m_clients;
+	std::vector<sockaddr> m_clientAddrs;
 	int m_numPlayers;
 	const int port = 8080;
 };

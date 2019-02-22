@@ -17,6 +17,7 @@ struct Packet {
 	int playerID;
 	MessageType type;
 	VectorAPI position;
+	int numOtherPlayers;
 };
 
 #endif //!PACKET_H
