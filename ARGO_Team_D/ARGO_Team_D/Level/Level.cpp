@@ -27,6 +27,20 @@ Level::~Level()
 bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Renderer * renderer)
 {
 	unload();
+	for (int i = 0; i < 3; i++) {
+		if (i == 0)
+		{
+			m_backgrounds.push_back(rManager->getImageResource("Background1"));
+		}
+		if (i == 1)
+		{
+			m_backgrounds.push_back(rManager->getImageResource("Background1-2"));
+		}
+		if (i == 2)
+		{
+			m_backgrounds.push_back(rManager->getImageResource("Background1-3"));
+		}
+	}
 
 	if (m_map.load(filepath)) {
 		tmx::Vector2u tileCount = m_map.getTileCount();
@@ -325,6 +339,19 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 	SDL_Rect srcRect;
 	SDL_Rect bounds = camera.getBounds();
 
+
+	SDL_Rect destination;
+	destination.x = -1280 - bounds.x;
+	destination.y = 0;
+	destination.w = 1280;
+	destination.h = 720;
+
+	for (int i = 0; i < m_levelWidth; i++) {
+		for (int j = 0; j < 3; j++) {
+			SDL_RenderCopy(renderer, m_backgrounds.at(j), NULL, &destination);
+			destination.x += 1270;
+		}
+	}
 
 	destRect.w = m_tileWidth;
 	destRect.h = m_tileHeight;

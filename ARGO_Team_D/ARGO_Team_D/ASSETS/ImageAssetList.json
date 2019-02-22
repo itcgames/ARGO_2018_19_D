@@ -6,5 +6,8 @@
   "Player":  "./ASSETS//IMAGES//player1.png",
   "Temp": "./ASSETS//IMAGES//tileset2.png",
   "tilesheet": "./ASSETS//IMAGES//tilesheet.png",
-  "Placeholder": "./ASSETS//IMAGES//tileset2.png"
+  "Placeholder": "./ASSETS//IMAGES//tileset2.png",
+  "Background1": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 1.png",
+  "Background1-2": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 2.png",
+  "Background1-3": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 3.png"
 }

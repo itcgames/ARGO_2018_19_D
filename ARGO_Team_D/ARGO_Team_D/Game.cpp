@@ -308,8 +308,8 @@ void Game::render()
 		m_menu->draw();
 		break;
 	case PlayScreen:
-		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
+		m_renderSystem.render(m_renderer, m_camera);
 		m_particleSystem->draw();
 		m_bulletManager->render(m_renderer, m_camera);
 		break;

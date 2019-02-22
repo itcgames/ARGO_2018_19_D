@@ -38,5 +38,4 @@ private:
 	int m_xMin;
 	int m_hits;
 };
-
 #endif // !AICOMPONENT_H
