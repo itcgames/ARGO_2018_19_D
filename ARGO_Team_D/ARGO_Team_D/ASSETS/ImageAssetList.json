@@ -9,12 +9,8 @@
   "Placeholder": "./ASSETS//IMAGES//tileset2.png",
   "Background1": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 1.png",
   "Background1-2": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 2.png",
-<<<<<<< HEAD
-  "Background1-3": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 3.png"
-=======
   "Background1-3": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 3.png",
   "GunEnemy": "./ASSETS//IMAGES//GunEnemy.png",
   "FlyEnemy": "./ASSETS//IMAGES//FlyEnemy.png",
   "BigEnemy": "./ASSETS//IMAGES//BigEnemy.png"
->>>>>>> 7aef16be74b6a5942c8f5603f968be4a964a7aaf
 }
