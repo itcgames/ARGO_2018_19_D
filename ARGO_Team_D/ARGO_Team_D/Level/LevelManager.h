@@ -22,7 +22,7 @@ public:
 	void render(SDL_Renderer * renderer, Camera & camera);
 	void loadCurrentLevel(ResourceManager & resourceManager, SDL_Renderer * renderer);
 	void parseLevelSystem(const std::string & filepath, b2World & world, const float worldScale, TTF_Font * font, std::vector<Enemy *> & gunEnemies, std::vector<Enemy *> & flyEnemies, std::vector<Enemy *> & bigEnemies);
-	void checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale, SDL_Renderer * renderer);
+	bool checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale, SDL_Renderer * renderer);
 
 	void loadLevel(Entity * e, ResourceManager & resourceManager, SDL_Renderer * renderer, int level);
 
