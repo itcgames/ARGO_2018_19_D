@@ -46,6 +46,8 @@
     <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
     <ClCompile Include="Bullets\Bullet.cpp" />
     <ClCompile Include="Bullets\BulletManager.cpp" />
+    <ClCompile Include="Observers\LevelData.cpp" />
+    <ClCompile Include="Observers\levelObserver.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Menu\PauseScreen.cpp" />
   </ItemGroup>
@@ -117,5 +119,7 @@
     <ClInclude Include="Bullets\BulletManager.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="Menu\PauseScreen.h" />
+    <ClInclude Include="Observers\LevelData.h" />
+    <ClInclude Include="Observers\levelObserver.h" />
   </ItemGroup>
 </Project>

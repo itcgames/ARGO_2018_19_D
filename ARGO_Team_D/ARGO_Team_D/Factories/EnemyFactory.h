@@ -32,7 +32,7 @@ public:
 
 private:
 	// Private Functions
-	Enemy * createEnemy(string spriteId, int idleFrames, int walkingFrames, int width, int height);
+	Enemy * createEnemy(string spriteId, int idleFrames, int walkingFrames, int width, int height, bool flying);
 
 	// Private Members
 	ResourceManager * m_resourceManager;

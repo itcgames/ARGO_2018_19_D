@@ -89,8 +89,8 @@ public:
 		start();
 	};
 
-	void handleInput(SDL_Event & e) {
-		m_animation.handle(e);
+	void handleInput(std::string state) {
+		m_animation.handle(state);
 	};
 
 	void setLooping(std::string name,bool looping) {

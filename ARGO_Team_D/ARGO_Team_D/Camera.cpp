@@ -9,7 +9,7 @@ Camera::Camera(const int windowWidth, const int windowHeight) :
 	m_originalSize(windowWidth, windowHeight)
 {
 	m_viewOffset = 0;
-	m_weight = 0.08f;
+	m_weight = 0.1f;
 	m_maxOffset = 3;
 	m_shake = 0.1;
 }

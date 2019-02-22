@@ -16,7 +16,7 @@ Entity * PlayerFactory::create(VectorAPI pos)
 	Entity * entity = new Entity();
 	entity->addComponent(new PositionComponent(pos));
 	entity->addComponent(new SpriteComponent(m_spriteId, *m_resourceManager, m_dimensions.x, m_dimensions.y));
-	auto body = new BodyComponent(pos.x, pos.y, m_dimensions.x, m_refWorld, WORLD_SCALE, "PlayerBody");
+	auto body = new BodyComponent(pos.x, pos.y, m_dimensions.x, m_refWorld, WORLD_SCALE, "PlayerBody", false);
 	auto part = new ParticleEffectsComponent(body->getBody()->GetPosition().x * WORLD_SCALE, 
 		body->getBody()->GetPosition().y * WORLD_SCALE, 
 		5, 5, SDL_Color{ 181, 101, 29 }, 

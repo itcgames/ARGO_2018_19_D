@@ -43,13 +43,15 @@
 #include <time.h>
 #include <functional>
 #include "Utils/ContactListener.h"
-#include"Particles/Timer.h"
-#include"Particles/Emitter.h"
-#include"ECS/Components/ParticleEffectsComponent.h"
-#include"ECS/Systems/ParticleSystem.h"
+#include "Particles/Timer.h"
+#include "Particles/Emitter.h"
+#include "ECS/Components/ParticleEffectsComponent.h"
+#include "ECS/Systems/ParticleSystem.h"
 #include "Bullets/BulletManager.h"
-#include"Hud.h"
+#include "Hud.h"
 #include "Menu/PauseScreen.h"
+#include "Observers/LevelData.h"
+#include "Observers/levelObserver.h"
 
 class ControlSystem;
 class MainMenu;
@@ -185,5 +187,9 @@ private:
 	//hud
 	Hud * m_hud;
 
+
+	//Observers and Subjects for level completion
+	LevelData *m_levelData;
+	LevelObserver *m_levelObserver;
 };
 #endif // !GAME_H

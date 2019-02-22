@@ -3,6 +3,7 @@
 
 #include "AnimationState.h"
 #include <SDL_events.h>
+#include <string>
 
 class AnimationState;
 
@@ -15,7 +16,7 @@ public:
 	AnimationState * getPrevious();
 	void setCurrent(AnimationState * s);
 	void setPrevious(AnimationState * s);
-	void handle(SDL_Event & e);
+	void handle(std::string newState);
 protected:
 	AnimationState * m_current;
 	AnimationState * m_previous;

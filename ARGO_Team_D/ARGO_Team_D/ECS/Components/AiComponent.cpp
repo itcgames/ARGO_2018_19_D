@@ -1,11 +1,12 @@
 #include "AiComponent.h"
 
-AiComponent::AiComponent(AiType type, int xMax, int xMin) 
+AiComponent::AiComponent(AiType type, int xMax, int xMin, int hits) 
 	: m_type(type), 
 	m_active(false), 
 	m_direction(1),
 	m_xMax(xMax),
-	m_xMin(xMin)
+	m_xMin(xMin),
+	m_hits(hits)
 {
 	id = "Ai";
 }
@@ -48,4 +49,14 @@ int AiComponent::getMinX()
 int AiComponent::getMaxX()
 {
 	return m_xMax;
+}
+
+int AiComponent::getMaxHits()
+{
+	return m_hits;
+}
+
+AiType AiComponent::getType()
+{
+	return m_type;
 }

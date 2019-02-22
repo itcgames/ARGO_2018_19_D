@@ -105,6 +105,10 @@ Game::Game() :
 
 	m_particleSystem = new ParticleSystem(m_camera);
 
+	m_levelData = new LevelData(3);
+	m_levelObserver = new LevelObserver(1);
+	m_levelData->registerObserver(m_levelObserver);
+
 	initialiseFactories();
 	initialiseEntities();
 	initialiseSystems();
@@ -128,6 +132,7 @@ Game::Game() :
 	m_bulletManager = new BulletManager(m_world, WORLD_SCALE, m_resourceManager);
 	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
+
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
 	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
@@ -191,7 +196,6 @@ void Game::processEvents()
 		case PlayScreen:
 			inputHandler->handleKeyboardInput(event);
 			inputHandler->handleControllerInput(event);
-			m_controlSystem.processInput(event);
 			break;
 		case Options:
 			m_options->handleInput(event);
@@ -279,8 +283,6 @@ void Game::processEvents()
 
 void Game::update(const float & dt)
 {
-
-
 	if (!m_network.getHost())
 	{
 		m_network.updateFromHost();
@@ -311,7 +313,11 @@ void Game::update(const float & dt)
 			inputHandler->update();
 			m_animationSystem.update(dt / 1000);
 			m_levelManager.update(dt/1000);
-			m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer);
+			if (m_levelObserver->getComplete()) {
+				if (m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer)) {
+					m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+				}	
+			}
 			m_particleSystem->update();
 			m_hud->update();
 			
@@ -365,8 +371,8 @@ void Game::render()
 		m_menu->draw();
 		break;
 	case PlayScreen:
-		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
+		m_renderSystem.render(m_renderer, m_camera);
 		m_particleSystem->draw();
 		m_bulletManager->render(m_renderer, m_camera);
 		m_hud->draw();
@@ -471,20 +477,21 @@ void Game::initialiseEntities()
 		Enemy * enemy = m_enemyFactory->createGunEnemy();
 		m_gunEnemies.push_back(enemy);
 		m_entityList.push_back(enemy->entity);
+		m_animationSystem.addEntity(enemy->entity);
 	}
 	for (int i = 0; i < FLY_ENEMY_COUNT; ++i)
 	{
-		// TBI
-		//Enemy * enemy = m_enemyFactory->createFlyEnemy();
-		//m_flyEnemies.push_back(enemy);
-		////m_entityList.push_back(m_flyEnemies.at(i)->entity);
+		Enemy * enemy = m_enemyFactory->createFlyEnemy();
+		m_flyEnemies.push_back(enemy);
+		m_entityList.push_back(m_flyEnemies.at(i)->entity);
+		m_animationSystem.addEntity(enemy->entity);
 	}
 	for (int i = 0; i < BIG_ENEMY_COUNT; ++i)
 	{
-		// TBI
-		//Enemy * enemy = m_enemyFactory->createBigEnemy();
-		//m_bigEnemies.push_back(enemy);
-		////m_entityList.push_back(m_bigEnemies.at(i)->entity);
+		Enemy * enemy = m_enemyFactory->createBigEnemy();
+		m_bigEnemies.push_back(enemy);
+		m_entityList.push_back(m_bigEnemies.at(i)->entity);
+		m_animationSystem.addEntity(enemy->entity);
 	}
 }
 
@@ -493,7 +500,7 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	m_aiSystem = new AiSystem(m_playerBody, WORLD_SCALE);
+	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData);
 	for (auto i : m_entityList)
 	{
 		if (i->checkForComponent("Sprite"))

@@ -65,6 +65,12 @@ public:
 	std::vector<Enemy *> & m_gunEnemies;
 	std::vector<Enemy *> & m_flyEnemies;
 	std::vector<Enemy *> & m_bigEnemies;
+
+
+	std::vector<SDL_Texture*> m_backgrounds;
+
+	// How many times to render the background
+	int m_levelWidth = 2;
 };
 
 #endif // !LEVEL_H

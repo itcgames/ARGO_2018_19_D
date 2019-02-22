@@ -65,14 +65,14 @@ bool ResourceManager::checkLoaded()
 {
 	for (auto i : m_imageResources) {
 		std::cout << "Loading: " << i.first << std::endl;
-		if (i.second->getTexture() == nullptr) {
+		if (nullptr == i.second->getTexture()) {
 			return false;
 		}
 	}
 
 	for (auto i : m_soundResources) {
 		std::cout << "Loading: " << i.first << std::endl;
-		if (i.second->getSound() == nullptr) {
+		if (nullptr == i.second->getSound()) {
 			return false;
 		}
 	}
