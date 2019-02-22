@@ -101,6 +101,7 @@ Game::Game() :
 	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+	m_pauseScreen = new PauseScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
 
 	m_particleSystem = new ParticleSystem(m_camera);
 
@@ -129,7 +130,7 @@ Game::Game() :
 	srand(time(NULL));
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
-	m_hud = new Hud(m_camera, *m_renderer, p_window);
+	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
 
 
 	//float enemyX = 100;
@@ -201,6 +202,9 @@ void Game::processEvents()
 		case LevelSelect:
 			m_levelSelect->handleInput(event);
 			break;
+		case Pause:
+			m_pauseScreen->handleInput(event);
+			break;
 		default:
 			break;
 		}
@@ -212,11 +216,24 @@ void Game::processEvents()
 			{
 			case PlayScreen:
 				m_camera.m_shaking = true;
+				m_gameState = State::Pause;
 				break;
 			}
 
 
 		case SDL_KEYDOWN:
+
+			switch (m_gameState)
+			{
+			case PlayScreen:
+				if (event.key.keysym.sym == SDLK_q)
+				{
+					m_gameState = State::Pause;
+				}
+				
+				break;
+			}
+
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			if (event.key.keysym.sym == SDLK_RETURN) {
@@ -238,6 +255,21 @@ void Game::processEvents()
 		case SDL_QUIT:
 			m_quit = true;
 			break;
+
+
+		case SDL_JOYBUTTONDOWN:
+			//Play rumble at 75% strenght for 500 milliseconds
+			//SDL_HapticRumblePlay(gControllerHaptic, 0.75, 500);
+			switch (event.jbutton.button)
+			{
+			case 7:
+				//cout << "A button" << endl;
+				if (m_gameState == State::PlayScreen)
+				{
+					m_gameState = State::Pause;
+				}
+				break;
+			}
 		default:
 			m_camera.m_shaking = false;
 			break;
@@ -297,6 +329,10 @@ void Game::update(const float & dt)
 	case Multiplayer:
 		m_network.updateFromHost();
 		break;
+	case Pause:
+		m_pauseScreen->update();
+		m_pauseScreen->updatePositions();
+		break;
 	default:
 		break;
 	}
@@ -334,6 +370,14 @@ void Game::render()
 		m_particleSystem->draw();
 		m_bulletManager->render(m_renderer, m_camera);
 		m_hud->draw();
+		break;
+	case Pause:
+		m_renderSystem.render(m_renderer, m_camera);
+		m_levelManager.render(m_renderer, m_camera);
+		m_particleSystem->draw();
+		m_bulletManager->render(m_renderer, m_camera);
+		m_pauseScreen->drawBackground();
+		m_pauseScreen->draw();
 		break;
 	case Options:
 		m_options->draw();

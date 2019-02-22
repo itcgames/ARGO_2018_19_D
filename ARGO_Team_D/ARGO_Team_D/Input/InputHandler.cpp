@@ -91,6 +91,7 @@ void InputHandler::handleControllerInput(SDL_Event theEvent)
 			break;
 		case 7:
 			//cout << "Pause button" << endl;
+			m_paused = true;
 			break;
 		case 8:
 			//cout << "Left Bumper button" << endl;
@@ -128,6 +129,7 @@ void InputHandler::handleControllerInput(SDL_Event theEvent)
 			break;
 		case 7:
 			//cout << "Pause button" << endl;
+			m_paused = false;
 			break;
 		case 8:
 			//cout << "Left Bumper button" << endl;
@@ -227,4 +229,9 @@ void InputHandler::update()
 	{
 		m_jump->execute();
 	}
+}
+
+bool InputHandler::isPaused()
+{
+	return m_paused;
 }

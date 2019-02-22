@@ -49,20 +49,22 @@
 #include"ECS/Systems/ParticleSystem.h"
 #include "Bullets/BulletManager.h"
 #include"Hud.h"
+#include "Menu/PauseScreen.h"
 
 class ControlSystem;
 class MainMenu;
 class OptionsMenu;
 class CreditScreen;
 class LevelSelectMenu;
-
+class PauseScreen;
 enum State {
 	Menu,
 	PlayScreen,
 	Options,
 	Credits,
 	LevelSelect,
-	Multiplayer
+	Multiplayer,
+	Pause
 };
 
 const int FRAMES_PER_SECOND = 60;
@@ -169,6 +171,7 @@ private:
 	OptionsMenu * m_options;
 	CreditScreen * m_credits;
 	LevelSelectMenu * m_levelSelect;
+	PauseScreen * m_pauseScreen;
 
 	// Networking
 	NetworkingSystem m_network;

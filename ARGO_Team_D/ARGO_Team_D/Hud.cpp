@@ -1,8 +1,11 @@
 #include "Hud.h"
 
-Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window):
+Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player):
 	m_cam{cam}
 {
+
+	m_player = &player;
+	allowedTypes.push_back("Health");
 	this->rend = &rend;
 	if (TTF_Init() < 0)
 	{
@@ -79,21 +82,47 @@ void Hud::update()
 	/*message_rect.x = this->m_cam.m_position.x;
 	message_rect.y = this->m_cam.m_position.y;*/
 
-	/*SDL_DestroyTexture(message);
+	
+
+	auto comps = m_player->getComponentsOfType(allowedTypes);
+	for (auto c : comps)
+	{
+		HudComponents hudcomps;
+		hudcomps.health = dynamic_cast<HealthComponent*>(comps["Health"]);
+
+		lives = hudcomps.health->getLives();
+		health = hudcomps.health->getHealth();
+
+	}
+	SDL_DestroyTexture(message);
 	color = { 255,0,0,255 };
-	surfaceMessage = TTF_RenderText_Blended(arial, string, color);
+	string = "Health : " + std::to_string(health);
+	surfaceMessage = TTF_RenderText_Blended(arial, string.c_str(), color);
 	message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
-	SDL_FreeSurface(surfaceMessage);*/
-
-
+	SDL_FreeSurface(surfaceMessage);
 
 }
 
 void Hud::draw()
 {
 	SDL_RenderCopy(rend, message, NULL, &message_rect);
-	SDL_RenderCopy(rend, texture, &srcrect, &dstrect);
+
+	if (lives >= 1)
+	{
+		SDL_RenderCopy(rend, texture, &srcrect, &dstrect);
+	}
+	if (lives >= 2)
+	{
+		SDL_RenderCopy(rend, texture, &srcrect, &dstrect2);
+	}
+	if (lives >= 3)
+	{
+		SDL_RenderCopy(rend, texture, &srcrect, &dstrect3);
+	}
+	/*SDL_RenderCopy(rend, texture, &srcrect, &dstrect);
 	SDL_RenderCopy(rend, texture, &srcrect, &dstrect2);
-	SDL_RenderCopy(rend, texture, &srcrect, &dstrect3);
+	SDL_RenderCopy(rend, texture, &srcrect, &dstrect3);*/
+
+
 	SDL_SetRenderDrawColor(rend, color.r, color.g, color.b, color.a);
 }

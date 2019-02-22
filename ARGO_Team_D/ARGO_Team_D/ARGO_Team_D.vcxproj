@@ -185,6 +185,7 @@
     <ClCompile Include="Menu\LevelSelectMenu.cpp" />
     <ClCompile Include="Menu\MainMenu.cpp" />
     <ClCompile Include="Menu\OptionsMenu.cpp" />
+    <ClCompile Include="Menu\PauseScreen.cpp" />
     <ClCompile Include="Menu\Screen.cpp" />
     <ClCompile Include="Particles\Emitter.cpp" />
     <ClCompile Include="Particles\Particle.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="Menu\LevelSelectMenu.h" />
     <ClInclude Include="Menu\MainMenu.h" />
     <ClInclude Include="Menu\OptionsMenu.h" />
+    <ClInclude Include="Menu\PauseScreen.h" />
     <ClInclude Include="Menu\Screen.h" />
     <ClInclude Include="Observers\Observer.h" />
     <ClInclude Include="Observers\Subject.h" />

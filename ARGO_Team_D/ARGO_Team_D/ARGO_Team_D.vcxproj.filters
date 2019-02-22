@@ -46,7 +46,8 @@
     <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
     <ClCompile Include="Bullets\Bullet.cpp" />
     <ClCompile Include="Bullets\BulletManager.cpp" />
-	<ClCompile Include="Hud.cpp" />
+    <ClCompile Include="Hud.cpp" />
+    <ClCompile Include="Menu\PauseScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -114,6 +115,7 @@
     <ClInclude Include="ECS\Systems\ParticleSystem.h" />
     <ClInclude Include="Bullets\Bullet.h" />
     <ClInclude Include="Bullets\BulletManager.h" />
-	<ClInclude Include="Hud.h" />
+    <ClInclude Include="Hud.h" />
+    <ClInclude Include="Menu\PauseScreen.h" />
   </ItemGroup>
 </Project>

@@ -21,6 +21,9 @@ public:
 
 	void Lerp(int startPosX, int startPosY, int destX, int destY);
 	void Focus(bool b);
+
+	void setPosition(int x, int y);
+	void doTransitions(bool b);
 private:
 	SDL_Renderer * rend;
 	TTF_Font* arial;
@@ -56,4 +59,6 @@ private:
 	int displayHeight;
 
 	bool activateFunction;
+
+	bool doTransition;
 };

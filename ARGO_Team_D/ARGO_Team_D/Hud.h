@@ -7,11 +7,18 @@
 #include<SDL_ttf.h>
 #include<iostream>
 #include<string>
+#include"ECS/Components/HealthComponent.h"
+#include"ECS/Entities/Entity.h"
+
+
+struct HudComponents {
+	HealthComponent * health;
+};
 
 class Hud
 {
 public:
-	Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window);
+	Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player);
 	~Hud();
 	void update();
 	void draw();
@@ -30,7 +37,8 @@ private:
 
 
 	Camera & m_cam;
-
+	Entity * m_player;
+	std::vector<std::string> allowedTypes;
 
 	SDL_Surface * image;
 	SDL_Texture * texture;
@@ -38,6 +46,9 @@ private:
 	SDL_Rect dstrect;
 	SDL_Rect dstrect2;
 	SDL_Rect dstrect3;
+
+	int lives;
+	int health;
 };
 
 #endif // !HUD_H
