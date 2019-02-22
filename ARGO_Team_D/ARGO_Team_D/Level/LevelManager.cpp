@@ -44,7 +44,7 @@ void LevelManager::parseLevelSystem(const std::string & filepath, b2World & worl
 	levelFile.close();
 }
 
-void LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale, SDL_Renderer * renderer)
+bool LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale, SDL_Renderer * renderer)
 {
 	std::vector<std::string> allowedTypes = {"Position", "Sprite", "Body"};
 	auto comps = e->getComponentsOfType(allowedTypes);
@@ -70,6 +70,9 @@ void LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const
 			auto startPos = m_levels[m_currentLevel]->m_startPos;
 			pos->setPosition(startPos);
 			body->getBody()->SetTransform(b2Vec2(startPos.x / worldScale, startPos.y / worldScale), 0);
+
+			return true;
 		}
 	}
+	return false;
 }

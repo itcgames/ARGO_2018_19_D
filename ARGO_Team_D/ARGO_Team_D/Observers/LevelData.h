@@ -16,6 +16,8 @@ public:
 
 	void enemyKilled();
 
+	void reset(int killLimit);
+
 private:
 	std::vector<Observer *> observers; // observers
 

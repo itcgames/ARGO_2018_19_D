@@ -35,3 +35,14 @@ void LevelData::enemyKilled()
 		notifyObservers();
 	}
 }
+
+void LevelData::reset(int killLimit)
+{
+	m_killLimit = killLimit;
+	m_enemiesKilled = 0;
+	if (observers.size() > 0) {
+		for (auto i : observers) {
+			i->update(false);
+		}
+	}
+}

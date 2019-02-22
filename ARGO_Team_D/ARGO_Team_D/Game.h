@@ -48,6 +48,8 @@
 #include "ECS/Components/ParticleEffectsComponent.h"
 #include "ECS/Systems/ParticleSystem.h"
 #include "Bullets/BulletManager.h"
+#include "Observers/LevelData.h"
+#include "Observers/levelObserver.h"
 
 class ControlSystem;
 class MainMenu;
@@ -176,5 +178,9 @@ private:
 	int test;
 
 	BulletManager * m_bulletManager;
+
+	//Observers and Subjects for level completion
+	LevelData *m_levelData;
+	LevelObserver *m_levelObserver;
 };
 #endif // !GAME_H

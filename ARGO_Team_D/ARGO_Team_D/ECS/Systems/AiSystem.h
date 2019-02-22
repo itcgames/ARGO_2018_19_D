@@ -9,6 +9,7 @@
 #include "../ECS/Components/BodyComponent.h"
 #include "../ECS/Components/AnimationComponent.h"
 #include "../ECS/Components/SpriteComponent.h"
+#include "../Observers/LevelData.h"
 
 struct AiComponents
 {
@@ -21,7 +22,7 @@ struct AiComponents
 class AiSystem : public System
 {
 public:
-	AiSystem(BodyComponent * playerBody, const float SCALE);
+	AiSystem(BodyComponent * playerBody, const float SCALE, LevelData* levelData);
 	~AiSystem();
 	void addEntity(Entity * e) override;
 	void update();
@@ -31,6 +32,7 @@ private:
 	const float WORLD_SCALE;
 	std::vector<string> m_allowedTypes;
 	std::map<int, AiComponents> m_components;
+	LevelData *m_levelData;
 };
 
 #endif // !AISYSTEM_H

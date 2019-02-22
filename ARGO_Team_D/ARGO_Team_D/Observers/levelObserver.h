@@ -13,6 +13,8 @@ public:
 
 	virtual void update(bool complete) override;
 
+	bool getComplete() { return m_levelComplete; }
+
 };
 
 #endif
