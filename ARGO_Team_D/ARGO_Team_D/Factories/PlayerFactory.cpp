@@ -25,6 +25,7 @@ Entity * PlayerFactory::create(VectorAPI pos)
 	body->getBody()->GetFixtureList()[0].SetFilterData(test);*/
 	entity->addComponent(body);
 	entity->addComponent(new GunComponent(0));
+	entity->addComponent(new NetworkComponent(-1));
 	return entity;
 }
 

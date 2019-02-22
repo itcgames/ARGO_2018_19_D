@@ -36,12 +36,14 @@ void NetworkingSystem::update()
 			if (p->type == MessageType::HOSTING) {
 				std::cout << "You are hosting as" << p->playerID << std::endl;
 				int host = p->playerID;
+				m_localPlayerID = p->playerID;
 				m_inLobby = true;
 				for (auto & entityComps : m_components) {
 					int entityID = entityComps.first;
 					auto & networkingComps = entityComps.second;
-					if (networkingComps.network == nullptr) {
-						
+					if (networkingComps.network->networkID == -1) {
+						networkingComps.network->networkID = p->playerID;
+						break;
 					}
 				}
 			}
@@ -52,7 +54,7 @@ void NetworkingSystem::update()
 						int entityID = entityComps.first;
 						auto & networkingComps = entityComps.second;
 
-						if (networkingComps.network != nullptr && networkingComps.network->networkID == -1) {
+						if (networkingComps.network->networkID == -1) {
 							networkingComps.network->networkID = p->playerID;
 							break;
 						}
@@ -60,10 +62,11 @@ void NetworkingSystem::update()
 					m_inLobby = true;
 				}
 				else {
-
+					m_localPlayerID = p->playerID;
 				}
 			}
-			else if (p->type == MessageType::START) {
+			if (p->type == MessageType::START) {
+				std::cout << "Start" << std::endl;
 				m_inGame = true;
 			}
 		}
@@ -89,7 +92,7 @@ void NetworkingSystem::update()
 			Packet * p = new Packet();
 			int entityID = entityComps.first;
 			auto & networkingComps = entityComps.second;
-			if (nullptr == networkingComps.network) {
+			if (networkingComps.network->networkID == m_localPlayerID) {
 				std::cout << "Sending for Local" << std::endl;
 				p->type = MessageType::PLAYER;
 				p->position = networkingComps.position->getPosition();

@@ -33,7 +33,7 @@ private:
 	std::vector<std::string> m_allowedTypes = { "Network", "Position" };
 	bool m_inLobby = false;
 	int hostEntity = 0;
-	int hostNetworkID = 0;
+	int m_localPlayerID = 0;
 };
 
 #endif // !NETWORKINSYSTEM_H
