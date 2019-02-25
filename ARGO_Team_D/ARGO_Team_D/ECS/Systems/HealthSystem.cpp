@@ -1,6 +1,6 @@
 #include "HealthSystem.h"
 
-HealthSystem::HealthSystem() 
+HealthSystem::HealthSystem() : m_playerAlive(true)
 {
 }
 

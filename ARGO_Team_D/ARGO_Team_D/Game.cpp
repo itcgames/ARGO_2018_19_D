@@ -300,6 +300,11 @@ void Game::update(const float & dt)
 			m_particleSystem->update();
 			m_healthSystem->update();
 			m_hud->update();
+			if (!m_healthSystem->playerAlive())
+			{
+				m_healthSystem->setPlayerAliveStatus(true);
+				m_gameState = State::Dead;
+			}
 		}
 		break;
 	case Options:
