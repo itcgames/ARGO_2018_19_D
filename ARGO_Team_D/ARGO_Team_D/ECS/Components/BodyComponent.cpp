@@ -259,3 +259,8 @@ b2Vec2 BodyComponent::getInitialPos()
 {
 	return m_initialPosition;
 }
+
+void BodyComponent::resetPos()
+{
+	m_body->SetTransform(m_initialPosition, m_body->GetAngle());
+}

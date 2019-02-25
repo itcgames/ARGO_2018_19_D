@@ -12,7 +12,7 @@ ControlSystem::~ControlSystem()
 
 void ControlSystem::addEntity(Entity * e)
 {
-	std::vector<std::string> allowedTypes{ "Body" , "Animation", "Particle", "Sprite" };
+	std::vector<std::string> allowedTypes{ "Body" , "Animation", "Particle", "Sprite", "Health" };
 	auto comps = e->getComponentsOfType(allowedTypes);
 	if (comps.size() >= allowedTypes.size() - 1)
 	{
@@ -21,6 +21,7 @@ void ControlSystem::addEntity(Entity * e)
 		c.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
 		c.sprite = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
 		c.part = dynamic_cast<ParticleEffectsComponent*>(comps["Particle"]);
+		c.health = dynamic_cast<HealthComponent*>(comps["Health"]);
 		m_components.insert(std::make_pair(e->id, c));
 		m_entityList.push_back(e);
 	}
@@ -40,6 +41,14 @@ void ControlSystem::update()
 
 		if (body != nullptr)
 		{
+			/*int hitCount = body->getBulletHitCount();
+			if (hitCount > 0)
+			{
+				body->setBulletHitCount(0);
+				int currentHealth = cc.health->getHealth();
+				currentHealth -= (hitCount * 10);
+				cc.health->setHealth(currentHealth);
+			}*/
 			b2Body * b2Body = body->getBody();
 			b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
 			if (m_jump && body->isOnGround())
@@ -107,7 +116,7 @@ void ControlSystem::bindBullets(BulletManager * bulletManager)
 void ControlSystem::spawnProjectile(float x, float y)
 {
 	// Add fire rate
-	m_bulletManager->createBullet(VectorAPI(x + 50 * direction, y), 50 * direction, true);
+	m_bulletManager->createBullet(VectorAPI(x, y + 7), 50 * direction, true);
 }
 
 void ControlSystem::removeEntity(const int id)

@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A3499566-7139-47A3-A26F-765702B1B24D}</ProjectGuid>
     <RootNamespace>ARGOTeamD</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -157,6 +157,7 @@
     <ClCompile Include="ECS\Components\AiComponent.cpp" />
     <ClCompile Include="ECS\Components\ParticleEffectsComponent.cpp" />
     <ClCompile Include="ECS\Systems\AiSystem.cpp" />
+    <ClCompile Include="ECS\Systems\HealthSystem.cpp" />
     <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
     <ClCompile Include="Factories\EnemyFactory.cpp" />
     <ClCompile Include="Hud.cpp" />
@@ -182,9 +183,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu\Button.cpp" />
     <ClCompile Include="Menu\CreditsScreen.cpp" />
+    <ClCompile Include="Menu\DeathScreen.cpp" />
     <ClCompile Include="Menu\Label.cpp" />
     <ClCompile Include="Menu\LevelSelectMenu.cpp" />
+    <ClCompile Include="Menu\LobbyScreen.cpp" />
     <ClCompile Include="Menu\MainMenu.cpp" />
+    <ClCompile Include="Menu\ModeSelectScreen.cpp" />
     <ClCompile Include="Menu\OptionsMenu.cpp" />
     <ClCompile Include="Menu\PauseScreen.cpp" />
     <ClCompile Include="Menu\Screen.cpp" />
@@ -213,6 +217,7 @@
     <ClInclude Include="ECS\Components\AiComponent.h" />
     <ClInclude Include="ECS\Components\ParticleEffectsComponent.h" />
     <ClInclude Include="ECS\Systems\AiSystem.h" />
+    <ClInclude Include="ECS\Systems\HealthSystem.h" />
     <ClInclude Include="ECS\Systems\ParticleSystem.h" />
     <ClInclude Include="Factories\EnemyFactory.h" />
     <ClInclude Include="Hud.h" />
@@ -249,9 +254,12 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Menu\Button.h" />
     <ClInclude Include="Menu\CreditsScreen.h" />
+    <ClInclude Include="Menu\DeathScreen.h" />
     <ClInclude Include="Menu\Label.h" />
     <ClInclude Include="Menu\LevelSelectMenu.h" />
+    <ClInclude Include="Menu\LobbyScreen.h" />
     <ClInclude Include="Menu\MainMenu.h" />
+    <ClInclude Include="Menu\ModeSelectScreen.h" />
     <ClInclude Include="Menu\OptionsMenu.h" />
     <ClInclude Include="Menu\PauseScreen.h" />
     <ClInclude Include="Menu\Screen.h" />

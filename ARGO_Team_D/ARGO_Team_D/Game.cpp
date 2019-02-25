@@ -102,6 +102,10 @@ Game::Game() :
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_pauseScreen = new PauseScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
+	m_deathScreen = new DeathScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
+	m_modeSelect = new ModeSelectScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+	m_lobby = new LobbyScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+
 
 	m_particleSystem = new ParticleSystem(m_camera);
 
@@ -124,41 +128,12 @@ Game::Game() :
 
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
 
-	for (int i = 0; i < 1; i++)
-	{
-		Entity * e = new Entity();
-		e->addComponent(new PositionComponent(-10000, -10000));
-		std::string theName = "bullet";
-		e->addComponent(new SpriteComponent(theName, *m_resourceManager, 30, 5));
-		e->addComponent(new VelocityComponent(VectorAPI(0, 0)));
-		e->addComponent(new TimeToLiveComponent(1.0f));
-		m_movementSystem.addEntity(e);
-		m_renderSystem.addEntity(e);
-		m_ttlSystem.addEntity(e);
-		m_bullets.push_back(e);
-	}
 	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
 
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
 	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
-
-
-	//float enemyX = 100;
-	//float enemyY = 100;
-	//float enemyWidth = 100;
-	//float enemyHeight = 100;
-	//std::string name = "TestAnimation";
-	//Entity * enemy = new Entity();
-	//enemy->addComponent(new BodyComponent(enemyX, enemyY, enemyWidth, enemyHeight, m_world, WORLD_SCALE));
-	//enemy->addComponent(new PositionComponent(enemyX, enemyY));
-	//enemy->addComponent(new SpriteComponent(name, *m_resourceManager, enemyX, enemyY));
-	////enemy->addComponent(new AnimationComponent());
-	//enemy->addComponent(new AiComponent(AiType::EnemyGun, 0, 200));
-	//m_renderSystem.addEntity(enemy);
-	//m_physicsSystem.addEntity(enemy);
-	////m_animationSystem.addEntity(enemy);
 }
 
 Game::~Game()
@@ -200,6 +175,9 @@ void Game::processEvents()
 		case Menu:
 			m_menu->handleInput(event);
 			break;
+		case ModeSelect:
+			m_modeSelect->handleInput(event);
+			break;
 		case PlayScreen:
 			inputHandler->handleKeyboardInput(event);
 			inputHandler->handleControllerInput(event);
@@ -216,6 +194,12 @@ void Game::processEvents()
 		case Pause:
 			m_pauseScreen->handleInput(event);
 			break;
+		case Dead:
+			m_deathScreen->handleInput(event);
+			break;
+		case Lobby:
+			m_lobby->handleInput(event);
+			break;
 		default:
 			break;
 		}
@@ -227,7 +211,7 @@ void Game::processEvents()
 			{
 			case PlayScreen:
 				m_camera.m_shaking = true;
-				m_gameState = State::Pause;
+				m_gameState = State::Dead;
 				break;
 			}
 
@@ -308,14 +292,12 @@ void Game::update(const float & dt)
 		{
 			m_controlSystem.update();
 			playeraiSystem->runTree();
-			m_aiSystem->update();
-			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+			m_aiSystem->update(dt);
 
+			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);
-			m_movementSystem.update();
-			m_ttlSystem.update();
 			inputHandler->update();
 			m_animationSystem.update(dt / 1000);
 			m_levelManager.update(dt/1000);
@@ -325,12 +307,20 @@ void Game::update(const float & dt)
 				}	
 			}
 			m_particleSystem->update();
+			m_healthSystem->update();
 			m_hud->update();
-			
+			if (!m_healthSystem->playerAlive())
+			{
+				m_healthSystem->setPlayerAliveStatus(true);
+				m_gameState = State::Dead;
+			}
 		}
 		break;
 	case Options:
 		m_options->update();
+		break;
+	case ModeSelect:
+		m_modeSelect->update();
 		break;
 	case Credits:
 		m_credits->update();
@@ -344,6 +334,13 @@ void Game::update(const float & dt)
 	case Pause:
 		m_pauseScreen->update();
 		m_pauseScreen->updatePositions();
+		break;
+	case Dead:
+		m_deathScreen->update();
+		m_deathScreen->updatePositions();
+		break;
+	case Lobby:
+		m_lobby->update();
 		break;
 	default:
 		break;
@@ -383,6 +380,9 @@ void Game::render()
 		m_bulletManager->render(m_renderer, m_camera);
 		m_hud->draw();
 		break;
+	case ModeSelect:
+		m_modeSelect->draw();
+		break;
 	case Pause:
 		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
@@ -392,6 +392,14 @@ void Game::render()
 		m_pauseScreen->drawBackground();
 		m_pauseScreen->draw();
 		break;
+	case Dead:
+		m_renderSystem.render(m_renderer, m_camera);
+		m_levelManager.render(m_renderer, m_camera);
+		m_particleSystem->draw();
+		m_bulletManager->render(m_renderer, m_camera);
+		m_deathScreen->drawBackground();
+		m_deathScreen->draw();
+		break;
 	case Options:
 		m_options->draw();
 		break;
@@ -400,6 +408,9 @@ void Game::render()
 		break;
 	case LevelSelect:
 		m_levelSelect->draw();
+		break;
+	case Lobby:
+		m_lobby->draw();
 		break;
 	default:
 		break;
@@ -510,19 +521,24 @@ void Game::initialiseEntities()
 void Game::initialiseSystems()
 {
 	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData);
-	for (auto i : m_entityList)
+	m_healthSystem = new HealthSystem();
+	for (auto e : m_entityList)
 	{
-		if (i->checkForComponent("Sprite"))
+		if (e->checkForComponent("Sprite"))
 		{
-			m_renderSystem.addEntity(i);
+			m_renderSystem.addEntity(e);
 		}
-		if (i->checkForComponent("Body"))
+		if (e->checkForComponent("Body"))
 		{
-			m_physicsSystem.addEntity(i);
+			m_physicsSystem.addEntity(e);
 		}
-		if (i->checkForComponent("Ai"))
+		if (e->checkForComponent("Ai"))
 		{
-			m_aiSystem->addEntity(i);
+			m_aiSystem->addEntity(e);
+		}
+		if (e->checkForComponent("Health"))
+		{
+			m_healthSystem->addEntity(e);
 		}
 	}
 }
@@ -547,32 +563,12 @@ void Game::setUpFont() {
 	Sans = TTF_OpenFont(path, 50);
 }
 
-void Game::spawnProjectile(float x, float y)
-{
-	for (auto &b : m_bullets)
-	{
-
-		std::vector<std::string> s = { "TimeToLive", "Position", "Velocity" };
-		auto comps = b->getComponentsOfType(s);
-		TimeToLiveComponent * t = dynamic_cast<TimeToLiveComponent*>(comps["TimeToLive"]);
-
-		if (!t->isActive())
-		{
-			t->setActive(true);
-			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
-			p->setPosition(VectorAPI(x, y));
-
-			VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
-			v->setVelocity(VectorAPI(30, ((double)rand() / RAND_MAX) * 2 - 1));
-			t->setTimer(SDL_GetTicks());
-			t->setActive(true);
-			break;
-		}
-
-	}
-}
-
 void Game::loadAlevel(int num)
 {
 	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
+}
+
+void Game::reloadCurrentlevel()
+{
+	m_levelManager.loadLevel(m_player, *m_resourceManager, m_renderer, m_levelManager.getCurrentLevel());
 }

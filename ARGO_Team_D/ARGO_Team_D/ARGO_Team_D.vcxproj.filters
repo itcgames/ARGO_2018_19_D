@@ -52,6 +52,10 @@
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Menu\PauseScreen.cpp" />
     <ClCompile Include="Shader class\Shader.cpp" />
+    <ClCompile Include="Menu\DeathScreen.cpp" />
+    <ClCompile Include="Menu\ModeSelectScreen.cpp" />
+    <ClCompile Include="Menu\LobbyScreen.cpp" />
+    <ClCompile Include="ECS\Systems\HealthSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -128,5 +132,9 @@
     <ClInclude Include="AI\PlayerAiSystem.h" />
     <ClInclude Include="AI\PlayerAiComponent.h" />
     <ClInclude Include="Shader class\Shader.h" />
+    <ClInclude Include="Menu\DeathScreen.h" />
+    <ClInclude Include="Menu\ModeSelectScreen.h" />
+    <ClInclude Include="Menu\LobbyScreen.h" />
+    <ClInclude Include="ECS\Systems\HealthSystem.h" />
   </ItemGroup>
 </Project>

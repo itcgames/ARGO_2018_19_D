@@ -38,6 +38,7 @@ public:
 	void setBulletHitCount(int count);
 	void setInitialPos(b2Vec2 pos);
 	b2Vec2 getInitialPos();
+	void resetPos();
 
 private:
 	// Private Functions

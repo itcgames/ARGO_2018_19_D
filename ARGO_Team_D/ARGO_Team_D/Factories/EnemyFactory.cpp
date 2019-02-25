@@ -44,7 +44,7 @@ Enemy * EnemyFactory::createEnemy(string spriteId, int idleFrameCount, int walki
 	// Create Components
 	enemy->position = new PositionComponent(-1000, -1000);
 	enemy->sprite = new SpriteComponent(spriteId, *m_resourceManager, width, height);
-	enemy->body = new BodyComponent(-1000, -1000, width, m_refWorld, WORLD_SCALE, "EnemyBody", flying);
+	enemy->body = new BodyComponent(-1000, -1000, width, m_refWorld, WORLD_SCALE, flying ? "FlyEnemyBody" : "EnemyBody", flying);
 	AnimationComponent * a = new AnimationComponent();
 
 	// Setup Animation

@@ -1,6 +1,6 @@
-#include "PauseScreen.h"
+#include "DeathScreen.h"
 
-PauseScreen::PauseScreen(float width, float height, Game & game, SDL_Renderer * renderer, SDL_Window * window, Camera & camera): Screen()
+DeathScreen::DeathScreen(float width, float height, Game & game, SDL_Renderer * renderer, SDL_Window * window, Camera & camera): Screen()
 {
 	m_game = &game;
 	this->window = window;
@@ -9,19 +9,19 @@ PauseScreen::PauseScreen(float width, float height, Game & game, SDL_Renderer * 
 	m_height = height;
 	m_cam = &camera;
 
-	Label * lbl = new Label("Pause", m_cam->m_position.x - m_cam->getBounds().x / m_cam->m_scale.x, 
-		m_cam->m_position.y - m_cam->getBounds().y / m_cam->m_scale.y, 
-		500, 300, SDL_Color{ 200, 0, 0, 255 }, 
+	Label * lbl = new Label("Your Dead!", m_cam->m_position.x - m_cam->getBounds().x / m_cam->m_scale.x,
+		m_cam->m_position.y - m_cam->getBounds().y / m_cam->m_scale.y,
+		700, 300, SDL_Color{ 0, 0, 0, 255 },
 		rend, this->window);
 
-	Button * btn = new Button("Continue", m_cam->m_position.x - m_cam->getBounds().x / m_cam->m_scale.x,
+	Button * btn = new Button("Try Again", m_cam->m_position.x - m_cam->getBounds().x / m_cam->m_scale.x,
 		m_cam->m_position.y - m_cam->getBounds().y / m_cam->m_scale.y,
-		300, 100, SDL_Color{ 200, 0, 0, 255 },
+		300, 100, SDL_Color{ 0, 0, 0, 255 },
 		rend, this->window);
 
 	Button * btn2 = new Button("Main Menu", m_cam->m_position.x - m_cam->getBounds().x / m_cam->m_scale.x,
 		m_cam->m_position.y - m_cam->getBounds().y / m_cam->m_scale.y,
-		300, 100, SDL_Color{ 200, 0, 0, 255 },
+		300, 100, SDL_Color{ 0, 0, 0, 255 },
 		rend, this->window);
 
 	lbl->doTransitions(false);
@@ -29,8 +29,8 @@ PauseScreen::PauseScreen(float width, float height, Game & game, SDL_Renderer * 
 	btn2->doTransitions(false);
 
 
-	btn->Enter = std::bind(&PauseScreen::GoToGame, this);
-	btn2->Enter = std::bind(&PauseScreen::GoToMenu, this);
+	btn->Enter = std::bind(&DeathScreen::GoToGame, this);
+	btn2->Enter = std::bind(&DeathScreen::GoToMenu, this);
 
 
 	m_buttons.push_back(btn);
@@ -43,17 +43,14 @@ PauseScreen::PauseScreen(float width, float height, Game & game, SDL_Renderer * 
 	m_transitionScreen.h = m_height;
 
 	m_transitionAlphaPercent = 100;
-
-
 }
 
-PauseScreen::~PauseScreen()
+DeathScreen::~DeathScreen()
 {
 }
 
-void PauseScreen::GoToMenu()
+void DeathScreen::GoToMenu()
 {
-	//m_game->setGameState(State::Menu);
 	m_game->fadeToState(State::Menu);
 	for (auto & b : m_buttons)
 	{
@@ -65,8 +62,9 @@ void PauseScreen::GoToMenu()
 	}
 }
 
-void PauseScreen::GoToGame()
+void DeathScreen::GoToGame()
 {
+	m_game->reloadCurrentlevel();
 	for (auto & b : m_buttons)
 	{
 		b->reset();
@@ -78,19 +76,19 @@ void PauseScreen::GoToGame()
 	m_game->fadeToState(State::PlayScreen);
 }
 
-void PauseScreen::updatePositions()
+void DeathScreen::updatePositions()
 {
 	for (auto l : m_labels)
 	{
-		l->setPosition(m_cam->m_position.x - m_cam->getBounds().x - 250 / m_cam->m_scale.x, m_cam->m_position.y - m_cam->getBounds().y - 500 / m_cam->m_scale.y);
+		l->setPosition(m_cam->m_position.x - m_cam->getBounds().x - 325 / m_cam->m_scale.x, m_cam->m_position.y - m_cam->getBounds().y - 500 / m_cam->m_scale.y);
 	}
-	
+
 	m_buttons.at(0)->setPosition(m_cam->m_position.x - m_cam->getBounds().x - 150 / m_cam->m_scale.x, m_cam->m_position.y - m_cam->getBounds().y - 150 / m_cam->m_scale.y);
-	m_buttons.at(1)->setPosition(m_cam->m_position.x - m_cam->getBounds().x - 150 / m_cam->m_scale.x, m_cam->m_position.y - m_cam->getBounds().y  / m_cam->m_scale.y);
+	m_buttons.at(1)->setPosition(m_cam->m_position.x - m_cam->getBounds().x - 150 / m_cam->m_scale.x, m_cam->m_position.y - m_cam->getBounds().y / m_cam->m_scale.y);
 }
 
-void PauseScreen::drawBackground()
+void DeathScreen::drawBackground()
 {
-	SDL_SetRenderDrawColor(rend, 0, 0, 0, 125);
+	SDL_SetRenderDrawColor(rend, 255, 0, 0, 125);
 	SDL_RenderFillRect(rend, &m_transitionScreen);
 }
