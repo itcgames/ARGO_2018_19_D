@@ -5,12 +5,14 @@
 #include "..//Client/Client.h"
 #include "../Components/PositionComponent.h"
 #include "../Components/NetworkComponent.h"
+#include "../Components/BodyComponent.h"
 
 #include <iostream>
 
 struct NetworkingComponents {
 	PositionComponent * position = nullptr;
 	NetworkComponent * network = nullptr;
+	BodyComponent * body = nullptr;
 };
 
 /// <summary>
@@ -30,7 +32,7 @@ private:
 	std::vector<Entity*> * m_clients;
 	Client m_client;
 	std::map<int, NetworkingComponents> m_components;
-	std::vector<std::string> m_allowedTypes = { "Network", "Position" };
+	std::vector<std::string> m_allowedTypes = { "Network", "Position", "Body"};
 	bool m_inLobby = false;
 	int hostEntity = 0;
 	int m_localPlayerID = -1;

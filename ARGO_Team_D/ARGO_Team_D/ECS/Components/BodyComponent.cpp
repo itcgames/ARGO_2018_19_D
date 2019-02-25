@@ -255,6 +255,11 @@ void BodyComponent::setInitialPos(b2Vec2 pos)
 	m_initialPosition = pos;
 }
 
+void BodyComponent::setPosition(const b2Vec2 & pos)
+{
+	m_body->SetTransform(pos, m_body->GetAngle());
+}
+
 b2Vec2 BodyComponent::getInitialPos()
 {
 	return m_initialPosition;

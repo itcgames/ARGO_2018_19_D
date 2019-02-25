@@ -19,6 +19,7 @@ class PlayerFactory
 public:
 	PlayerFactory(std::string spriteId, VectorAPI dimensions, ResourceManager * rm, b2World & world, const float SCALE, SDL_Renderer * rend);
 	Entity * create(VectorAPI pos);
+	Entity * createOnlinePlayer(VectorAPI pos);
 private:
 	ResourceManager * m_resourceManager;
 	b2World & m_refWorld;

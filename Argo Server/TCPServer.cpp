@@ -73,6 +73,7 @@ void TCPServer::startLobby(Lobby & lobby)
 				otherPlayerIDs.push_back(j);
 			}
 		}
+		p->numOtherPlayers = otherPlayerIDs.size();
 		/*p->otherPlayerIDs = otherPlayerIDs;
 		std::cout << sizeof(otherPlayerIDs) << std::endl;*/
 		std::cout << "Sending start to :" << lobby.m_clients[i] << std::endl;
@@ -154,17 +155,8 @@ void TCPServer::acceptConnections()
 		if (m_numPlayers != MAX_CLIENTS) {
 			m_clients[m_numPlayers] = accept(m_listening, &m_clientAddrs[m_numPlayers], &addrSize);
 			if (m_clients[m_numPlayers] != INVALID_SOCKET) {
-				/*p->playerID = m_numPlayers;
-				p->type = MessageType::JOINED;
-				p->numOtherPlayers = m_numPlayers;
-				send(m_clients[m_numPlayers], (char*)p, sizeof(struct Packet) + 1, 0);*/
-				/*std::thread t([&](TCPServer * serv) {
-					serv->messageHandler(m_numPlayers, m_numPlayers, m_clients, m_started);
-				}, this);*/
-
 				m_numPlayers++;
 				std::cout << "Num players: " << m_numPlayers << std::endl;
-				//t.detach();
 			}
 		}
 		else if (!m_started) {
@@ -190,9 +182,9 @@ void TCPServer::acceptConnections()
 					lobby.m_open = false;
 				}
 				int numPlayers = lobby.m_clients.size();
-				for (int i = 0; i < lobby.m_clients.size() - 1; ++i) {
+				for (int i = 0; i < lobby.m_clients.size(); ++i) {
 					std::thread t([&](TCPServer * serv) {
-						serv->messageHandler(i, numPlayers, m_lobbies.at(i).m_clients, m_lobbies.back().m_inGame);
+						serv->messageHandler(i, numPlayers, m_lobbies.back().m_clients, m_lobbies.back().m_inGame);
 					}, this);
 					t.detach();
 				}

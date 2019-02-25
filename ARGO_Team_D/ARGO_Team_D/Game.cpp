@@ -274,9 +274,6 @@ void Game::update(const float & dt)
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
-			if (online) {
-				m_network.update();
-			}
 			m_controlSystem.update();
 			m_aiSystem->update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
@@ -296,7 +293,9 @@ void Game::update(const float & dt)
 			}
 			m_particleSystem->update();
 			m_hud->update();
-			
+			if (online) {
+				m_network.update();
+			}
 		}
 		break;
 	case Options:
@@ -439,9 +438,11 @@ void Game::initialiseEntities()
 	m_network.addEntity(e);
 	m_player = e;
 	m_players.push_back(e);
-	for (int i = 0; i < 2; ++i) {
-		Entity * e = m_playerFactory->create(VectorAPI(150, 0));
+	for (int i = 0; i < 3; ++i) {
+		Entity * e = m_playerFactory->createOnlinePlayer(VectorAPI(150, 0));
 		m_entityList.push_back(e);
+		m_particleSystem->addEntity(e);
+		m_animationSystem.addEntity(e);
 		m_network.addEntity(e);
 		m_players.push_back(e);
 	}

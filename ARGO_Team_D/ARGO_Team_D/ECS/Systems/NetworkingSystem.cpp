@@ -24,6 +24,7 @@ void NetworkingSystem::addEntity(Entity * e)
 	NetworkingComponents n;
 	n.position = dynamic_cast<PositionComponent*>(comps["Position"]);
 	n.network = dynamic_cast<NetworkComponent*>(comps["Network"]);
+	n.body = dynamic_cast<BodyComponent*>(comps["Body"]);
 	m_components.insert(std::make_pair(e->id, n));
 	m_entityList.push_back(e);
 }
@@ -32,37 +33,48 @@ void NetworkingSystem::update()
 {
 	for (int i = 0; i < m_components.size() - 1; ++i) {
 		Packet * p = m_client.Receive();
-			//if (p->type == MessageType::JOINED || p->type == MessageType::HOSTING) {
-			//	std::cout << "Player joined" << p->playerID << std::endl;
-			//	/*for (int i = 0; i < p->numOtherPlayers + 1; ++i) {
-			//		for (auto & entityComps : m_components) {
-			//			int entityID = entityComps.first;
-			//			auto & networkingComps = entityComps.second;
-
-			//			if (networkingComps.network->networkID == -1) {
-			//				if (m_localPlayerID == -1) {
-			//					m_localPlayerID = p->playerID;
-			//				}
-			//				networkingComps.network->networkID = p->playerID;
-			//				break;
-			//			}
-			//		}
-			//	}*/
-			//}
-		if (p->type == MessageType::PLAYER) {
+		if (p->type == MessageType::START) {
+			m_localPlayerID = p->playerID;
+			int numPlayers = p->numOtherPlayers + 1;
+			std::vector<int> playerIDs;
+			for (int i = 0; i < numPlayers; ++i) {
+				playerIDs.push_back(i);
+			}
+			// Set local player
 			for (auto & entityComps : m_components) {
 				int entityID = entityComps.first;
 				auto & networkingComps = entityComps.second;
-				if (networkingComps.network != nullptr && networkingComps.network->networkID == p->playerID) {
-					//std::cout << "Received from " << p->playerID << std::endl;
-					auto & pos = networkingComps.position;
-					std::cout << p->position.x << ", " << p->position.y << std::endl;
-					pos->setPosition(p->position);
+				if (networkingComps.network != nullptr && networkingComps.network->networkID == -1) {
+					networkingComps.network->networkID = m_localPlayerID;
+					break;
 				}
 			}
-		}
-		if (p->type == MessageType::START) {
-			m_localPlayerID = p->playerID;
+			playerIDs.erase(std::remove(playerIDs.begin(), playerIDs.end(), m_localPlayerID));
+			// Set online players
+			for (int i = 0; i < playerIDs.size(); ++i) {
+				for (auto & entityComps : m_components) {
+					int entityID = entityComps.first;
+					auto & networkingComps = entityComps.second;
+					if (networkingComps.network != nullptr && networkingComps.network->networkID == -1) {
+						networkingComps.network->networkID = playerIDs[i];
+						break;
+					}
+				}
+			}
+			if (p->type == MessageType::PLAYER) {
+				for (auto & entityComps : m_components) {
+					int entityID = entityComps.first;
+					auto & networkingComps = entityComps.second;
+					if (networkingComps.network != nullptr && networkingComps.network->networkID == p->playerID) {
+						std::cout << "Received from " << p->playerID << std::endl;
+						auto & pos = networkingComps.position;
+						//std::cout << p->position.x << ", " << p->position.y << std::endl;
+						pos->setPosition(p->position);
+						/*auto & body = networkingComps.body;
+						body->setPosition(b2Vec2(p->position.x / 30.f, p->position.y / 30.f));*/
+					}
+				}
+			}
 			m_inGame = true;
 		}
 	}
@@ -74,6 +86,7 @@ void NetworkingSystem::update()
 			auto & networkingComps = entityComps.second;
 			if (networkingComps.network->networkID == m_localPlayerID) {
 				std::cout << "Sending for Local" << std::endl;
+				p->playerID = m_localPlayerID;
 				p->type = MessageType::PLAYER;
 				p->position = networkingComps.position->getPosition();
 				m_client.Send(p);
