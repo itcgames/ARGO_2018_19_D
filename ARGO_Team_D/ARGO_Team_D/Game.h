@@ -39,6 +39,8 @@
 #include "ECS/Systems/TimeToLiveSystem.h"
 #include "ECS/Components/GunComponent.h"
 #include "ECS/Components//AiComponent.h"
+#include "AI/PlayerAiComponent.h"
+#include "AI/PlayerAiSystem.h"
 #include <stdlib.h>
 #include <time.h>
 #include <functional>
@@ -191,5 +193,10 @@ private:
 	//Observers and Subjects for level completion
 	LevelData *m_levelData;
 	LevelObserver *m_levelObserver;
+
+	//Ai
+	Entity* m_aiEnt;
+	PlayerAiSystem* playeraiSystem;
+	PlayerAiComponent* aiComponent;
 };
 #endif // !GAME_H

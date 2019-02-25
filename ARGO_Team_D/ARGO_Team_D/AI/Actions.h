@@ -4,6 +4,8 @@
 #include "BehaviourTree.h"
 #include "../ECS/Entities/Entity.h"
 #include "../ECS/Components/BodyComponent.h"
+#include "../Bullets/BulletManager.h"
+#include "../Utils/VectorAPI.h"
 
 class Action : public BehaviourTree::Node
 {
@@ -71,6 +73,9 @@ public:
 	Jump(Entity * e)
 		: Action(e)
 	{
+		if (m_entity->checkForComponent("Body")) {
+			m_body = dynamic_cast<BodyComponent*>(m_entity->getComponent("Body"));
+		}
 	}
 	bool run() override
 	{
@@ -79,10 +84,42 @@ public:
 
 		std::cout << "Jumping" << std::endl;
 
-		b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
-		currentVelocity.y = -35;
+		if (m_body->isOnGround()) {
+			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -30));
+			currentVelocity.y = -30;
 
+			return true;
+		}
+
+		return false;
+	}
+};
+
+class Shoot : public Action
+{
+public:
+	Shoot(Entity * e, BulletManager* manager)
+		: Action(e), 
+		m_manager(manager)
+	{
+		if (m_entity->checkForComponent("Body")) {
+			m_body = dynamic_cast<BodyComponent*>(m_entity->getComponent("Body"));
+		}
+	}
+
+	bool run() override
+	{
+
+		b2Body * b2Body = m_body->getBody();
+		b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
+
+		m_manager->createBullet(VectorAPI((b2Body->GetPosition().x * 30.0f) + 50, b2Body->GetPosition().y * 30.0f), 50, true);
+
+		cout << b2Body->GetPosition().x * 30.0f << ", " << b2Body->GetPosition().y * 30.0f << endl;
 		return true;
 	}
+
+private:
+	BulletManager * m_manager;
 };
 #endif

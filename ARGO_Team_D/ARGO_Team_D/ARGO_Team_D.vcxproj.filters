@@ -51,6 +51,7 @@
     <ClCompile Include="AI\PlayerAiSystem.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Menu\PauseScreen.cpp" />
+    <ClCompile Include="Shader class\Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -126,5 +127,6 @@
     <ClInclude Include="AI\Actions.h" />
     <ClInclude Include="AI\PlayerAiSystem.h" />
     <ClInclude Include="AI\PlayerAiComponent.h" />
+    <ClInclude Include="Shader class\Shader.h" />
   </ItemGroup>
 </Project>
