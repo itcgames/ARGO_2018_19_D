@@ -2,5 +2,15 @@
   "test": "./ASSETS/IMAGES/test.png",
   "testsquare": "./ASSETS//IMAGES//TestSquare.png",
   "TestAnimation": "./ASSETS/IMAGES/grid.png",
-  "bullet": "./ASSETS//IMAGES//bullet.png"
+  "bullet": "./ASSETS//IMAGES//bullet.png",
+  "Player": "./ASSETS//IMAGES//Player1.png",
+  "Temp": "./ASSETS//IMAGES//tileset2.png",
+  "tilesheet": "./ASSETS//IMAGES//tilesheet.png",
+  "Placeholder": "./ASSETS//IMAGES//tileset2.png",
+  "Background1": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 1.png",
+  "Background1-2": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 2.png",
+  "Background1-3": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 3.png",
+  "GunEnemy": "./ASSETS//IMAGES//GunEnemy.png",
+  "FlyEnemy": "./ASSETS//IMAGES//FlyEnemy.png",
+  "BigEnemy": "./ASSETS//IMAGES//BigEnemy.png"
 }

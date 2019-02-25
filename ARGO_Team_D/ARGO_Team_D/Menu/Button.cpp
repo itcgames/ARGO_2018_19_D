@@ -7,8 +7,8 @@ Button::Button(const char * string,int x, int y, int w, int h, SDL_Color color, 
 	{
 		std::cout << "error error error" << std::endl;
 	}
-	const char *path = "ASSETS\\FONTS\\arial.ttf";
-	arial = TTF_OpenFont(path, 50);
+	const char *path = "ASSETS\\FONTS\\BloodBlocks.ttf";
+	arial = TTF_OpenFont(path, 300);
 	//arial = TTF_OpenFont("..//ASSETS//FONTS//arial.ttf", 100);
 
 	this->color = color;
@@ -45,6 +45,9 @@ Button::Button(const char * string,int x, int y, int w, int h, SDL_Color color, 
 	isTransitioning = false;
 	percent = 0;
 	hasFocus = false;
+
+	doTransition = true;
+
 }
 
 Button::~Button()
@@ -56,15 +59,28 @@ Button::~Button()
 void Button::update()
 {
 
-
-	if (onScreen == false&& message_rect.x != displayX && message_rect.y != displayY) 
+	if (doTransition)
 	{
-		Lerp(startPosX, startPosY, displayX, displayY);
-		if (percent >= 1.0f)
+		if (onScreen == false && message_rect.x != displayX && message_rect.y != displayY)
 		{
-			onScreen = true;
-			percent = 0;
+			Lerp(startPosX, startPosY, displayX, displayY);
+			if (percent >= 1.0f)
+			{
+				onScreen = true;
+				percent = 0;
+			}
 		}
+	}
+	else
+	{
+		message_rect.x = displayX;
+		message_rect.y = displayY;
+		message_rect.w = displayWidth;
+		message_rect.h = displayHeight;
+		r.x = message_rect.x - 5;
+		r.y = message_rect.y - 5;
+		r.w = displayWidth + 20;
+		r.h = displayHeight + 20;
 	}
 
 
@@ -104,12 +120,29 @@ void Button::mousePress()
 		std::cout << string << " pressed" << std::endl;
 		isTransitioning = true;
 		isClicked = true;
+
+		if (!doTransition)
+		{
+			try
+			{
+				Enter();
+			}
+			catch (std::bad_function_call)
+			{
+				std::cout << string << " bad function call" << std::endl;
+			}
+			activateFunction = true;
+		}
+		
 	}
 }
 
 void Button::transition()
 {
-	Lerp(displayX, displayY, -200, windowHeight/2);
+	if (doTransition)
+	{
+		Lerp(displayX, displayY, -200, windowHeight / 2);
+	}
 }
 
 void Button::goToTransition()
@@ -197,4 +230,15 @@ void Button::Lerp(int startPosX, int startPosY, int destX, int destY)
 void Button::Focus(bool b)
 {
 	hasFocus = b;
+}
+
+void Button::setPosition(int x, int y)
+{
+	displayX = x;
+	displayY = y;
+}
+
+void Button::doTransitions(bool b)
+{
+	doTransition = false;
 }

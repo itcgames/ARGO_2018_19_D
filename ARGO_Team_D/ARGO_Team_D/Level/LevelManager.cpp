@@ -44,7 +44,7 @@ void LevelManager::parseLevelSystem(const std::string & filepath, b2World & worl
 	levelFile.close();
 }
 
-void LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale, SDL_Renderer * renderer)
+bool LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale, SDL_Renderer * renderer)
 {
 	std::vector<std::string> allowedTypes = {"Position", "Sprite", "Body"};
 	auto comps = e->getComponentsOfType(allowedTypes);
@@ -70,6 +70,33 @@ void LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const
 			auto startPos = m_levels[m_currentLevel]->m_startPos;
 			pos->setPosition(startPos);
 			body->getBody()->SetTransform(b2Vec2(startPos.x / worldScale, startPos.y / worldScale), 0);
+
+			return true;
 		}
 	}
+	return false;
+}
+
+void LevelManager::loadLevel(Entity * e,ResourceManager & resourceManager, SDL_Renderer * renderer, int level)
+{
+
+	std::vector<std::string> allowedTypes = { "Position", "Sprite", "Body" };
+	auto comps = e->getComponentsOfType(allowedTypes);
+	if (comps.size() == allowedTypes.size()) {
+		auto pos = dynamic_cast<PositionComponent *>(comps["Position"]);
+		auto sprite = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
+		auto body = dynamic_cast<BodyComponent*>(comps["Body"]);
+		auto p = pos->getPosition();
+
+
+		m_currentLevel = level;
+		m_levels[m_currentLevel]->load(m_levelPaths[m_currentLevel], &resourceManager, renderer);
+
+		auto startPos = m_levels[m_currentLevel]->m_startPos;
+		pos->setPosition(startPos);
+		body->getBody()->SetTransform(b2Vec2(startPos.x / 30, startPos.y / 30), 0);
+	}
+
+
+	
 }

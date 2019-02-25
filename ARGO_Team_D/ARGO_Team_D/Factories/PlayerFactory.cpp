@@ -1,42 +1,55 @@
 #include "PlayerFactory.h"
 #include <Box2D/Box2D.h>
 
-PlayerFactory::PlayerFactory(std::string spriteId, VectorAPI dimensions, ResourceManager * rm, b2World & world, const float SCALE)
+PlayerFactory::PlayerFactory(std::string spriteId, VectorAPI dimensions, ResourceManager * rm, b2World & world, const float SCALE, SDL_Renderer * rend)
 	: m_resourceManager(rm), 
 	m_refWorld(world), 
 	WORLD_SCALE(SCALE),
 	m_spriteId(spriteId),
 	m_dimensions(dimensions)
 {
+	m_renderer = rend;
 }
 
 Entity * PlayerFactory::create(VectorAPI pos)
 {
-	Entity * e1 = new Entity();
-	Entity * e2 = new Entity();
-	Entity * e3 = new Entity();
-
 	Entity * entity = new Entity();
 	entity->addComponent(new PositionComponent(pos));
 	entity->addComponent(new SpriteComponent(m_spriteId, *m_resourceManager, m_dimensions.x, m_dimensions.y));
-	auto body = new BodyComponent(pos.x, pos.y, m_dimensions.x, m_refWorld, WORLD_SCALE);
+	auto body = new BodyComponent(pos.x, pos.y, m_dimensions.x, m_refWorld, WORLD_SCALE, "PlayerBody", false);
+	auto part = new ParticleEffectsComponent(body->getBody()->GetPosition().x * WORLD_SCALE,
+		body->getBody()->GetPosition().y * WORLD_SCALE,
+		5, 5, SDL_Color{ 181, 101, 29 },
+		m_renderer, false, 45);
+	part->m_emitter.setEmitting(true);
+	part->m_emitter.setFramesPerEmission(5);
+	part->m_emitter.setLooping(true);
+
+	//part->m_emitterExplos.setLooping(true);
+	entity->addComponent(part);
 	/*b2Filter test;
 	test.categoryBits = 0x0001;
 	body->getBody()->GetFixtureList()[0].SetFilterData(test);*/
 	entity->addComponent(body);
 	entity->addComponent(new GunComponent(0));
-	entity->addComponent(new NetworkComponent(-1));
-	return entity;
-}
+	entity->addComponent(new HealthComponent(100, 3));
 
-Entity * PlayerFactory::createOnlinePlayer(VectorAPI pos, int id)
-{
-	Entity * entity = new Entity();
-	entity->addComponent(new PositionComponent(pos));
-	entity->addComponent(new SpriteComponent(m_spriteId, *m_resourceManager, m_dimensions.x, m_dimensions.y));
-	auto body = new BodyComponent(pos.x, pos.y, m_dimensions.x, m_refWorld, WORLD_SCALE);
-	entity->addComponent(body);
-	entity->addComponent(new GunComponent(0));
-	entity->addComponent(new NetworkComponent(id));
+	AnimationComponent * a = new AnimationComponent();
+	std::vector<SDL_Rect> idleFrames;
+	for (int i = 0; i < 4; ++i)
+	{
+		SDL_Rect frame = { i * 64, 0, 64, 64 };
+		idleFrames.push_back(frame);
+	}
+	a->addAnimation("Idle", idleFrames, 1, 2, true);
+	std::vector<SDL_Rect> walkingFrames;
+	for (int i = 0; i < 8; ++i)
+	{
+		SDL_Rect frame = { i * 64, 64, 64, 64 };
+		walkingFrames.push_back(frame);
+	}
+	a->addAnimation("Walking", walkingFrames, 1, 2, true);
+	entity->addComponent(a);
+	entity->addComponent(new NetworkComponent(-1));
 	return entity;
 }

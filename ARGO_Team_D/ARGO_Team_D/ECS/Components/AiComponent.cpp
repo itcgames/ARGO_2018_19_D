@@ -1,11 +1,12 @@
 #include "AiComponent.h"
 
-AiComponent::AiComponent(AiType type, int xMax, int xMin) 
+AiComponent::AiComponent(AiType type, int xMax, int xMin, int hits) 
 	: m_type(type), 
 	m_active(false), 
 	m_direction(1),
 	m_xMax(xMax),
-	m_xMin(xMin)
+	m_xMin(xMin),
+	m_hits(hits)
 {
 	id = "Ai";
 }
@@ -30,23 +31,6 @@ bool AiComponent::getActivationState()
 	return m_active;
 }
 
-void AiComponent::setNewPosition(VectorAPI pos)
-{
-	m_changePosition = true;
-	m_newPos = pos;
-}
-
-VectorAPI AiComponent::getPosition()
-{
-	m_changePosition = false;
-	return m_newPos;
-}
-
-bool AiComponent::getChangePositionStatus()
-{
-	return m_changePosition;
-}
-
 void AiComponent::setDirection(int direction)
 {
 	m_direction = direction == -1 ? -1 : 1;
@@ -65,4 +49,14 @@ int AiComponent::getMinX()
 int AiComponent::getMaxX()
 {
 	return m_xMax;
+}
+
+int AiComponent::getMaxHits()
+{
+	return m_hits;
+}
+
+AiType AiComponent::getType()
+{
+	return m_type;
 }

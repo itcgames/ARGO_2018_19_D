@@ -16,6 +16,9 @@ public:
 	void goToTransition();
 	void reset();
 	void Lerp(int startPosX, int startPosY, int destX, int destY);
+
+	void setPosition(int x, int y);
+	void doTransitions(bool b);
 private:
 	SDL_Renderer * rend;
 	TTF_Font* arial;
@@ -37,6 +40,8 @@ private:
 	bool onScreen;
 	int displayWidth;
 	int displayHeight;
+
+	bool doTransition;
 };
 
 #endif // !LABEL_H

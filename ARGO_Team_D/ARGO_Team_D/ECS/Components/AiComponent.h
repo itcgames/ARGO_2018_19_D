@@ -16,18 +16,17 @@ class AiComponent : public Component
 {
 public:
 	// Public Functions
-	AiComponent(AiType type, int xMax, int xMin);
+	AiComponent(AiType type, int xMax, int xMin, int hits);
 	~AiComponent();
 	void setMovementMarkers(int min, int max);
 	void setActivationState(bool state);
 	bool getActivationState();
-	void setNewPosition(VectorAPI pos);
-	VectorAPI getPosition();
-	bool getChangePositionStatus();
 	void setDirection(int direction);
 	int getDirection();
 	int getMinX();
 	int getMaxX();
+	int getMaxHits();
+	AiType getType();
 private:
 	// Private Members
 	AiType m_type;
@@ -37,6 +36,6 @@ private:
 	int m_direction;
 	int m_xMax;
 	int m_xMin;
+	int m_hits;
 };
-
 #endif // !AICOMPONENT_H

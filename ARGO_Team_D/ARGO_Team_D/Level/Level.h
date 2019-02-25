@@ -42,6 +42,8 @@ public:
 	void createBody(float startX, float startY, float width);
 	void clearPhysicsBodies();
 	void clearTutorials();
+	void clearEnemies();
+	void clearSingleEnemy(Enemy * enemy);
 	void unload();
 	void update();
 
@@ -63,6 +65,12 @@ public:
 	std::vector<Enemy *> & m_gunEnemies;
 	std::vector<Enemy *> & m_flyEnemies;
 	std::vector<Enemy *> & m_bigEnemies;
+
+
+	std::vector<SDL_Texture*> m_backgrounds;
+
+	// How many times to render the background
+	int m_levelWidth = 2;
 };
 
 #endif // !LEVEL_H

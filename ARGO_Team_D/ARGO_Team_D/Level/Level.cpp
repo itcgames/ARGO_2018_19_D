@@ -27,6 +27,20 @@ Level::~Level()
 bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Renderer * renderer)
 {
 	unload();
+	for (int i = 0; i < 3; i++) {
+		if (i == 0)
+		{
+			m_backgrounds.push_back(rManager->getImageResource("Background1"));
+		}
+		if (i == 1)
+		{
+			m_backgrounds.push_back(rManager->getImageResource("Background1-2"));
+		}
+		if (i == 2)
+		{
+			m_backgrounds.push_back(rManager->getImageResource("Background1-3"));
+		}
+	}
 
 	if (m_map.load(filepath)) {
 		tmx::Vector2u tileCount = m_map.getTileCount();
@@ -39,7 +53,7 @@ bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Ren
 
 		auto & map_tilesets = m_map.getTilesets();
 		for (auto & tset : map_tilesets) {
-			rManager->addImageResource(new ImageResource, tset.getName(), tset.getImagePath().c_str());
+			//rManager->addImageResource(new ImageResource, tset.getName(), tset.getImagePath().c_str());
 			//if the tileset texture is loaded place it into the map with key being gid
 			SDL_Texture * tex = rManager->getImageResource(tset.getName());
 			if (tex) {
@@ -215,7 +229,9 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 	auto* object_layer = dynamic_cast<const tmx::ObjectGroup*>(layer.get());
 	auto & layer_objects = object_layer->getObjects();
 
-	int enemyCounter = 0;
+	int gunEnemyCounter = 0;
+	int flyEnemyCounter = 0;
+	int bigEnemyCounter = 0;
 
 	std::cout << "Name: " << object_layer->getName();
 	for (auto & object : layer_objects) {
@@ -265,13 +281,54 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 				std::cout << "Tutorial: " << id->getIntValue() << " Message: " << tutorial->message << std::endl;
 			}
 		}
-		else if (type == "Enemy")
+		else if (type.find("Enemy") != std::string::npos)
 		{
 			auto pos = object.getPosition();
-			m_gunEnemies.at(enemyCounter)->ai->setNewPosition(VectorAPI(pos.x / m_worldScale, pos.y / m_worldScale));
-			m_gunEnemies.at(enemyCounter)->ai->setMovementMarkers(0, 0);
-			m_gunEnemies.at(enemyCounter)->ai->setActivationState(true);
-			++enemyCounter;
+			auto properties = object.getProperties();
+			int min = 0;
+			int max = 0;
+			for (auto & prop : properties)
+			{
+				string name = prop.getName();
+				if (name == "MinX")
+				{
+					min = std::stoi(prop.getStringValue());
+				}
+				else if (name == "MaxX")
+				{
+					max = std::stoi(prop.getStringValue());
+				}
+			}
+			if (type == "GunEnemy")
+			{
+				auto body = m_gunEnemies.at(gunEnemyCounter)->body->getBody();
+				b2Vec2 newPos = b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale);
+				body->SetTransform(newPos, body->GetAngle());
+				m_gunEnemies.at(gunEnemyCounter)->body->setInitialPos(newPos);
+				m_gunEnemies.at(gunEnemyCounter)->ai->setMovementMarkers(min, max);
+				m_gunEnemies.at(gunEnemyCounter)->ai->setActivationState(true);
+				++gunEnemyCounter;
+			}
+			else if (type == "FlyEnemy")
+			{
+				auto body = m_flyEnemies.at(flyEnemyCounter)->body->getBody();
+				b2Vec2 newPos = b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale);
+				body->SetTransform(newPos, body->GetAngle());
+				m_flyEnemies.at(flyEnemyCounter)->body->setInitialPos(newPos);
+				m_flyEnemies.at(flyEnemyCounter)->ai->setMovementMarkers(min, max);
+				m_flyEnemies.at(flyEnemyCounter)->ai->setActivationState(true);
+				++flyEnemyCounter;
+			}
+			else if (type == "BigEnemy")
+			{
+				auto body = m_bigEnemies.at(bigEnemyCounter)->body->getBody();
+				b2Vec2 newPos = b2Vec2(pos.x / m_worldScale, pos.y / m_worldScale);
+				body->SetTransform(newPos, body->GetAngle());
+				m_bigEnemies.at(bigEnemyCounter)->body->setInitialPos(newPos);
+				m_bigEnemies.at(bigEnemyCounter)->ai->setMovementMarkers(min, max);
+				m_bigEnemies.at(bigEnemyCounter)->ai->setActivationState(true);
+				++bigEnemyCounter;
+			}
 		}
 	}
 }
@@ -288,6 +345,19 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 	SDL_Rect srcRect;
 	SDL_Rect bounds = camera.getBounds();
 
+
+	SDL_Rect destination;
+	destination.x = -1280 - bounds.x;
+	destination.y = 0;
+	destination.w = 1280;
+	destination.h = 720;
+
+	for (int i = 0; i < m_levelWidth; i++) {
+		for (int j = 0; j < 3; j++) {
+			SDL_RenderCopy(renderer, m_backgrounds.at(j), NULL, &destination);
+			destination.x += 1270;
+		}
+	}
 
 	destRect.w = m_tileWidth;
 	destRect.h = m_tileHeight;
@@ -365,6 +435,7 @@ void Level::clearPhysicsBodies()
 	for (auto & pb : m_physicsBodies)
 	{
 		m_refWorld.DestroyBody(pb->body);
+		delete pb;
 	}
 	m_physicsBodies.clear();
 }
@@ -374,8 +445,32 @@ void Level::clearTutorials()
 	for (auto tut : m_tutorials)
 	{
 		m_refWorld.DestroyBody(tut->pb.body);
+		delete tut;
 	}
 	m_tutorials.clear();
+}
+
+void Level::clearEnemies()
+{
+	for (auto enemy : m_gunEnemies)
+	{
+		clearSingleEnemy(enemy);
+	}
+	for (auto enemy : m_flyEnemies)
+	{
+		clearSingleEnemy(enemy);
+	}
+	for (auto enemy : m_bigEnemies)
+	{
+		clearSingleEnemy(enemy);
+	}
+}
+
+void Level::clearSingleEnemy(Enemy * enemy)
+{
+	auto body = enemy->body->getBody();
+	enemy->ai->setActivationState(false);
+	body->SetTransform(b2Vec2(-1000, 0), body->GetAngle());
 }
 
 void Level::unload()
@@ -384,8 +479,11 @@ void Level::unload()
 		for (auto & tile : row) {
 			if (nullptr != tile && nullptr != tile->body) {
 				m_refWorld.DestroyBody(tile->body);
+				delete tile;
+				tile = nullptr;
 			}
 		}
+		row.clear();
 	}
 	m_tiles.clear();
 
@@ -397,6 +495,7 @@ void Level::unload()
 	m_tilesets.clear();
 	clearPhysicsBodies();
 	clearTutorials();
+	clearEnemies();
 }
 
 void Level::update()

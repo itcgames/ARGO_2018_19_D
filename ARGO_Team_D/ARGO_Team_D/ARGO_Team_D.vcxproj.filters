@@ -39,6 +39,17 @@
     <ClCompile Include="Factories\EnemyFactory.cpp" />
     <ClCompile Include="ECS\Systems\AiSystem.cpp" />
     <ClCompile Include="ECS\Components\AiComponent.cpp" />
+    <ClCompile Include="Particles\Emitter.cpp" />
+    <ClCompile Include="Particles\Particle.cpp" />
+    <ClCompile Include="Particles\Timer.cpp" />
+    <ClCompile Include="ECS\Components\ParticleEffectsComponent.cpp" />
+    <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
+    <ClCompile Include="Bullets\Bullet.cpp" />
+    <ClCompile Include="Bullets\BulletManager.cpp" />
+    <ClCompile Include="Observers\LevelData.cpp" />
+    <ClCompile Include="Observers\levelObserver.cpp" />
+    <ClCompile Include="Hud.cpp" />
+    <ClCompile Include="Menu\PauseScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -98,6 +109,18 @@
     <ClInclude Include="Factories\EnemyFactory.h" />
     <ClInclude Include="ECS\Systems\AiSystem.h" />
     <ClInclude Include="ECS\Components\AiComponent.h" />
+    <ClInclude Include="Utils\Packet.h" />
+    <ClInclude Include="Particles\Emitter.h" />
+    <ClInclude Include="Particles\Particle.h" />
+    <ClInclude Include="Particles\Timer.h" />
+    <ClInclude Include="ECS\Components\ParticleEffectsComponent.h" />
+    <ClInclude Include="ECS\Systems\ParticleSystem.h" />
+    <ClInclude Include="Bullets\Bullet.h" />
+    <ClInclude Include="Bullets\BulletManager.h" />
+    <ClInclude Include="Hud.h" />
+    <ClInclude Include="Menu\PauseScreen.h" />
+    <ClInclude Include="Observers\LevelData.h" />
+    <ClInclude Include="Observers\levelObserver.h" />
     <ClInclude Include="Utils\Packet.h" />
     <ClInclude Include="ECS\Components\NetworkComponent.h" />
   </ItemGroup>

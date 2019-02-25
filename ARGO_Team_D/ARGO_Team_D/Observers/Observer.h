@@ -9,7 +9,6 @@ public:
 	/**
 	* Update the observer.
 	*/
-	virtual void update() = 0;
-
+	virtual void update(bool complete) = 0;
 };
 #endif

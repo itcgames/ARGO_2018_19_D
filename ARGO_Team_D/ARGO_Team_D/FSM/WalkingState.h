@@ -11,7 +11,7 @@ public:
 	void onEntry(Animation * a)  override;
 	void onExit(Animation * a)  override;
 
-	AnimationState * handle(Animation * a, SDL_Event & e) override;
+	AnimationState * handle(Animation * a, std::string state) override;
 };
 
 #endif //!WALKINGSTATE_H

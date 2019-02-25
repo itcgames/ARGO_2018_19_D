@@ -98,6 +98,13 @@ Game::Game() :
 	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+	m_pauseScreen = new PauseScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
+
+	m_particleSystem = new ParticleSystem(m_camera);
+
+	m_levelData = new LevelData(3);
+	m_levelObserver = new LevelObserver(1);
+	m_levelData->registerObserver(m_levelObserver);
 
 	initialiseFactories();
 	initialiseEntities();
@@ -119,9 +126,13 @@ Game::Game() :
 		m_ttlSystem.addEntity(e);
 		m_bullets.push_back(e);
 	}
-	m_controlSystem.bindBullets(m_bullets);
+	m_bulletManager = new BulletManager(m_world, WORLD_SCALE, m_resourceManager);
+	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
+
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
+
+	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
 	online = true;
 }
 
@@ -135,6 +146,7 @@ void Game::run()
 	float timePerFrame = 1000.f / 60.f;
 	Uint32 timeSinceLastUpdate = 0;
 	Uint32 timeSinceStart = SDL_GetTicks();
+
 	while (!m_quit)
 	{
 		processEvents();
@@ -145,7 +157,7 @@ void Game::run()
 		{
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents();
-			update(timeSinceLastUpdate);
+			update(timePerFrame);
 		}
 		render();
 	}
@@ -166,7 +178,6 @@ void Game::processEvents()
 		case PlayScreen:
 			inputHandler->handleKeyboardInput(event);
 			inputHandler->handleControllerInput(event);
-			m_controlSystem.processInput(event);
 			break;
 		case Options:
 			m_options->handleInput(event);
@@ -176,6 +187,9 @@ void Game::processEvents()
 			break;
 		case LevelSelect:
 			m_levelSelect->handleInput(event);
+			break;
+		case Pause:
+			m_pauseScreen->handleInput(event);
 			break;
 		default:
 			break;
@@ -188,11 +202,24 @@ void Game::processEvents()
 			{
 			case PlayScreen:
 				m_camera.m_shaking = true;
+				m_gameState = State::Pause;
 				break;
 			}
 
 
 		case SDL_KEYDOWN:
+
+			switch (m_gameState)
+			{
+			case PlayScreen:
+				if (event.key.keysym.sym == SDLK_q)
+				{
+					m_gameState = State::Pause;
+				}
+				
+				break;
+			}
+
 			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_quit = true;
 			if (event.key.keysym.sym == SDLK_RETURN) {
@@ -214,6 +241,21 @@ void Game::processEvents()
 		case SDL_QUIT:
 			m_quit = true;
 			break;
+
+
+		case SDL_JOYBUTTONDOWN:
+			//Play rumble at 75% strenght for 500 milliseconds
+			//SDL_HapticRumblePlay(gControllerHaptic, 0.75, 500);
+			switch (event.jbutton.button)
+			{
+			case 7:
+				//cout << "A button" << endl;
+				if (m_gameState == State::PlayScreen)
+				{
+					m_gameState = State::Pause;
+				}
+				break;
+			}
 		default:
 			m_camera.m_shaking = false;
 			break;
@@ -227,6 +269,7 @@ void Game::update(const float & dt)
 	{
 	case Menu:
 		m_menu->update();
+
 		break;
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
@@ -237,6 +280,8 @@ void Game::update(const float & dt)
 			m_controlSystem.update();
 			m_aiSystem->update();
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+
+			m_bulletManager->update(dt);
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);
 			m_movementSystem.update();
@@ -244,7 +289,14 @@ void Game::update(const float & dt)
 			inputHandler->update();
 			m_animationSystem.update(dt / 1000);
 			m_levelManager.update(dt/1000);
-			m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer);
+			if (m_levelObserver->getComplete()) {
+				if (m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer)) {
+					m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+				}	
+			}
+			m_particleSystem->update();
+			m_hud->update();
+			
 		}
 		break;
 	case Options:
@@ -257,6 +309,10 @@ void Game::update(const float & dt)
 		m_levelSelect->update();
 		break;
 	case Multiplayer:
+		break;
+	case Pause:
+		m_pauseScreen->update();
+		m_pauseScreen->updatePositions();
 		break;
 	default:
 		break;
@@ -271,7 +327,7 @@ void Game::render()
 		SDL_Log("Could not create a renderer: %s", SDL_GetError());
 	}
 
-	SDL_SetRenderDrawColor(m_renderer, 0, 255, 255, 255);
+	SDL_SetRenderDrawColor(m_renderer, 0, 155, 200, 255);
 
 	SDL_RenderClear(m_renderer);
 
@@ -281,8 +337,19 @@ void Game::render()
 		m_menu->draw();
 		break;
 	case PlayScreen:
+		m_levelManager.render(m_renderer, m_camera);
+		m_renderSystem.render(m_renderer, m_camera);
+		m_particleSystem->draw();
+		m_bulletManager->render(m_renderer, m_camera);
+		m_hud->draw();
+		break;
+	case Pause:
 		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
+		m_particleSystem->draw();
+		m_bulletManager->render(m_renderer, m_camera);
+		m_pauseScreen->drawBackground();
+		m_pauseScreen->draw();
 		break;
 	case Options:
 		m_options->draw();
@@ -367,11 +434,13 @@ void Game::initialiseEntities()
 	Entity * e = m_playerFactory->create(VectorAPI(150, 0));
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
+	m_particleSystem->addEntity(e);
+	m_animationSystem.addEntity(e);
 	m_network.addEntity(e);
 	m_player = e;
 	m_players.push_back(e);
 	for (int i = 0; i < 2; ++i) {
-		Entity * e = m_playerFactory->createOnlinePlayer(VectorAPI(150, 0), -1);
+		Entity * e = m_playerFactory->create(VectorAPI(150, 0));
 		m_entityList.push_back(e);
 		m_network.addEntity(e);
 		m_players.push_back(e);
@@ -382,18 +451,21 @@ void Game::initialiseEntities()
 		Enemy * enemy = m_enemyFactory->createGunEnemy();
 		m_gunEnemies.push_back(enemy);
 		m_entityList.push_back(enemy->entity);
+		m_animationSystem.addEntity(enemy->entity);
 	}
 	for (int i = 0; i < FLY_ENEMY_COUNT; ++i)
 	{
-		//Enemy * enemy = m_enemyFactory->createFlyEnemy();
-		//m_flyEnemies.push_back(enemy);
-		////m_entityList.push_back(m_flyEnemies.at(i)->entity);
+		Enemy * enemy = m_enemyFactory->createFlyEnemy();
+		m_flyEnemies.push_back(enemy);
+		m_entityList.push_back(m_flyEnemies.at(i)->entity);
+		m_animationSystem.addEntity(enemy->entity);
 	}
 	for (int i = 0; i < BIG_ENEMY_COUNT; ++i)
 	{
-		//Enemy * enemy = m_enemyFactory->createBigEnemy();
-		//m_bigEnemies.push_back(enemy);
-		////m_entityList.push_back(m_bigEnemies.at(i)->entity);
+		Enemy * enemy = m_enemyFactory->createBigEnemy();
+		m_bigEnemies.push_back(enemy);
+		m_entityList.push_back(m_bigEnemies.at(i)->entity);
+		m_animationSystem.addEntity(enemy->entity);
 	}
 }
 
@@ -402,7 +474,7 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	m_aiSystem = new AiSystem(m_playerBody);
+	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData);
 	for (auto i : m_entityList)
 	{
 		if (i->checkForComponent("Sprite"))
@@ -422,8 +494,8 @@ void Game::initialiseSystems()
 
 void Game::initialiseFactories()
 {
-	std::string spriteName = "test";
-	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE);
+	std::string spriteName = "Player";
+	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE, m_renderer);
 	m_enemyFactory = new EnemyFactory(m_resourceManager, m_world, WORLD_SCALE);
 }
 
@@ -436,7 +508,7 @@ void Game::setUpFont() {
 	{
 		std::cout << "error error error" << std::endl;
 	}
-	const char *path = "ASSETS\\FONTS\\arial.ttf";
+	const char *path = "ASSETS\\FONTS\\TheBlackFestival.ttf";
 	Sans = TTF_OpenFont(path, 50);
 }
 
@@ -463,4 +535,9 @@ void Game::spawnProjectile(float x, float y)
 		}
 
 	}
+}
+
+void Game::loadAlevel(int num)
+{
+	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
 }

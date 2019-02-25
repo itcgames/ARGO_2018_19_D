@@ -9,24 +9,26 @@
 /// <param name="h">Height of th entity</param>
 /// <param name="world">Reference to the Box2D world</param>
 /// <param name="worldScale">The scale used for Box2D</param>
-BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world, float worldScale)
+BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world, float worldScale, std::string name, bool ignoreGravity)
 	: m_refWorld(world),
 	m_worldScale(worldScale),
 	m_isCircle(false),
 	m_dimensions(w, h),
+	m_bodyData(name, this),
 	m_onGround(false),
 	m_groundData("BodyGround", this),
 	m_leftContact(false),
 	m_leftData("BodyLeft", this),
 	m_rightContact(false),
-	m_rightData("BodyRight", this)
+	m_rightData("BodyRight", this),
+	m_bulletHitCount(0)
 {
 	float halfWidth = w / 2.f;
 	float halfHeight = h / 2.f;
 	b2PolygonShape * polygonShape = new b2PolygonShape();
 	polygonShape->SetAsBox(halfWidth / m_worldScale, halfHeight / m_worldScale);
 	m_shape = polygonShape;
-	init(x, y, w, h);
+	init(x, y, w, h, ignoreGravity);
 }
 
 /// <summary>
@@ -37,24 +39,25 @@ BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world
 /// <param name="rad">Radius of the entity</param>
 /// <param name="world">Reference to the Box2D world</param>
 /// <param name="worldScale">The scale used for Box2D</param>
-BodyComponent::BodyComponent(float x, float y, float rad, b2World & world, float worldScale)
+BodyComponent::BodyComponent(float x, float y, float rad, b2World & world, float worldScale, std::string name, bool ignoreGravity)
 	: m_refWorld(world),
 	m_worldScale(worldScale),
 	m_isCircle(true),
 	m_dimensions(rad, rad),
+	m_bodyData(name, this),
 	m_onGround(false),
 	m_groundData("BodyGround", this),
 	m_leftContact(false),
 	m_leftData("BodyLeft", this),
 	m_rightContact(false),
-	m_rightData("BodyRight", this)
+	m_rightData("BodyRight", this),
+	m_bulletHitCount(0)
 {
 	float halfRad = rad / 2.f;
 	b2CircleShape * circleShape = new b2CircleShape();
-	//circleShape->m_p.Set(halfRad, halfRad); // DEBUG
 	circleShape->m_radius = halfRad / m_worldScale;
 	m_shape = circleShape;
-	init(x, y, rad, rad);
+	init(x, y, rad, rad, ignoreGravity);
 }
 
 /// <summary>
@@ -128,18 +131,21 @@ bool BodyComponent::isRightContact()
 /// <param name="y">Y position passed in </param>
 /// <param name="w">Width of Box2D rect (or radius of circle)</param>
 /// <param name="h">Height of Box2D rect (or radius of circle)</param>
-void BodyComponent::init(float x, float y, float w, float h)
+void BodyComponent::init(float x, float y, float w, float h, bool ignoreGravity)
 {
 	id = "Body";
 	float halfWidth = w / 2.f;
 	float halfHeight = h / 2.f;
-	m_bodyDef.position = b2Vec2((x + halfWidth) / m_worldScale, (y + halfHeight) / m_worldScale);
+	m_initialPosition = b2Vec2((x + halfWidth) / m_worldScale, (y + halfHeight) / m_worldScale);
+	m_bodyDef.position = m_initialPosition;
 	m_bodyDef.type = b2_dynamicBody;
 	m_body = m_refWorld.CreateBody(&m_bodyDef);
+	m_body->SetGravityScale(ignoreGravity ? 0.0f : 1.0f);
 	m_fixtureDef.density = 1.f;
 	m_fixtureDef.friction = 0.1f;
 	m_fixtureDef.restitution = 0.0f;
 	m_fixtureDef.shape = m_shape;
+	m_fixtureDef.userData = &m_bodyData;
 	m_body->CreateFixture(&m_fixtureDef);
 	m_body->SetFixedRotation(true);
 
@@ -223,4 +229,33 @@ void BodyComponent::rightContactStart()
 void BodyComponent::rightContactEnd()
 {
 	m_rightContact = false;
+}
+
+/// <summary>
+/// Function used to check how many times a body has been hit by a bullet
+/// </summary>
+/// <returns>int bullet hit count</returns>
+int BodyComponent::getBulletHitCount()
+{
+	return m_bulletHitCount;
+}
+
+/// <summary>
+/// Function allows bullet hit count to be set or reset
+/// </summary>
+/// <param name="count">Desired bullet hit count (generally used as a bullet count reset so 0)</param>
+void BodyComponent::setBulletHitCount(int count)
+{
+	m_bulletHitCount = count;
+	std::cout << m_bodyData.tag << ": " << count << std::endl;
+}
+
+void BodyComponent::setInitialPos(b2Vec2 pos)
+{
+	m_initialPosition = pos;
+}
+
+b2Vec2 BodyComponent::getInitialPos()
+{
+	return m_initialPosition;
 }

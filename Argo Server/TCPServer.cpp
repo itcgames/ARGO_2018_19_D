@@ -73,11 +73,10 @@ void TCPServer::startLobby(Lobby & lobby)
 				otherPlayerIDs.push_back(j);
 			}
 		}
-		p->otherPlayerIDs = otherPlayerIDs;
 		/*p->otherPlayerIDs = otherPlayerIDs;
 		std::cout << sizeof(otherPlayerIDs) << std::endl;*/
 		std::cout << "Sending start to :" << lobby.m_clients[i] << std::endl;
-		send(lobby.m_clients[i], (char*)p, sizeof(struct Packet) + (sizeof(int) * otherPlayerIDs.size()) + 1, 0);
+		send(lobby.m_clients[i], (char*)p, sizeof(struct Packet) + 1, 0);
 	}
 }
 

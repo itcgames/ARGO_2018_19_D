@@ -43,21 +43,33 @@
 #include <time.h>
 #include <functional>
 #include "Utils/ContactListener.h"
+#include "Particles/Timer.h"
+#include "Particles/Emitter.h"
+#include "ECS/Components/ParticleEffectsComponent.h"
+#include "ECS/Systems/ParticleSystem.h"
+#include "Bullets/BulletManager.h"
+#include "Hud.h"
+#include "Menu/PauseScreen.h"
+#include "Observers/LevelData.h"
+#include "Observers/levelObserver.h"
 
 class ControlSystem;
 class MainMenu;
 class OptionsMenu;
 class CreditScreen;
 class LevelSelectMenu;
-
+class PauseScreen;
 enum State {
 	Menu,
 	PlayScreen,
 	Options,
 	Credits,
 	LevelSelect,
-	Multiplayer
+	Multiplayer,
+	Pause
 };
+
+const int FRAMES_PER_SECOND = 60;
 
 using namespace std;
 
@@ -83,6 +95,9 @@ public:
 	NetworkingSystem m_network;
 	PlayerFactory * m_playerFactory;
 
+
+	void loadAlevel(int num);
+
 private:
 	void processEvents();
 	void update(const float & dt);
@@ -95,8 +110,8 @@ private:
 
 	// SDL Window
 	SDL_Window * p_window;
-	int m_windowWidth = 1280;
-	int m_windowHeight = 720;
+	int m_windowWidth = 1920;
+	int m_windowHeight = 1080;
 	bool m_quit = false;
 	TTF_Font* Sans;
 
@@ -128,6 +143,7 @@ private:
 	TimeToLiveSystem m_ttlSystem;
 	AnimationSystem m_animationSystem;
 	AiSystem * m_aiSystem;
+	ParticleSystem * m_particleSystem;
 
 	// Input
 	InputHandler * inputHandler;
@@ -161,11 +177,21 @@ private:
 	OptionsMenu * m_options;
 	CreditScreen * m_credits;
 	LevelSelectMenu * m_levelSelect;
+	PauseScreen * m_pauseScreen;
+
 	//bullets
 	std::vector<Entity *> m_bullets;
 	float startTimer;
 	bool fire = false;
 	int test;
+	BulletManager * m_bulletManager;
+	//hud
+	Hud * m_hud;
+
+
+	//Observers and Subjects for level completion
+	LevelData *m_levelData;
+	LevelObserver *m_levelObserver;
 
 	bool online;
 };

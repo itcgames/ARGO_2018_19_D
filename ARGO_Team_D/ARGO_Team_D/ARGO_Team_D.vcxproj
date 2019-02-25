@@ -149,11 +149,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullets\Bullet.cpp" />
+    <ClCompile Include="Bullets\BulletManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Client\Client.cpp" />
     <ClCompile Include="ECS\Components\AiComponent.cpp" />
+    <ClCompile Include="ECS\Components\ParticleEffectsComponent.cpp" />
     <ClCompile Include="ECS\Systems\AiSystem.cpp" />
+    <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
     <ClCompile Include="Factories\EnemyFactory.cpp" />
+    <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Input\Command.cpp" />
     <ClCompile Include="Input\ConcreteCommand.cpp" />
     <ClCompile Include="ECS\Components\BodyComponent.cpp" />
@@ -180,7 +185,13 @@
     <ClCompile Include="Menu\LevelSelectMenu.cpp" />
     <ClCompile Include="Menu\MainMenu.cpp" />
     <ClCompile Include="Menu\OptionsMenu.cpp" />
+    <ClCompile Include="Menu\PauseScreen.cpp" />
     <ClCompile Include="Menu\Screen.cpp" />
+    <ClCompile Include="Observers\LevelData.cpp" />
+    <ClCompile Include="Observers\levelObserver.cpp" />
+    <ClCompile Include="Particles\Emitter.cpp" />
+    <ClCompile Include="Particles\Particle.cpp" />
+    <ClCompile Include="Particles\Timer.cpp" />
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
@@ -189,12 +200,17 @@
     <ClCompile Include="Utils\MathUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullets\Bullet.h" />
+    <ClInclude Include="Bullets\BulletManager.h" />
     <ClInclude Include="Client\Client.h" />
     <ClInclude Include="Client\ParseUtils.h" />
     <ClInclude Include="ECS\Components\AiComponent.h" />
+    <ClInclude Include="ECS\Components\ParticleEffectsComponent.h" />
     <ClInclude Include="ECS\Components\NetworkComponent.h" />
     <ClInclude Include="ECS\Systems\AiSystem.h" />
+    <ClInclude Include="ECS\Systems\ParticleSystem.h" />
     <ClInclude Include="Factories\EnemyFactory.h" />
+    <ClInclude Include="Hud.h" />
     <ClInclude Include="Input\Command.h" />
     <ClInclude Include="Input\ConcreteCommand.h" />
     <ClInclude Include="ECS\Components\AnimationComponent.h" />
@@ -232,9 +248,15 @@
     <ClInclude Include="Menu\LevelSelectMenu.h" />
     <ClInclude Include="Menu\MainMenu.h" />
     <ClInclude Include="Menu\OptionsMenu.h" />
+    <ClInclude Include="Menu\PauseScreen.h" />
     <ClInclude Include="Menu\Screen.h" />
+    <ClInclude Include="Observers\LevelData.h" />
+    <ClInclude Include="Observers\levelObserver.h" />
     <ClInclude Include="Observers\Observer.h" />
     <ClInclude Include="Observers\Subject.h" />
+    <ClInclude Include="Particles\Emitter.h" />
+    <ClInclude Include="Particles\Particle.h" />
+    <ClInclude Include="Particles\Timer.h" />
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ECS\Systems\ControlSystem.h" />

@@ -2,7 +2,6 @@
 #define SUBJECT_H
 
 #include "Observer.h"
-
 /// <summary>
 /// Subject Interface class.
 /// </summary>
