@@ -28,7 +28,7 @@ void OptionsMenu::GoToMenu()
 	{
 		b->reset();
 	}
-	for (auto & l : m_buttons)
+	for (auto & l : m_labels)
 	{
 		l->reset();
 	}

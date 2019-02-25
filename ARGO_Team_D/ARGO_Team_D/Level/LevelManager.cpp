@@ -101,3 +101,8 @@ void LevelManager::loadLevel(Entity * e,ResourceManager & resourceManager, SDL_R
 
 	
 }
+
+int LevelManager::getCurrentLevel()
+{
+	return m_currentLevel;
+}
