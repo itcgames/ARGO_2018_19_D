@@ -156,6 +156,7 @@
     <ClCompile Include="ECS\Components\AiComponent.cpp" />
     <ClCompile Include="ECS\Components\ParticleEffectsComponent.cpp" />
     <ClCompile Include="ECS\Systems\AiSystem.cpp" />
+    <ClCompile Include="ECS\Systems\HealthSystem.cpp" />
     <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
     <ClCompile Include="Factories\EnemyFactory.cpp" />
     <ClCompile Include="Hud.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="ECS\Components\AiComponent.h" />
     <ClInclude Include="ECS\Components\ParticleEffectsComponent.h" />
     <ClInclude Include="ECS\Systems\AiSystem.h" />
+    <ClInclude Include="ECS\Systems\HealthSystem.h" />
     <ClInclude Include="ECS\Systems\ParticleSystem.h" />
     <ClInclude Include="Factories\EnemyFactory.h" />
     <ClInclude Include="Hud.h" />

@@ -27,11 +27,11 @@ public:
 	AiSystem(BulletManager * bulletManager, BodyComponent * playerBody, const float SCALE, LevelData* levelData);
 	~AiSystem();
 	void addEntity(Entity * e) override;
-	void update();
+	void update(float dt);
 	void removeEntity(const int id) override;
 private:
 	// Private Functions
-	void handleGroundEnemy(AiComponents & ac);
+	void handleGroundEnemy(AiComponents & ac, float dt);
 	void handleFlyEnemy(AiComponents & ac);
 
 	// Private Members
@@ -39,8 +39,8 @@ private:
 	BodyComponent * m_playerBody;
 	const float WORLD_SCALE;
 	const float DISTANCE_THRESHOLD;
-	const float GUN_ENEMY_ROF_SEC;
-	const float BIG_ENEMY_ROF_SEC;
+	const float GUN_ENEMY_ROF_MS;
+	const float BIG_ENEMY_ROF_MS;
 	const float GUN_ENEMY_SPEED;
 	const float FLY_ENEMY_SPEED;
 	const float BIG_ENEMY_SPEED;

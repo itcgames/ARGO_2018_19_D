@@ -47,6 +47,7 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				auto enemy = static_cast<BodyComponent *>(dataB->data);
 				int currentHitCount = enemy->getBulletHitCount();
 				enemy->setBulletHitCount(++currentHitCount);
+				data->remove();
 			}
 			else if (dataA->tag == "BulletEnemy" && dataB->tag == "PlayerBody")
 			{
@@ -54,9 +55,12 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				auto player = static_cast<BodyComponent *>(dataB->data);
 				int currentHitCount = player->getBulletHitCount();
 				player->setBulletHitCount(++currentHitCount);
+				data->remove();
 			}
-			data->remove();
-
+			else if (dataB->tag != "PlayerBody" && dataB->tag != "EnemyBody")
+			{
+				data->remove();
+			}
 		}
 	}
 
@@ -97,6 +101,7 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				auto enemy = static_cast<BodyComponent *>(dataA->data);
 				int currentHitCount = enemy->getBulletHitCount();
 				enemy->setBulletHitCount(++currentHitCount);
+				data->remove();
 			}
 			else if (dataB->tag == "BulletEnemy" && dataA->tag == "PlayerBody")
 			{
@@ -104,8 +109,12 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				auto player = static_cast<BodyComponent *>(dataA->data);
 				int currentHitCount = player->getBulletHitCount();
 				player->setBulletHitCount(++currentHitCount);
+				data->remove();
 			}
-			data->remove();
+			else if (dataA->tag != "PlayerBody" && dataA->tag != "EnemyBody")
+			{
+				data->remove();
+			}
 		}
 	}
 }

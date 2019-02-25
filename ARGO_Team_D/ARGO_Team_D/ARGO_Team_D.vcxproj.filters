@@ -50,6 +50,7 @@
     <ClCompile Include="Observers\levelObserver.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Menu\PauseScreen.cpp" />
+    <ClCompile Include="ECS\Systems\HealthSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -121,5 +122,6 @@
     <ClInclude Include="Menu\PauseScreen.h" />
     <ClInclude Include="Observers\LevelData.h" />
     <ClInclude Include="Observers\levelObserver.h" />
+    <ClInclude Include="ECS\Systems\HealthSystem.h" />
   </ItemGroup>
 </Project>
