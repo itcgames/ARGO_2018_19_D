@@ -6,7 +6,7 @@
 #include <vector>
 #include "../ARGO_Team_D/ARGO_Team_D/Utils/Packet.h"
 
-#define MAX_CLIENTS 1
+#define MAX_CLIENTS 2
 
 
 class Server {

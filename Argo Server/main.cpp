@@ -9,7 +9,7 @@ int main() {
 		if (server->createSock()) {
 			if (server->bindSock()) {
 				while (true) {
-					server->acceptConnections();
+					server->update();
 				}
 			}
 		}

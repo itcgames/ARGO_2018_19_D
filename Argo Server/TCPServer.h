@@ -19,9 +19,11 @@ public:
 	std::vector<int> getAvailableLobbies();
 	void createLobby();
 	int mapToLobby();
+	void startLobby(Lobby & lobby);
 
 	void update();
 	void sendToAllWaiting(Packet * p);
+	void sendToAllInLobby(Packet * p, Lobby & lobby);
 
 	bool createSock() override;
 	bool bindSock() override;
