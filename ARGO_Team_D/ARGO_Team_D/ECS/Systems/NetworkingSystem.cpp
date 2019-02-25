@@ -61,21 +61,21 @@ void NetworkingSystem::update()
 					}
 				}
 			}
-			if (p->type == MessageType::PLAYER) {
-				for (auto & entityComps : m_components) {
-					int entityID = entityComps.first;
-					auto & networkingComps = entityComps.second;
-					if (networkingComps.network != nullptr && networkingComps.network->networkID == p->playerID) {
-						std::cout << "Received from " << p->playerID << std::endl;
-						auto & pos = networkingComps.position;
-						//std::cout << p->position.x << ", " << p->position.y << std::endl;
-						pos->setPosition(p->position);
-						/*auto & body = networkingComps.body;
-						body->setPosition(b2Vec2(p->position.x / 30.f, p->position.y / 30.f));*/
-					}
+			m_inGame = true;
+		}
+		if (p->type == MessageType::PLAYER) {
+			for (auto & entityComps : m_components) {
+				int entityID = entityComps.first;
+				auto & networkingComps = entityComps.second;
+				if (networkingComps.network != nullptr && networkingComps.network->networkID == p->playerID) {
+					std::cout << "Received from " << p->playerID << std::endl;
+					auto & pos = networkingComps.position;
+					//std::cout << p->position.x << ", " << p->position.y << std::endl;
+					pos->setPosition(p->position);
+					/*auto & body = networkingComps.body;
+					body->setPosition(b2Vec2(p->position.x / 30.f, p->position.y / 30.f));*/
 				}
 			}
-			m_inGame = true;
 		}
 	}
 	if (m_inGame) {
