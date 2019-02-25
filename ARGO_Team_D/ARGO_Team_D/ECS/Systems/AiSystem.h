@@ -39,6 +39,11 @@ private:
 	BodyComponent * m_playerBody;
 	const float WORLD_SCALE;
 	const float DISTANCE_THRESHOLD;
+	const float GUN_ENEMY_ROF_SEC;
+	const float BIG_ENEMY_ROF_SEC;
+	const float GUN_ENEMY_SPEED;
+	const float FLY_ENEMY_SPEED;
+	const float BIG_ENEMY_SPEED;
 	std::vector<string> m_allowedTypes;
 	std::map<int, AiComponents> m_components;
 	LevelData *m_levelData;

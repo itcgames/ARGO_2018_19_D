@@ -5,6 +5,11 @@ AiSystem::AiSystem(BulletManager * bulletManager, BodyComponent * playerBody, co
 	m_playerBody(playerBody),
 	WORLD_SCALE(SCALE),
 	DISTANCE_THRESHOLD(7.f),
+	GUN_ENEMY_ROF_SEC(1.5f),
+	BIG_ENEMY_ROF_SEC(1.f),
+	GUN_ENEMY_SPEED(10.f),
+	FLY_ENEMY_SPEED(12.f),
+	BIG_ENEMY_SPEED(5.f),
 	m_levelData(levelData)
 {
 	m_allowedTypes = { "Body", "Animation", "Ai", "Sprite" };
@@ -86,6 +91,7 @@ void AiSystem::handleGroundEnemy(AiComponents & ac)
 	int minX = ac.ai->getMinX();
 	int maxX = ac.ai->getMaxX();
 	int direction = ac.ai->getDirection();
+	float speed = ac.ai->getType() == EnemyGun ? GUN_ENEMY_SPEED : BIG_ENEMY_SPEED;
 
 	// Process
 	b2Vec2 dist = m_playerBody->getBody()->GetPosition() - bodyPos;
@@ -100,7 +106,7 @@ void AiSystem::handleGroundEnemy(AiComponents & ac)
 		{
 			if ((bodyPos.x) > minX / WORLD_SCALE)
 			{
-				body->SetLinearVelocity(b2Vec2(-10, bodyVel.y));
+				body->SetLinearVelocity(b2Vec2(-speed, bodyVel.y));
 				ac.animation->handleInput("Walking");
 			}
 			else
@@ -113,7 +119,7 @@ void AiSystem::handleGroundEnemy(AiComponents & ac)
 		{
 			if ((bodyPos.x) < maxX / WORLD_SCALE)
 			{
-				body->SetLinearVelocity(b2Vec2(10, bodyVel.y));
+				body->SetLinearVelocity(b2Vec2(speed, bodyVel.y));
 				ac.animation->handleInput("Walking");
 			}
 			else
@@ -139,8 +145,13 @@ void AiSystem::handleFlyEnemy(AiComponents & ac)
 	b2Vec2 dist = m_playerBody->getBody()->GetPosition() - bodyPos;
 	if (DISTANCE_THRESHOLD > dist.Length())
 	{
-		body->SetLinearVelocity(b2Vec2(0, 0));
-		ac.animation->handleInput("Idle");
+
+		dist.Normalize();
+		dist *= FLY_ENEMY_SPEED;
+		body->SetLinearVelocity(dist);
+		ac.animation->handleInput("Walking");
+		direction = dist.x < 0 ? 1 : -1;
+		ac.sprite->m_flip = direction < 0 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
 	}
 	else
 	{
@@ -151,7 +162,7 @@ void AiSystem::handleFlyEnemy(AiComponents & ac)
 			{
 				newVelocity.x = (minX / WORLD_SCALE) - bodyPos.x;
 				newVelocity.Normalize();
-				newVelocity *= 10.f;
+				newVelocity *= FLY_ENEMY_SPEED;
 				body->SetLinearVelocity(newVelocity);
 				ac.animation->handleInput("Walking");
 			}
@@ -167,7 +178,7 @@ void AiSystem::handleFlyEnemy(AiComponents & ac)
 			{
 				newVelocity.x = (maxX / WORLD_SCALE) - bodyPos.x;
 				newVelocity.Normalize();
-				newVelocity *= 10.f;
+				newVelocity *= FLY_ENEMY_SPEED;
 				body->SetLinearVelocity(newVelocity);
 				ac.animation->handleInput("Walking");
 			}
