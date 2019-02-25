@@ -25,11 +25,12 @@ public:
 	bool checkPlayerCollisions(Entity * e, ResourceManager & rm, const float worldScale, SDL_Renderer * renderer);
 
 	void loadLevel(Entity * e, ResourceManager & resourceManager, SDL_Renderer * renderer, int level);
-
+	std::vector<Level*> m_levels;
+	int getCurrentLevel();
 protected:
 	TTF_Font * m_font;
 	std::vector<std::string> m_levelPaths;
-	std::vector<Level*> m_levels;
+	
 	int m_currentLevel;
 
 };

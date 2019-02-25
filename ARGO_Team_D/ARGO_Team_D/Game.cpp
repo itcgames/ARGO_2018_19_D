@@ -102,6 +102,10 @@ Game::Game() :
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_pauseScreen = new PauseScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
+	m_deathScreen = new DeathScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
+	m_modeSelect = new ModeSelectScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+	m_lobby = new LobbyScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+
 
 	m_particleSystem = new ParticleSystem(m_camera);
 
@@ -193,6 +197,9 @@ void Game::processEvents()
 		case Menu:
 			m_menu->handleInput(event);
 			break;
+		case ModeSelect:
+			m_modeSelect->handleInput(event);
+			break;
 		case PlayScreen:
 			inputHandler->handleKeyboardInput(event);
 			inputHandler->handleControllerInput(event);
@@ -209,6 +216,12 @@ void Game::processEvents()
 		case Pause:
 			m_pauseScreen->handleInput(event);
 			break;
+		case Dead:
+			m_deathScreen->handleInput(event);
+			break;
+		case Lobby:
+			m_lobby->handleInput(event);
+			break;
 		default:
 			break;
 		}
@@ -220,7 +233,7 @@ void Game::processEvents()
 			{
 			case PlayScreen:
 				m_camera.m_shaking = true;
-				m_gameState = State::Pause;
+				m_gameState = State::Dead;
 				break;
 			}
 
@@ -326,6 +339,9 @@ void Game::update(const float & dt)
 	case Options:
 		m_options->update();
 		break;
+	case ModeSelect:
+		m_modeSelect->update();
+		break;
 	case Credits:
 		m_credits->update();
 		break;
@@ -338,6 +354,13 @@ void Game::update(const float & dt)
 	case Pause:
 		m_pauseScreen->update();
 		m_pauseScreen->updatePositions();
+		break;
+	case Dead:
+		m_deathScreen->update();
+		m_deathScreen->updatePositions();
+		break;
+	case Lobby:
+		m_lobby->update();
 		break;
 	default:
 		break;
@@ -377,6 +400,9 @@ void Game::render()
 		m_bulletManager->render(m_renderer, m_camera);
 		m_hud->draw();
 		break;
+	case ModeSelect:
+		m_modeSelect->draw();
+		break;
 	case Pause:
 		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
@@ -384,6 +410,14 @@ void Game::render()
 		m_bulletManager->render(m_renderer, m_camera);
 		m_pauseScreen->drawBackground();
 		m_pauseScreen->draw();
+		break;
+	case Dead:
+		m_renderSystem.render(m_renderer, m_camera);
+		m_levelManager.render(m_renderer, m_camera);
+		m_particleSystem->draw();
+		m_bulletManager->render(m_renderer, m_camera);
+		m_deathScreen->drawBackground();
+		m_deathScreen->draw();
 		break;
 	case Options:
 		m_options->draw();
@@ -393,6 +427,9 @@ void Game::render()
 		break;
 	case LevelSelect:
 		m_levelSelect->draw();
+		break;
+	case Lobby:
+		m_lobby->draw();
 		break;
 	default:
 		break;
@@ -566,4 +603,9 @@ void Game::spawnProjectile(float x, float y)
 void Game::loadAlevel(int num)
 {
 	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
+}
+
+void Game::reloadCurrentlevel()
+{
+	m_levelManager.loadLevel(m_player, *m_resourceManager, m_renderer, m_levelManager.getCurrentLevel());
 }

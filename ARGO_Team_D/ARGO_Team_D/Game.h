@@ -52,6 +52,9 @@
 #include "Menu/PauseScreen.h"
 #include "Observers/LevelData.h"
 #include "Observers/levelObserver.h"
+#include "Menu/DeathScreen.h"
+#include "Menu/ModeSelectScreen.h"
+#include "Menu/LobbyScreen.h"
 
 class ControlSystem;
 class MainMenu;
@@ -59,6 +62,10 @@ class OptionsMenu;
 class CreditScreen;
 class LevelSelectMenu;
 class PauseScreen;
+class DeathScreen;
+class ModeSelectScreen;
+class LobbyScreen;
+
 enum State {
 	Menu,
 	PlayScreen,
@@ -66,7 +73,10 @@ enum State {
 	Credits,
 	LevelSelect,
 	Multiplayer,
-	Pause
+	Pause,
+	Dead,
+	ModeSelect,
+	Lobby
 };
 
 const int FRAMES_PER_SECOND = 60;
@@ -93,6 +103,7 @@ public:
 	SDL_Renderer * m_renderer;
 
 	void loadAlevel(int num);
+	void reloadCurrentlevel();
 
 private:
 	void processEvents();
@@ -174,6 +185,10 @@ private:
 	CreditScreen * m_credits;
 	LevelSelectMenu * m_levelSelect;
 	PauseScreen * m_pauseScreen;
+	DeathScreen * m_deathScreen;
+	ModeSelectScreen * m_modeSelect;
+	LobbyScreen * m_lobby;
+
 
 	// Networking
 	NetworkingSystem m_network;

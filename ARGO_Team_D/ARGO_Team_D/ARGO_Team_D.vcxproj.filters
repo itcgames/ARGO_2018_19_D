@@ -50,6 +50,9 @@
     <ClCompile Include="Observers\levelObserver.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Menu\PauseScreen.cpp" />
+    <ClCompile Include="Menu\DeathScreen.cpp" />
+    <ClCompile Include="Menu\ModeSelectScreen.cpp" />
+    <ClCompile Include="Menu\LobbyScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -121,5 +124,8 @@
     <ClInclude Include="Menu\PauseScreen.h" />
     <ClInclude Include="Observers\LevelData.h" />
     <ClInclude Include="Observers\levelObserver.h" />
+    <ClInclude Include="Menu\DeathScreen.h" />
+    <ClInclude Include="Menu\ModeSelectScreen.h" />
+    <ClInclude Include="Menu\LobbyScreen.h" />
   </ItemGroup>
 </Project>
