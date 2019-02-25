@@ -31,6 +31,16 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				{
 					data->rightContactStart();
 				}
+				else if (dataA->tag == "FlyEnemyBody" && dataB->tag == "PlayerBody")
+				{
+					auto flyEnemy = static_cast<BodyComponent *>(dataA->data);
+					int flyEnemyHitCount = flyEnemy->getBulletHitCount();
+					flyEnemy->setBulletHitCount(++flyEnemyHitCount);
+
+					auto player = static_cast<BodyComponent *>(dataB->data);
+					int playerHitCount = player->getBulletHitCount();
+					player->setBulletHitCount(playerHitCount + 5);
+				}
 			}
 		}
 		else if (dataA->tag == "TutorialTrigger") 
@@ -41,7 +51,7 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 		else if (dataA->tag.find("Bullet") != std::string::npos)
 		{
 			auto data = static_cast<Bullet*>(bodyUserData);
-			if (dataA->tag == "BulletPlayer" && dataB->tag == "EnemyBody")
+			if (dataA->tag == "BulletPlayer" && (dataB->tag == "EnemyBody" || dataB->tag == "FlyEnemyBody"))
 			{
 				// Enemy is hit by bullet
 				auto enemy = static_cast<BodyComponent *>(dataB->data);
@@ -57,7 +67,7 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				player->setBulletHitCount(++currentHitCount);
 				data->remove();
 			}
-			else if (dataB->tag != "PlayerBody" && dataB->tag != "EnemyBody")
+			else if (dataB->tag != "PlayerBody" && dataB->tag != "EnemyBody" && dataB->tag != "FlyEnemyBody")
 			{
 				data->remove();
 			}
@@ -85,6 +95,16 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				{
 					data->rightContactStart();
 				}
+				else if (dataB->tag == "FlyEnemyBody" && dataA->tag == "PlayerBody")
+				{
+					auto flyEnemy = static_cast<BodyComponent *>(dataB->data);
+					int flyEnemyHitCount = flyEnemy->getBulletHitCount();
+					flyEnemy->setBulletHitCount(++flyEnemyHitCount);
+
+					auto player = static_cast<BodyComponent *>(dataA->data);
+					int playerHitCount = player->getBulletHitCount();
+					player->setBulletHitCount(playerHitCount + 5);
+				}
 			}
 		}
 		else if (dataB->tag == "TutorialTrigger") 
@@ -95,7 +115,7 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 		else if (dataB->tag.find("Bullet") != std::string::npos)
 		{
 			auto data = static_cast<Bullet*>(bodyUserData);
-			if(dataB->tag == "BulletPlayer" && dataA->tag == "EnemyBody")
+			if(dataB->tag == "BulletPlayer" && (dataA->tag == "EnemyBody" || dataA->tag == "FlyEnemyBody"))
 			{
 				// Enemy is hit by bullet
 				auto enemy = static_cast<BodyComponent *>(dataA->data);
@@ -111,7 +131,7 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				player->setBulletHitCount(++currentHitCount);
 				data->remove();
 			}
-			else if (dataA->tag != "PlayerBody" && dataA->tag != "EnemyBody")
+			else if (dataA->tag != "PlayerBody" && dataA->tag != "EnemyBody" && dataA->tag != "FlyEnemyBody")
 			{
 				data->remove();
 			}
