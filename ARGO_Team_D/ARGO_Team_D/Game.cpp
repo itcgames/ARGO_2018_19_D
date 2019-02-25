@@ -122,6 +122,18 @@ Game::Game() :
 	initialiseSystems();
 	setUpFont();
 
+	for (Enemy* i : m_flyEnemies) {
+		playeraiSystem->addEnemy(i);
+	}
+
+	for (Enemy* i : m_bigEnemies) {
+		playeraiSystem->addEnemy(i);
+	}
+
+	for (Enemy* i : m_gunEnemies) {
+		playeraiSystem->addEnemy(i);
+	}
+
 	aiComponent = new PlayerAiComponent(m_player);
 	playeraiSystem->addComponent(aiComponent);
 

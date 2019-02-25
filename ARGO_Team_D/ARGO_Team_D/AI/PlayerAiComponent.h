@@ -4,13 +4,14 @@
 #include "../ECS/Entities/Entity.h"
 #include "../ECS/Components/Components.h"
 #include "BehaviourTree.h"
+#include "../Factories/EnemyFactory.h"
 
 class PlayerAiComponent : public Component {
 public:
 	PlayerAiComponent(Entity * e) :
 		m_entity(e)
 	{
-
+		id = "PlayerAi";
 	}
 	~PlayerAiComponent() {}
 
@@ -19,5 +20,6 @@ public:
 	BehaviourTree::Sequence m_sequences[2];
 	BehaviourTree::Succeeder m_succeeders[1];
 	Entity * m_entity;
+	Enemy * m_nearestEnemy;
 };
 #endif
