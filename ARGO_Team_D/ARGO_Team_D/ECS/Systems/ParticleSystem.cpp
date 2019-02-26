@@ -28,7 +28,6 @@ void ParticleSystem::update()
 		{
 			pc.part->m_emitter.setEmitting(false);
 		}
-		
 	}
 }
 
