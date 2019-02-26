@@ -25,14 +25,9 @@ Entity * PlayerFactory::create(VectorAPI pos)
 	part->m_emitter.setFramesPerEmission(5);
 	part->m_emitter.setLooping(true);
 
-	//part->m_emitterExplos.setLooping(true);
 	entity->addComponent(part);
-	/*b2Filter test;
-	test.categoryBits = 0x0001;
-	body->getBody()->GetFixtureList()[0].SetFilterData(test);*/
 	entity->addComponent(body);
-	entity->addComponent(new GunComponent(0));
-	entity->addComponent(new HealthComponent(100, 3));
+	entity->addComponent(new HealthComponent(100,3));
 
 	AnimationComponent * a = new AnimationComponent();
 	std::vector<SDL_Rect> idleFrames;

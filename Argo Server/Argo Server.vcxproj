@@ -119,12 +119,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="TCPServer.cpp" />
+    <ClCompile Include="UDPServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ARGO_Team_D\ARGO_Team_D\Utils\Packet.h" />
     <ClInclude Include="..\ARGO_Team_D\ARGO_Team_D\Utils\VectorAPI.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="TCPServer.h" />
+    <ClInclude Include="UDPServer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

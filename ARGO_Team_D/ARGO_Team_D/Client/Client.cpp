@@ -11,11 +11,14 @@ Client::~Client()
 {
 }
 
-bool Client::init(const std::string ip, const int port)
+bool Client::init()
 {
-	sock = socket(AF_INET, SOCK_STREAM, 0);
+	std::string ip = "149.153.106.150";
+	int port = 8080;
 
-	if (sock == INVALID_SOCKET)
+	m_sock = socket(AF_INET, SOCK_STREAM, 0);
+
+	if (m_sock == INVALID_SOCKET)
 	{
 		std::cerr << "Can't create socket, Err #" << WSAGetLastError() << std::endl;
 		WSACleanup();
@@ -23,7 +26,7 @@ bool Client::init(const std::string ip, const int port)
 	}
 
 	u_long iMode = 1;
-	int result = ioctlsocket(sock, FIONBIO, &iMode);
+	int result = ioctlsocket(m_sock, FIONBIO, &iMode);
 	if (result != NO_ERROR) {
 		std::cout << "ioctlsocket failed with error: " << result << std::endl;
 		return false;
@@ -36,7 +39,7 @@ bool Client::init(const std::string ip, const int port)
 	inet_pton(AF_INET, ip.c_str(), &hint.sin_addr);
 
 	// Connect to server
-	int connResult = connect(sock, (sockaddr*)&hint, sizeof(hint));
+	int connResult = connect(m_sock, (sockaddr*)&hint, sizeof(hint));
 	if (connResult == SOCKET_ERROR)
 	{
 		std::cout << "-----------------------------------------------------------------------" << std::endl;
@@ -51,7 +54,7 @@ bool Client::init(const std::string ip, const int port)
 bool Client::Send(Packet * p)
 {
 	auto size = sizeof(struct Packet) + 1;
-	int sendResult = send(sock, (char*)p, size, 0);
+	int sendResult = send(m_sock, (char*)p, size, 0);
 	if (sendResult == SOCKET_ERROR) {
 		return false;
 	}
@@ -60,7 +63,7 @@ bool Client::Send(Packet * p)
 Packet * Client::Receive()
 {
 	ZeroMemory(m_packet, sizeof(struct Packet));
-	int bytesReceived = recv(sock, (char*)m_packet, sizeof(struct Packet), 0);
+	int bytesReceived = recv(m_sock, (char*)m_packet, sizeof(struct Packet), 0);
 	if (bytesReceived == SOCKET_ERROR) {
 		int error = WSAGetLastError();
 		if (error != WSAEWOULDBLOCK) {
@@ -72,6 +75,6 @@ Packet * Client::Receive()
 
 void Client::close()
 {
-	closesocket(sock);
+	closesocket(m_sock);
 	WSACleanup();
 }

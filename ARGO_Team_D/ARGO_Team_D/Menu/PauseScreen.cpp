@@ -67,7 +67,6 @@ void PauseScreen::GoToMenu()
 
 void PauseScreen::GoToGame()
 {
-	std::cout << "Going to Game" << std::endl;
 	for (auto & b : m_buttons)
 	{
 		b->reset();

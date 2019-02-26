@@ -10,7 +10,9 @@ enum MessageType {
 	JOINED,
 	POSITION,
 	PLAYER,
-	START
+	START,
+	ALLREADY,
+	READY
 };
 
 struct Packet {

@@ -18,20 +18,6 @@ Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color 
 	activateBurst = false;
 	dir = -1;
 	decrement = alphaDec;
-
-	if (!burst)
-	{
-		/*for (int i = 0; i < 1; i++)
-		{
-			m_particles.push_back(new Particle(m_posX, m_posY, width, height, m_color, m_rend));
-		}*/
-	}
-	else
-	{
-
-	}
-
-	
 }
 
 Emitter::~Emitter()
@@ -50,6 +36,36 @@ Emitter::~Emitter()
 
 void Emitter::update(int positionX, int positionY)
 {
+	if (burst)
+	{
+		if (looping)
+		{
+			for (int i = 0; i < MAX_PARTICLES; ++i)
+			{
+				if (m_particlesArray[i] != nullptr)
+				{
+					if (m_particlesArray[i]->isDead())
+					{
+						delete m_particlesArray[i];
+
+						m_particlesArray[i] = new Particle(burstX, burstY, width, height, m_color, m_rend, dir, burst, decrement);
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < m_particles.size(); ++i)
+		{
+			if (m_particles[i]->isDead())
+			{
+				delete m_particles.at(i);
+				m_particles.erase(std::remove(m_particles.begin(), m_particles.end(), m_particles.at(i)), m_particles.end());
+			}
+		}
+	}
+
 	m_posX = positionX;
 	m_posY = positionY;
 
@@ -67,7 +83,7 @@ void Emitter::update(int positionX, int positionY)
 			m_particles.at(i)->update();
 		}
 
-		if (emit)
+		if (emit && !burst)
 		{
 
 			counter++;
@@ -80,9 +96,9 @@ void Emitter::update(int positionX, int positionY)
 	}	
 }
 
-void Emitter::draw()
+void Emitter::draw(Camera * cam)
 {
-	drawParticles();
+	drawParticles(cam);
 }
 
 void Emitter::setEmitting(bool b)
@@ -119,40 +135,31 @@ void Emitter::activate(bool b)
 	}
 }
 
-void Emitter::setAlphaDec(int num)
+void Emitter::activate(bool b, int x, int y)
 {
-
+	activateBurst = true;
+	burstX = x;
+	burstY = y;
+	for (int i = 0; i < MAX_PARTICLES; i++)
+	{
+		m_particlesArray[i] = (new Particle(burstX, burstY, width, height, m_color, m_rend, dir, burst, decrement));
+	}
 }
 
-void Emitter::drawParticles()
+void Emitter::setAlphaDec(int num)
 {
+}
 
+void Emitter::drawParticles(Camera * cam)
+{
+	//Show particles
 	if (burst)
 	{
-		if (looping)
-		{
-			for (int i = 0; i < MAX_PARTICLES; ++i)
-			{
-
-
-				if (m_particlesArray[i] != nullptr)
-				{
-					if (m_particlesArray[i]->isDead())
-					{
-						delete m_particlesArray[i];
-						m_particlesArray[i] = new Particle(m_posX, m_posY, width, height, m_color, m_rend, dir, burst, decrement);
-					}
-				}
-				
-			}
-		}
-		
-
 		for (int i = 0; i < MAX_PARTICLES; ++i)
 		{
 			if (activateBurst)
 			{
-				m_particlesArray[i]->draw();
+				m_particlesArray[i]->draw(cam);
 			}		
 		}
 	}
@@ -160,17 +167,7 @@ void Emitter::drawParticles()
 	{
 		for (int i = 0; i < m_particles.size(); ++i)
 		{
-			if (m_particles[i]->isDead())
-			{
-				delete m_particles.at(i);
-				m_particles.erase(std::remove(m_particles.begin(), m_particles.end(), m_particles.at(i)), m_particles.end());
-			}
-		}
-		//std::cout << m_particles.size() << std::endl;
-		//Show particles
-		for (int i = 0; i < m_particles.size(); ++i)
-		{
-			m_particles.at(i)->draw();
+			m_particles.at(i)->draw(cam);
 		}
 	}
 }

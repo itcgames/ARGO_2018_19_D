@@ -12,8 +12,11 @@
 #include "ECS/Systems/PhysicsSystem.h"
 #include "ECS/Systems/AnimationSystem.h"
 #include "ECS/Systems/AiSystem.h"
+#include "ECS/Systems/HealthSystem.h"
 #include "ECS/Components/PositionComponent.h"
 #include "ECS/Components/SpriteComponent.h"
+#include "ECS/Components/AiComponent.h"
+#include "ECS/Components/HealthComponent.h"
 #include <tmxlite/Map.hpp>
 #include "Input/InputHandler.h"
 #include "Resource Manager/ResourceManager.h"
@@ -39,6 +42,8 @@
 #include "ECS/Systems/TimeToLiveSystem.h"
 #include "ECS/Components/GunComponent.h"
 #include "ECS/Components//AiComponent.h"
+#include "AI/PlayerAiComponent.h"
+#include "AI/PlayerAiSystem.h"
 #include <stdlib.h>
 #include <time.h>
 #include <functional>
@@ -52,6 +57,9 @@
 #include "Menu/PauseScreen.h"
 #include "Observers/LevelData.h"
 #include "Observers/levelObserver.h"
+#include "Menu/DeathScreen.h"
+#include "Menu/ModeSelectScreen.h"
+#include "Menu/LobbyScreen.h"
 
 class ControlSystem;
 class MainMenu;
@@ -59,6 +67,10 @@ class OptionsMenu;
 class CreditScreen;
 class LevelSelectMenu;
 class PauseScreen;
+class DeathScreen;
+class ModeSelectScreen;
+class LobbyScreen;
+
 enum State {
 	Menu,
 	PlayScreen,
@@ -66,7 +78,10 @@ enum State {
 	Credits,
 	LevelSelect,
 	Multiplayer,
-	Pause
+	Pause,
+	Dead,
+	ModeSelect,
+	Lobby
 };
 
 const int FRAMES_PER_SECOND = 60;
@@ -89,7 +104,6 @@ public:
 	// Resources
 	ResourceManager * m_resourceManager;
 
-	void spawnProjectile(float x, float y);
 	SDL_Renderer * m_renderer;
 	// Networking
 	NetworkingSystem m_network;
@@ -97,6 +111,7 @@ public:
 
 
 	void loadAlevel(int num);
+	void reloadCurrentlevel();
 
 private:
 	void processEvents();
@@ -139,11 +154,10 @@ private:
 	RenderSystem m_renderSystem;
 	PhysicsSystem m_physicsSystem;
 	ControlSystem m_controlSystem;
-	MovementSystem m_movementSystem;
-	TimeToLiveSystem m_ttlSystem;
 	AnimationSystem m_animationSystem;
 	AiSystem * m_aiSystem;
 	ParticleSystem * m_particleSystem;
+	HealthSystem * m_healthSystem;
 
 	// Input
 	InputHandler * inputHandler;
@@ -178,21 +192,32 @@ private:
 	CreditScreen * m_credits;
 	LevelSelectMenu * m_levelSelect;
 	PauseScreen * m_pauseScreen;
+	DeathScreen * m_deathScreen;
+	ModeSelectScreen * m_modeSelect;
+	LobbyScreen * m_lobby;
+
 
 	//bullets
 	std::vector<Entity *> m_bullets;
 	float startTimer;
 	bool fire = false;
 	int test;
-	BulletManager * m_bulletManager;
-	//hud
-	Hud * m_hud;
 
+	// Bullets
+	BulletManager * m_bulletManager;
+
+	// HUD
+	Hud * m_hud;
 
 	//Observers and Subjects for level completion
 	LevelData *m_levelData;
 	LevelObserver *m_levelObserver;
 
 	bool online;
+
+	//Ai
+	Entity* m_aiEnt;
+	PlayerAiSystem* playeraiSystem;
+	PlayerAiComponent* aiComponent;
 };
 #endif // !GAME_H

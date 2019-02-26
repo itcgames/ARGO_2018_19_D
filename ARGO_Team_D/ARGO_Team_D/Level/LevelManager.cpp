@@ -70,6 +70,7 @@ bool LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const
 			auto startPos = m_levels[m_currentLevel]->m_startPos;
 			pos->setPosition(startPos);
 			body->getBody()->SetTransform(b2Vec2(startPos.x / worldScale, startPos.y / worldScale), 0);
+			body->setInitialPos(b2Vec2(startPos.x / worldScale, startPos.y / worldScale));
 
 			return true;
 		}
@@ -96,7 +97,21 @@ void LevelManager::loadLevel(Entity * e,ResourceManager & resourceManager, SDL_R
 		pos->setPosition(startPos);
 		body->getBody()->SetTransform(b2Vec2(startPos.x / 30, startPos.y / 30), 0);
 	}
+}
 
+int LevelManager::getCurrentLevel()
+{
+	return m_currentLevel;
+}
 
-	
+Level * LevelManager::getCurrentLevelObject()
+{
+	return m_levels.at(m_currentLevel);
+}
+
+void LevelManager::unloadAllLevels()
+{
+	for (auto level : m_levels) {
+		level->unload();
+	}
 }

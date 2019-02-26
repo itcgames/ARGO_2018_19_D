@@ -9,7 +9,7 @@ MainMenu::MainMenu(float width, float height, Game & game, SDL_Renderer * render
 	m_height = height;
 
 
-	m_labels.push_back(new Label("ARGO", m_width / 3.50, -50, 800, 400, SDL_Color{ 200, 0, 0, 255 }, rend, this->window));
+	m_labels.push_back(new Label("THE SINDICATE", m_width / 3.50, -50, 800, 400, SDL_Color{ 200, 0, 0, 255 }, rend, this->window));
 	m_buttons.push_back(new Button("Play", m_width / 2.35, 350, 300, 100, SDL_Color{ 200, 0, 0, 255 }, rend, this->window));
 	m_buttons.at(0)->Enter = std::bind(&MainMenu::GoToPlay, this);
 	m_buttons.push_back(new Button("Options", m_width / 2.35, 500, 300, 100, SDL_Color{ 200, 0, 0, 255 }, rend, this->window));
@@ -27,9 +27,10 @@ MainMenu::~MainMenu()
 
 void MainMenu::GoToPlay()
 {
-	m_game->m_levelManager.loadCurrentLevel(*m_game->m_resourceManager, m_game->m_renderer);
-	m_game->fadeToState(State::PlayScreen);
-	m_game->m_network.initClientLocalClient();
+	//m_game->m_levelManager.loadCurrentLevel(*m_game->m_resourceManager, m_game->m_renderer);
+	/*m_game->loadAlevel(0);
+	m_game->fadeToState(State::PlayScreen);*/
+	m_game->setGameState(State::ModeSelect);
 	for (auto & b : m_buttons)
 	{
 		b->reset();

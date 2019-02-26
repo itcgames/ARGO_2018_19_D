@@ -1,10 +1,11 @@
 #include "EnemyFactory.h"
 
-EnemyFactory::EnemyFactory(ResourceManager * rm, b2World & world, const float SCALE)
+EnemyFactory::EnemyFactory(ResourceManager * rm, b2World & world, const float SCALE, SDL_Renderer * rend)
 	: m_resourceManager(rm),
 	m_refWorld(world),
 	WORLD_SCALE(SCALE)
 {
+	m_renderer = rend;
 }
 
 EnemyFactory::~EnemyFactory()
@@ -15,7 +16,16 @@ Enemy * EnemyFactory::createGunEnemy()
 {
 	Enemy * enemy = createEnemy("GunEnemy", 8, 8, 64, 64, false);
 	enemy->ai = new AiComponent(EnemyGun, 0, 0, 3);
+	auto p = new ParticleEffectsComponent(enemy->body->getBody()->GetPosition().x * WORLD_SCALE,
+		enemy->body->getBody()->GetPosition().y * WORLD_SCALE,
+		5, 5, SDL_Color{ 181, 101, 29 },
+		m_renderer, false, 45);
+	p->m_emitter.setEmitting(false);
+	enemy->part = p;
+
+
 	enemy->entity->addComponent(enemy->ai);
+	enemy->entity->addComponent(enemy->part);
 	return enemy;
 }
 
@@ -23,7 +33,15 @@ Enemy * EnemyFactory::createFlyEnemy()
 {
 	Enemy * enemy = createEnemy("FlyEnemy", 8, 8, 64, 64, true);
 	enemy->ai = new AiComponent(EnemyFly, 0, 0, 1);
+	auto p = new ParticleEffectsComponent(enemy->body->getBody()->GetPosition().x * WORLD_SCALE,
+		enemy->body->getBody()->GetPosition().y * WORLD_SCALE,
+		5, 5, SDL_Color{ 0, 0, 250 },
+		m_renderer, false, 45);
+	p->emit = false;
+	enemy->part = p;
+
 	enemy->entity->addComponent(enemy->ai);
+	enemy->entity->addComponent(enemy->part);
 	return enemy;
 }
 
@@ -31,7 +49,15 @@ Enemy * EnemyFactory::createBigEnemy()
 {
 	Enemy * enemy = createEnemy("BigEnemy", 8, 8, 128, 128, false);
 	enemy->ai = new AiComponent(EnemyBig, 0, 0, 10);
+	auto p = new ParticleEffectsComponent(enemy->body->getBody()->GetPosition().x * WORLD_SCALE,
+		enemy->body->getBody()->GetPosition().y * WORLD_SCALE,
+		5, 5, SDL_Color{ 181, 101, 29 },
+		m_renderer, false, 45);
+	p->m_emitter.setEmitting(false);
+	enemy->part = p;
+
 	enemy->entity->addComponent(enemy->ai);
+	enemy->entity->addComponent(enemy->part);
 	return enemy;
 }
 
@@ -44,7 +70,7 @@ Enemy * EnemyFactory::createEnemy(string spriteId, int idleFrameCount, int walki
 	// Create Components
 	enemy->position = new PositionComponent(-1000, -1000);
 	enemy->sprite = new SpriteComponent(spriteId, *m_resourceManager, width, height);
-	enemy->body = new BodyComponent(-1000, -1000, width, m_refWorld, WORLD_SCALE, "EnemyBody", flying);
+	enemy->body = new BodyComponent(-1000, -1000, width, m_refWorld, WORLD_SCALE, flying ? "FlyEnemyBody" : "EnemyBody", flying);
 	AnimationComponent * a = new AnimationComponent();
 
 	// Setup Animation
@@ -70,5 +96,6 @@ Enemy * EnemyFactory::createEnemy(string spriteId, int idleFrameCount, int walki
 	enemy->entity->addComponent(enemy->sprite);
 	enemy->entity->addComponent(enemy->body);
 	enemy->entity->addComponent(enemy->animation);
+	
 	return enemy;
 }

@@ -27,6 +27,9 @@
     <ClCompile Include="..\ARGO_Team_D\ARGO_Team_D\Utils\VectorAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UDPServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ARGO_Team_D\ARGO_Team_D\Utils\VectorAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

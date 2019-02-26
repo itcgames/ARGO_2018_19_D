@@ -13,10 +13,10 @@ public:
 	Client();
 	~Client();
 
-	bool init(const std::string ip, const int port);
-	bool Send(Packet * p);
-	Packet * Receive();
-	void close();
+	virtual bool init();
+	virtual bool Send(Packet * p);
+	virtual Packet * Receive();
+	virtual void close();
 
 	void setID(int newId) { m_networkId = newId; }
 	void setHost(int host) {
@@ -29,12 +29,12 @@ public:
 	}
 	int getNetworkId() { return m_networkId; }
 	bool getHost() { return m_host; }
-private:
-	SOCKET sock;
+protected:
+	SOCKET m_sock;
 	int m_networkId = 0;
 	bool m_host = false;
-	char buf[4096];
 	Packet * m_packet;
+	sockaddr_in m_hint;
 };
 
 #endif // !CLIENT

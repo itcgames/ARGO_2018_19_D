@@ -9,6 +9,7 @@
 #include "..//ECS/Components/AnimationComponent.h"
 #include "..//ECS/Components/AiComponent.h"
 #include "..//Client/Client.h"
+#include "../ECS/Components/ParticleEffectsComponent.h"
 
 struct Enemy
 {
@@ -18,13 +19,14 @@ struct Enemy
 	SpriteComponent * sprite = nullptr;
 	AnimationComponent * animation = nullptr;
 	AiComponent * ai = nullptr;
+	ParticleEffectsComponent * part = nullptr;
 };
 
 class EnemyFactory
 {
 public:
 	// Public Functions
-	EnemyFactory(ResourceManager * rm, b2World & world, const float SCALE);
+	EnemyFactory(ResourceManager * rm, b2World & world, const float SCALE, SDL_Renderer * rend);
 	~EnemyFactory();
 	Enemy * createGunEnemy();
 	Enemy * createFlyEnemy();
@@ -38,6 +40,7 @@ private:
 	ResourceManager * m_resourceManager;
 	b2World & m_refWorld;
 	const float WORLD_SCALE;
+	SDL_Renderer * m_renderer;
 };
 
 #endif // !ENEMYFACTORY_H

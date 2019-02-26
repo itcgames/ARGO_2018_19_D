@@ -16,7 +16,7 @@ struct ParticleComponents
 class ParticleSystem: public System 
 {
 public:
-	ParticleSystem(Camera & cam);
+	ParticleSystem(Camera * cam);
 	~ParticleSystem();
 	void update();
 	void draw();
@@ -24,8 +24,9 @@ public:
 private:
 	std::vector<std::string> allowedTypes;
 	std::vector<ParticleComponents> m_components;
-	Camera * cam;
+	Camera * m_cam;
 	const float WORLD_SCALE = 30.f;
+	int num;
 };
 
 #endif // !PARTICLESYSTEM_H
