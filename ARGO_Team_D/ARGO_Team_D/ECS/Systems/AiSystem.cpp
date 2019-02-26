@@ -39,17 +39,12 @@ void AiSystem::update()
 		auto body = ac.body->getBody();
 		if (ac.body->getBulletHitCount() >= ac.ai->getMaxHits())
 		{
-			ac.part->m_emitterExplos.activate(true, (ac.body->getBody()->GetPosition().x * WORLD_SCALE) - m_cam->getBounds().x,
-				(ac.body->getBody()->GetPosition().y * WORLD_SCALE) - m_cam->getBounds().y);
+			ac.part->m_emitterExplos.activate(true, (ac.body->getBody()->GetPosition().x * WORLD_SCALE),
+				(ac.body->getBody()->GetPosition().y * WORLD_SCALE));
 			m_levelData->enemyKilled();
 			ac.ai->setActivationState(false);
 			ac.body->setBulletHitCount(0); // Reset bullet hit count
 			body->SetTransform(b2Vec2(-1000, 0), body->GetAngle());
-
-			/*int x = ac.body->getBody()->GetPosition().x * WORLD_SCALE;
-			int y = ac.body->getBody()->GetPosition().y * WORLD_SCALE;*/
-
-			
 		}
 		else
 		{

@@ -1,11 +1,12 @@
 #ifndef EMITTER_H
 #define EMITTER_H
 
-#include<SDL.h>
-#include<SDL_image.h>
-#include"Particle.h"
-#include<vector>
-#include<algorithm>
+#include <SDL.h>
+#include <SDL_image.h>
+#include "Particle.h"
+#include <vector>
+#include <algorithm>
+#include "../Camera.h"
 
 
 const int MAX_PARTICLES = 50;
@@ -19,7 +20,7 @@ public:
 	~Emitter();
 
 	void update(int positionX, int positionY);
-	void draw();
+	void draw(Camera * cam);
 	void setEmitting(bool b);
 	void setFramesPerEmission(int num);
 	void setLooping(bool b);
@@ -32,7 +33,7 @@ private:
 	//Particle* m_particles[MAX_PARTICLES];
 	std::vector<Particle *> m_particles;
 	Particle* m_particlesArray[MAX_PARTICLES];
-	void drawParticles();
+	void drawParticles(Camera * cam);
 	int m_posX, m_posY;
 	SDL_Renderer * m_rend;
 

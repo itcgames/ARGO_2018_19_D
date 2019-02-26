@@ -107,7 +107,7 @@ Game::Game() :
 	m_lobby = new LobbyScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 
 
-	m_particleSystem = new ParticleSystem(m_camera);
+	m_particleSystem = new ParticleSystem(&m_camera);
 
 	m_levelData = new LevelData(3);
 	m_levelObserver = new LevelObserver(1);
