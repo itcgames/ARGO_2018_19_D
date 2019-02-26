@@ -2,6 +2,7 @@
 #include<SDL.h>
 #include<SDL_ttf.h>
 #include<functional>
+#include<string>
 class Button {
 public:
 	Button(const char * string,int x, int y, int w, int h, SDL_Color color, SDL_Renderer * renderer, SDL_Window * window);
@@ -24,7 +25,14 @@ public:
 
 	void setPosition(int x, int y);
 	void doTransitions(bool b);
+	
+
+	void makeCheckbox(bool * b);
+
 private:
+
+	bool * condition;
+
 	SDL_Renderer * rend;
 	TTF_Font* arial;
 	SDL_Color color;
@@ -36,7 +44,8 @@ private:
 
 	SDL_Color nonFocusColor;
 	SDL_Color focusColor;
-	const char * string = "";
+	std::string string = "";
+	std::string checkboxString;
 	bool hasFocus = false;
 	float alpha;
 	bool isTransitioning = false;
@@ -61,4 +70,6 @@ private:
 	bool activateFunction;
 
 	bool doTransition;
+
+	bool isACheckbox;
 };

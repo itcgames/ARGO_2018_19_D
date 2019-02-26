@@ -1,6 +1,6 @@
 #include "AiSystem.h"
 
-AiSystem::AiSystem(BulletManager * bulletManager, BodyComponent * playerBody, const float SCALE, LevelData* levelData)
+AiSystem::AiSystem(BulletManager * bulletManager, BodyComponent * playerBody, const float SCALE, LevelData* levelData , Camera & camera)
 	: m_bulletManager(bulletManager),
 	m_playerBody(playerBody),
 	WORLD_SCALE(SCALE),
@@ -12,7 +12,8 @@ AiSystem::AiSystem(BulletManager * bulletManager, BodyComponent * playerBody, co
 	BIG_ENEMY_SPEED(5.f),
 	m_levelData(levelData)
 {
-	m_allowedTypes = { "Body", "Animation", "Ai", "Sprite" };
+	m_cam = &camera;
+	m_allowedTypes = { "Body", "Animation", "Ai", "Sprite", "Particle" };
 }
 
 AiSystem::~AiSystem()
@@ -29,6 +30,7 @@ void AiSystem::addEntity(Entity * e)
 		aiComp.animation = dynamic_cast<AnimationComponent*>(comps["Animation"]);
 		aiComp.ai = dynamic_cast<AiComponent*>(comps["Ai"]);
 		aiComp.sprite = dynamic_cast<SpriteComponent*>(comps["Sprite"]);
+		aiComp.part = dynamic_cast<ParticleEffectsComponent*>(comps["Particle"]);
 		m_components.insert(std::make_pair(e->id, aiComp));
 		m_entityList.push_back(e);
 	}
@@ -42,6 +44,8 @@ void AiSystem::update(float dt)
 		auto body = ac.body->getBody();
 		if (ac.body->getBulletHitCount() >= ac.ai->getMaxHits())
 		{
+			ac.part->m_emitterExplos.activate(true, (ac.body->getBody()->GetPosition().x * WORLD_SCALE),
+				(ac.body->getBody()->GetPosition().y * WORLD_SCALE));
 			m_levelData->enemyKilled();
 			ac.ai->setActivationState(false);
 			ac.body->setBulletHitCount(0); // Reset bullet hit count
@@ -67,7 +71,9 @@ void AiSystem::update(float dt)
 			{
 				body->SetLinearVelocity(b2Vec2(0, 0));
 			}
-		}		
+		}	
+
+		ac.part->m_emitter.setDirection(ac.ai->getDirection());
 	}
 }
 

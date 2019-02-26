@@ -99,8 +99,8 @@ public:
 		b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
 
 		if ((m_body->isOnGround() && !m_Ai->m_fighting) || (m_body->isOnGround() && m_Ai->m_nearestEnemy->ai->getType() == 1)) {
-			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -30));
-			currentVelocity.y = -30;
+			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+			currentVelocity.y = -35;
 
 			return true;
 		}
@@ -113,7 +113,7 @@ class Shoot : public Action
 {
 public:
 	Shoot(Entity * e, BulletManager* manager)
-		: Action(e), 
+		: Action(e),
 		m_manager(manager)
 	{
 	}
@@ -167,12 +167,12 @@ public:
 			}
 		}
 
-		
+
 		if (closest == nullptr && m_observer->getComplete()) {
 			return true;
 		}
 
-		if(closest != nullptr) {
+		if (closest != nullptr) {
 			m_Ai->m_nearestEnemy = closest;
 			return true;
 		}
@@ -187,7 +187,7 @@ private:
 	LevelObserver * m_observer;
 };
 
-class IsEnemyRight : public Action 
+class IsEnemyRight : public Action
 {
 public:
 	IsEnemyRight(Entity * e)
@@ -268,14 +268,14 @@ public:
 		float dist = sqrt(((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x))
 			+ ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y)));
 
-		if (dist < 7 && dist > -7 && dist == dist * m_Ai->m_dir){
+		if (dist < 6 && dist > -6 && dist == dist * m_Ai->m_dir) {
 			m_Ai->m_fighting = true;
 			return true;
 		}
 		else {
 			m_Ai->m_fighting = false;
 			return false;
-		}	
+		}
 	}
 };
 #endif

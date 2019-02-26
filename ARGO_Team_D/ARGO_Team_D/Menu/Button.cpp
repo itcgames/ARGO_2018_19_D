@@ -7,7 +7,7 @@ Button::Button(const char * string,int x, int y, int w, int h, SDL_Color color, 
 	{
 		std::cout << "error error error" << std::endl;
 	}
-	const char *path = "ASSETS\\FONTS\\BloodBlocks.ttf";
+	const char *path = "ASSETS\\FONTS\\Face Your Fears.ttf";
 	arial = TTF_OpenFont(path, 300);
 	//arial = TTF_OpenFont("..//ASSETS//FONTS//arial.ttf", 100);
 
@@ -37,7 +37,7 @@ Button::Button(const char * string,int x, int y, int w, int h, SDL_Color color, 
 	r.h = h + 20;
 	alpha = 0;
 	this->string= string;
-
+	checkboxString = "Off";
 
 	
 
@@ -48,6 +48,7 @@ Button::Button(const char * string,int x, int y, int w, int h, SDL_Color color, 
 
 	doTransition = true;
 
+	isACheckbox = false;
 }
 
 Button::~Button()
@@ -83,23 +84,23 @@ void Button::update()
 		r.h = displayHeight + 20;
 	}
 
-
 	if (hasFocus)
 	{
 		SDL_DestroyTexture(message);
 		color = focusColor;
-		surfaceMessage = TTF_RenderText_Blended(arial, string, color);
+		surfaceMessage = TTF_RenderText_Blended(arial, string.c_str(), color);
 		message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
-		SDL_FreeSurface(surfaceMessage);		
+		SDL_FreeSurface(surfaceMessage);
 	}
 	else {
 		SDL_DestroyTexture(message);
 		color = nonFocusColor;
-		surfaceMessage = TTF_RenderText_Blended(arial, string, color);
+		surfaceMessage = TTF_RenderText_Blended(arial, string.c_str(), color);
 		message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
 		SDL_FreeSurface(surfaceMessage);
-		
 	}
+
+	
 	if (isTransitioning)
 	{
 		transition();
@@ -117,9 +118,25 @@ void Button::mousePress()
 {
 	if (hasFocus)
 	{
-		std::cout << string << " pressed" << std::endl;
-		isTransitioning = true;
-		isClicked = true;
+		if (!isACheckbox)
+		{
+			std::cout << string << " pressed" << std::endl;
+			isTransitioning = true;
+			isClicked = true;
+		}
+		else
+		{
+			*condition = !(*condition);
+
+			if (*condition)
+			{
+				checkboxString = "On";
+			}
+			else
+			{
+				checkboxString = "Off";
+			}
+		}
 
 		if (!doTransition)
 		{
@@ -241,4 +258,10 @@ void Button::setPosition(int x, int y)
 void Button::doTransitions(bool b)
 {
 	doTransition = false;
+}
+
+void Button::makeCheckbox(bool * b)
+{
+	isACheckbox = true;
+	condition = b;
 }

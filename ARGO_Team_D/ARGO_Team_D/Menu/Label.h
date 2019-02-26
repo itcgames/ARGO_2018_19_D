@@ -19,7 +19,10 @@ public:
 
 	void setPosition(int x, int y);
 	void doTransitions(bool b);
+	void isACheckBoxLabel(bool * b);
 private:
+
+	bool * condition;
 	SDL_Renderer * rend;
 	TTF_Font* arial;
 	SDL_Color color;
@@ -42,6 +45,8 @@ private:
 	int displayHeight;
 
 	bool doTransition;
+
+	bool isCheckBoxLabel;
 };
 
 #endif // !LABEL_H

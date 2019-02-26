@@ -27,19 +27,17 @@ Level::~Level()
 bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Renderer * renderer)
 {
 	unload();
-	for (int i = 0; i < 3; i++) {
-		if (i == 0)
-		{
-			m_backgrounds.push_back(rManager->getImageResource("Background1"));
-		}
-		if (i == 1)
-		{
-			m_backgrounds.push_back(rManager->getImageResource("Background1-2"));
-		}
-		if (i == 2)
-		{
-			m_backgrounds.push_back(rManager->getImageResource("Background1-3"));
-		}
+	if (filepath.find("Level1.tmx") != string::npos || filepath.find("Tutorial") != string::npos) {
+		m_backgrounds.push_back(rManager->getImageResource("Background1"));
+		m_backgrounds.push_back(rManager->getImageResource("Background1-2"));
+		m_backgrounds.push_back(rManager->getImageResource("Background1-3"));
+		m_backgroundColour = { 0, 155, 200, 255 };
+	}
+	else if (filepath.find("Level2") != string::npos) {
+		m_backgrounds.push_back(rManager->getImageResource("Background2"));
+		m_backgrounds.push_back(rManager->getImageResource("Background2-2"));
+		m_backgrounds.push_back(rManager->getImageResource("Background2-3"));
+		m_backgroundColour = { 108, 62, 127, 255 };
 	}
 
 	if (m_map.load(filepath)) {
@@ -339,6 +337,8 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 /// <param name="renderer"></param>
 void Level::render(SDL_Renderer * renderer, Camera &camera)
 {
+	SDL_SetRenderDrawColor(renderer, m_backgroundColour.r, m_backgroundColour.g, m_backgroundColour.b, m_backgroundColour.a);
+	SDL_RenderClear(renderer);
 	int tileC = 0;
 	int tileD = 0;
 	SDL_Rect destRect;
@@ -446,6 +446,7 @@ void Level::clearTutorials()
 	{
 		m_refWorld.DestroyBody(tut->pb.body);
 		delete tut;
+		tut = nullptr;
 	}
 	m_tutorials.clear();
 }

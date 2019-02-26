@@ -27,6 +27,8 @@ public:
 	void loadLevel(Entity * e, ResourceManager & resourceManager, SDL_Renderer * renderer, int level);
 	std::vector<Level*> m_levels;
 	int getCurrentLevel();
+	Level * getCurrentLevelObject();
+	void unloadAllLevels();
 protected:
 	TTF_Font * m_font;
 	std::vector<std::string> m_levelPaths;

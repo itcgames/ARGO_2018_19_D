@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A3499566-7139-47A3-A26F-765702B1B24D}</ProjectGuid>
     <RootNamespace>ARGOTeamD</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -160,6 +160,7 @@
     <ClCompile Include="ECS\Systems\HealthSystem.cpp" />
     <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
     <ClCompile Include="Factories\EnemyFactory.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Input\Command.cpp" />
     <ClCompile Include="Input\ConcreteCommand.cpp" />
@@ -176,7 +177,6 @@
     <ClCompile Include="FSM\WalkingState.cpp" />
     <ClCompile Include="Factories\PlayerFactory.cpp" />
     <ClCompile Include="ECS\Systems\TimeToLiveSystem.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input\InputHandler.cpp" />
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="Level\LevelManager.cpp" />

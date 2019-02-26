@@ -71,6 +71,7 @@ public:
 
 	// How many times to render the background
 	int m_levelWidth = 2;
+	SDL_Color m_backgroundColour;
 };
 
 #endif // !LEVEL_H
