@@ -303,7 +303,7 @@ void Game::update(const float & dt)
 		if (doneFading) // dont update the game unless screen is done fading
 		{
 			m_controlSystem.update();
-			playeraiSystem->runTree();
+			//playeraiSystem->runTree();
 			m_aiSystem->update(dt);
 
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world

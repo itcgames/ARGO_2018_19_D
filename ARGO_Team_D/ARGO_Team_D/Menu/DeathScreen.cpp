@@ -51,6 +51,7 @@ DeathScreen::~DeathScreen()
 
 void DeathScreen::GoToMenu()
 {
+	m_game->m_levelManager.unloadAllLevels();
 	m_game->fadeToState(State::Menu);
 	for (auto & b : m_buttons)
 	{
