@@ -56,6 +56,7 @@
     <ClCompile Include="Utils\ContactListener.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
+    <ClCompile Include="Level\Goal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\Actions.h" />
@@ -136,5 +137,6 @@
     <ClInclude Include="Utils\VectorAPI.h" />
     <ClInclude Include="Utils\MathUtils.h" />
     <ClInclude Include="Resource Manager\SoundResource.h" />
+    <ClInclude Include="Level\Goal.h" />
   </ItemGroup>
 </Project>

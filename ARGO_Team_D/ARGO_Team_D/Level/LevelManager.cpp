@@ -14,7 +14,7 @@ LevelManager::~LevelManager()
 
 void LevelManager::update(const float dt)
 {
-	m_levels[m_currentLevel]->update();
+	m_levels[m_currentLevel]->update(dt);
 }
 
 void LevelManager::render(SDL_Renderer * renderer, Camera & camera)

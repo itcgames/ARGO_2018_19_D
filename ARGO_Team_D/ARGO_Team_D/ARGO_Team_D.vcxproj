@@ -178,6 +178,7 @@
     <ClCompile Include="ECS\Systems\TimeToLiveSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input\InputHandler.cpp" />
+    <ClCompile Include="Level\Goal.cpp" />
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="Level\LevelManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="FSM\WalkingState.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Input\InputHandler.h" />
+    <ClInclude Include="Level\Goal.h" />
     <ClInclude Include="Level\LevelManager.h" />
     <ClInclude Include="Level\Level.h" />
     <ClInclude Include="Camera.h" />

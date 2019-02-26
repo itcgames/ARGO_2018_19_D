@@ -16,6 +16,7 @@
 #include "../Utils/TutorialTrigger.h"
 #include "../ECS/Components/AiComponent.h"
 #include "../Factories/EnemyFactory.h"
+#include "Goal.h"
 
 struct TileData {
 	int destX;
@@ -45,7 +46,7 @@ public:
 	void clearEnemies();
 	void clearSingleEnemy(Enemy * enemy);
 	void unload();
-	void update();
+	void update(float dt);
 
 	// Public Members
 	b2World & m_refWorld;
@@ -60,6 +61,9 @@ public:
 	std::vector<PhysicsBody *> m_physicsBodies;
 	std::vector<TutorialTrigger*> m_tutorials;
 	SDL_Rect m_goal;
+
+	Goal * m_goalObj = nullptr;
+
 	VectorAPI m_startPos;
 	TTF_Font * m_font;
 	std::vector<Enemy *> & m_gunEnemies;

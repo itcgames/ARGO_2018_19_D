@@ -27,6 +27,10 @@ Level::~Level()
 bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Renderer * renderer)
 {
 	unload();
+	if (nullptr == m_goalObj)
+	{
+		m_goalObj = new Goal(rManager);
+	}
 	if (filepath.find("Level1.tmx") != string::npos || filepath.find("Tutorial") != string::npos) {
 		m_backgrounds.push_back(rManager->getImageResource("Background1"));
 		m_backgrounds.push_back(rManager->getImageResource("Background1-2"));
@@ -108,8 +112,6 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 
 	//get all the tiles in the current tile layer.
 	auto & layer_tiles = tile_layer->getTiles();
-	//@debug
-	//std::cout << "Got all tiles" << std::endl;
 
 	//For every tile at poistion do something
 	auto props = tile_layer->getProperties();
@@ -129,9 +131,6 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 
 			//get the gid of the current tile
 			int cur_gid = layer_tiles[tile_index].ID;
-			//std::cout << "cur_gid: " << cur_gid << std::endl;
-			//@debug
-			//std::cout << "Gid of tile:" << cur_gid << std::endl;
 
 			//GID of 0 is an empty tile so we skip it
 			if (cur_gid == 0)
@@ -152,9 +151,6 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 			//Normalize the GID(converts it to a 1 to n range instead of an n to m range)
 			cur_gid -= tset_gid;
 
-			//@debug
-			//std::cout << "Normalised GID:" << cur_gid << std::endl;
-
 			int ts_width = 0;
 			int ts_height = 0;
 
@@ -168,9 +164,6 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 			int x_pos = x * m_tileWidth;
 			int y_pos = y * m_tileHeight;
 
-			//	//@debug
-			//	//std::cout << "added tile to the level tiles" << std::endl;
-			//}
 			TileData * t = new TileData();
 			t->destX = x_pos;
 			t->destY = y_pos;
@@ -179,7 +172,6 @@ void Level::parseTMXTileLayer(const std::unique_ptr<tmx::Layer>& layer, int laye
 			t->texture = m_tilesets.at(tset_gid);
 			t->destructible = destructible;
 			m_tiles[y][x] = t;
-			//t->m_index = tile_index;
 			count++;
 		}
 	}
@@ -242,6 +234,8 @@ void Level::parseTMXObjectLayer(const std::unique_ptr<tmx::Layer>& layer, int la
 		else if (type == "Goal") {
 			auto rect = object.getAABB();
 			m_goal = { (int)rect.left, (int)rect.top, (int)rect.width, (int)rect.height };
+			m_goalObj->setCollisionRect((int)rect.left, (int)rect.top, (int)rect.width, (int)rect.height);
+			m_goalObj->setPosition((int)rect.left, (int)rect.top);
 		}
 		else if (type == "TutorialTrigger") {
 			auto rect = object.getAABB();
@@ -400,7 +394,7 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 		SDL_RenderDrawRect(renderer, &tRect);
 	}
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
-	//std::cout << tileD << "/" << tileC << " tiles Shown with bounds of: " << bounds.x << "," << bounds.y  << "," << bounds.w << "," << bounds.h << std::endl;
+	m_goalObj->render(renderer, &camera);
 }
 
 /// <summary>
@@ -499,9 +493,10 @@ void Level::unload()
 	clearEnemies();
 }
 
-void Level::update()
+void Level::update(const float dt)
 {
 	for (auto & tut : m_tutorials) {
 		tut->update();
 	}
+	m_goalObj->update(dt);
 }
