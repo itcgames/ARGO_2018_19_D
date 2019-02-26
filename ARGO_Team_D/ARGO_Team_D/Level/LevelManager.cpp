@@ -103,3 +103,15 @@ int LevelManager::getCurrentLevel()
 {
 	return m_currentLevel;
 }
+
+Level * LevelManager::getCurrentLevelObject()
+{
+	return m_levels.at(m_currentLevel);
+}
+
+void LevelManager::unloadAllLevels()
+{
+	for (auto level : m_levels) {
+		level->unload();
+	}
+}
