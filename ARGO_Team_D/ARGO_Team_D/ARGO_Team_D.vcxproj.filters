@@ -28,6 +28,7 @@
     <ClCompile Include="FSM\WalkingState.cpp" />
     <ClCompile Include="Factories\PlayerFactory.cpp" />
     <ClCompile Include="ECS\Systems\TimeToLiveSystem.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input\InputHandler.cpp" />
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="Level\LevelManager.cpp" />
@@ -55,7 +56,6 @@
     <ClCompile Include="Utils\ContactListener.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
-    <ClCompile Include="Game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI\Actions.h" />
