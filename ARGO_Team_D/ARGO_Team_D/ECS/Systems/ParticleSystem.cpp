@@ -15,11 +15,10 @@ void ParticleSystem::update()
 {
 	for (auto & pc : m_components)
 	{
-		pc.part->m_emitter.update((pc.body->getBody()->GetPosition().x * WORLD_SCALE),
-			(pc.body->getBody()->GetPosition().y * WORLD_SCALE));
+		pc.part->m_emitter.update((pc.body->getBody()->GetPosition().x * WORLD_SCALE) - (pc.body->getDimensions().x / 2.f  * pc.part->m_emitter.getDirection()),
+			(pc.body->getBody()->GetPosition().y * WORLD_SCALE) + pc.body->getDimensions().y / 2.f );
 
-		pc.part->m_emitterExplos.update(0,
-			0);
+		pc.part->m_emitterExplos.update(0, 0);
 
 		if ((pc.body->getBody()->GetLinearVelocity().x > 0 || pc.body->getBody()->GetLinearVelocity().x < 0) && pc.body->getBody()->GetLinearVelocity().y == 0 )
 		{
