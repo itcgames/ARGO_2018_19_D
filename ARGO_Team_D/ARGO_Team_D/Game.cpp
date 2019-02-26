@@ -135,7 +135,7 @@ Game::Game() :
 	}
 
 	aiComponent = new PlayerAiComponent(m_player);
-	playeraiSystem->addComponent(aiComponent);
+	//playeraiSystem->addComponent(aiComponent);
 
 
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
@@ -502,7 +502,7 @@ void Game::initialiseEntities()
 	m_animationSystem.addEntity(e);
 	m_player = e;
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
-	playeraiSystem->addEntity(m_player);
+	//playeraiSystem->addEntity(m_player);
 
 	for(int i = 0; i < GUN_ENEMY_COUNT; ++i)
 	{
@@ -535,7 +535,7 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData);
+	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData, m_camera);
 	m_healthSystem = new HealthSystem();
 	for (auto e : m_entityList)
 	{
@@ -581,11 +581,6 @@ void Game::setUpFont() {
 void Game::loadAlevel(int num)
 {
 	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
-}
-
-void Game::reloadCurrentlevel()
-{
-	m_levelManager.loadLevel(m_player, *m_resourceManager, m_renderer, m_levelManager.getCurrentLevel());
 }
 
 void Game::reloadCurrentlevel()

@@ -103,8 +103,3 @@ int LevelManager::getCurrentLevel()
 {
 	return m_currentLevel;
 }
-
-int LevelManager::getCurrentLevel()
-{
-	return m_currentLevel;
-}
