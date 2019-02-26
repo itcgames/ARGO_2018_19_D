@@ -23,7 +23,8 @@ LobbyScreen::~LobbyScreen()
 
 void LobbyScreen::StartGame()
 {
-	m_game->setGameState(State::PlayScreen);
+	m_game->loadAlevel(0);
+	m_game->fadeToState(State::PlayScreen);
 	m_game->m_network.joinServer();
 	for (auto & b : m_buttons)
 	{
