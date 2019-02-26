@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{A3499566-7139-47A3-A26F-765702B1B24D}</ProjectGuid>
     <RootNamespace>ARGOTeamD</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AI\PlayerAiSystem.cpp" />
     <ClCompile Include="Bullets\Bullet.cpp" />
     <ClCompile Include="Bullets\BulletManager.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="ECS\Components\AiComponent.cpp" />
     <ClCompile Include="ECS\Components\ParticleEffectsComponent.cpp" />
     <ClCompile Include="ECS\Systems\AiSystem.cpp" />
+    <ClCompile Include="ECS\Systems\HealthSystem.cpp" />
     <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
     <ClCompile Include="Factories\EnemyFactory.cpp" />
     <ClCompile Include="Hud.cpp" />
@@ -198,11 +200,16 @@
     <ClCompile Include="Resource Manager\ImageResource.cpp" />
     <ClCompile Include="Resource Manager\ResourceManager.cpp" />
     <ClCompile Include="Resource Manager\SoundResource.cpp" />
+    <ClCompile Include="Shader class\Shader.cpp" />
     <ClCompile Include="Utils\ContactListener.cpp" />
     <ClCompile Include="Utils\VectorAPI.cpp" />
     <ClCompile Include="Utils\MathUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AI\Actions.h" />
+    <ClInclude Include="AI\PlayerAiComponent.h" />
+    <ClInclude Include="AI\BehaviourTree.h" />
+    <ClInclude Include="AI\PlayerAiSystem.h" />
     <ClInclude Include="Bullets\Bullet.h" />
     <ClInclude Include="Bullets\BulletManager.h" />
     <ClInclude Include="Client\Client.h" />
@@ -210,6 +217,7 @@
     <ClInclude Include="ECS\Components\AiComponent.h" />
     <ClInclude Include="ECS\Components\ParticleEffectsComponent.h" />
     <ClInclude Include="ECS\Systems\AiSystem.h" />
+    <ClInclude Include="ECS\Systems\HealthSystem.h" />
     <ClInclude Include="ECS\Systems\ParticleSystem.h" />
     <ClInclude Include="Factories\EnemyFactory.h" />
     <ClInclude Include="Hud.h" />
@@ -265,6 +273,7 @@
     <ClInclude Include="Resource Manager\ImageResource.h" />
     <ClInclude Include="Resource Manager\ResourceManager.h" />
     <ClInclude Include="ECS\Systems\ControlSystem.h" />
+    <ClInclude Include="Shader class\Shader.h" />
     <ClInclude Include="Systems\RenderSystem.h" />
     <ClInclude Include="Systems\System.h" />
     <ClInclude Include="Utils\CollisionData.h" />

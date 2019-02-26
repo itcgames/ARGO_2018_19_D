@@ -12,8 +12,11 @@
 #include "ECS/Systems/PhysicsSystem.h"
 #include "ECS/Systems/AnimationSystem.h"
 #include "ECS/Systems/AiSystem.h"
+#include "ECS/Systems/HealthSystem.h"
 #include "ECS/Components/PositionComponent.h"
 #include "ECS/Components/SpriteComponent.h"
+#include "ECS/Components/AiComponent.h"
+#include "ECS/Components/HealthComponent.h"
 #include <tmxlite/Map.hpp>
 #include "Input/InputHandler.h"
 #include "Resource Manager/ResourceManager.h"
@@ -39,6 +42,8 @@
 #include "ECS/Systems/TimeToLiveSystem.h"
 #include "ECS/Components/GunComponent.h"
 #include "ECS/Components//AiComponent.h"
+#include "AI/PlayerAiComponent.h"
+#include "AI/PlayerAiSystem.h"
 #include <stdlib.h>
 #include <time.h>
 #include <functional>
@@ -99,7 +104,6 @@ public:
 	// Resources
 	ResourceManager * m_resourceManager;
 
-	void spawnProjectile(float x, float y);
 	SDL_Renderer * m_renderer;
 
 	void loadAlevel(int num);
@@ -146,11 +150,10 @@ private:
 	RenderSystem m_renderSystem;
 	PhysicsSystem m_physicsSystem;
 	ControlSystem m_controlSystem;
-	MovementSystem m_movementSystem;
-	TimeToLiveSystem m_ttlSystem;
 	AnimationSystem m_animationSystem;
 	AiSystem * m_aiSystem;
 	ParticleSystem * m_particleSystem;
+	HealthSystem * m_healthSystem;
 
 	// Input
 	InputHandler * inputHandler;
@@ -193,18 +196,19 @@ private:
 	// Networking
 	NetworkingSystem m_network;
 
-	//bullets
-	std::vector<Entity *> m_bullets;
-	float startTimer;
-	bool fire = false;
-	int test;
+	// Bullets
 	BulletManager * m_bulletManager;
-	//hud
-	Hud * m_hud;
 
+	// HUD
+	Hud * m_hud;
 
 	//Observers and Subjects for level completion
 	LevelData *m_levelData;
 	LevelObserver *m_levelObserver;
+
+	//Ai
+	Entity* m_aiEnt;
+	PlayerAiSystem* playeraiSystem;
+	PlayerAiComponent* aiComponent;
 };
 #endif // !GAME_H

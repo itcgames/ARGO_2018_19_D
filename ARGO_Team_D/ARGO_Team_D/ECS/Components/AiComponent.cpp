@@ -6,7 +6,8 @@ AiComponent::AiComponent(AiType type, int xMax, int xMin, int hits)
 	m_direction(1),
 	m_xMax(xMax),
 	m_xMin(xMin),
-	m_hits(hits)
+	m_hits(hits),
+	m_shotTimer(0.f)
 {
 	id = "Ai";
 }
@@ -59,4 +60,14 @@ int AiComponent::getMaxHits()
 AiType AiComponent::getType()
 {
 	return m_type;
+}
+
+void AiComponent::setShotTimer(float val)
+{
+	m_shotTimer = val;
+}
+
+float AiComponent::getShotTimer()
+{
+	return m_shotTimer;
 }

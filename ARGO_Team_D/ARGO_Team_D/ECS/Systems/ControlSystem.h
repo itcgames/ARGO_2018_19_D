@@ -10,6 +10,7 @@
 #include "../ECS/Components/SpriteComponent.h"
 #include "../ECS/Components/AnimationComponent.h"
 #include "../ECS/Components/PositionComponent.h"
+#include "../ECS/Components/HealthComponent.h"
 #include "../ECS/Entities/Entity.h"
 #include "../Utils/VectorAPI.h"
 #include "../Bullets/BulletManager.h"
@@ -20,6 +21,7 @@ struct ControlComponents {
 	AnimationComponent * animation;
 	ParticleEffectsComponent * part;
 	SpriteComponent * sprite;
+	HealthComponent * health;
 };
 
 class ControlSystem : public System {

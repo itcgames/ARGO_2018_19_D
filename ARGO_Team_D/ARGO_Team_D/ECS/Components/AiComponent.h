@@ -27,6 +27,8 @@ public:
 	int getMaxX();
 	int getMaxHits();
 	AiType getType();
+	void setShotTimer(float val);
+	float getShotTimer();
 private:
 	// Private Members
 	AiType m_type;
@@ -37,5 +39,6 @@ private:
 	int m_xMax;
 	int m_xMin;
 	int m_hits;
+	float m_shotTimer;
 };
 #endif // !AICOMPONENT_H

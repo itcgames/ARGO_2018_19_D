@@ -48,11 +48,14 @@
     <ClCompile Include="Bullets\BulletManager.cpp" />
     <ClCompile Include="Observers\LevelData.cpp" />
     <ClCompile Include="Observers\levelObserver.cpp" />
+    <ClCompile Include="AI\PlayerAiSystem.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Menu\PauseScreen.cpp" />
+    <ClCompile Include="Shader class\Shader.cpp" />
     <ClCompile Include="Menu\DeathScreen.cpp" />
     <ClCompile Include="Menu\ModeSelectScreen.cpp" />
     <ClCompile Include="Menu\LobbyScreen.cpp" />
+    <ClCompile Include="ECS\Systems\HealthSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client\Client.h" />
@@ -124,8 +127,14 @@
     <ClInclude Include="Menu\PauseScreen.h" />
     <ClInclude Include="Observers\LevelData.h" />
     <ClInclude Include="Observers\levelObserver.h" />
+    <ClInclude Include="AI\BehaviourTree.h" />
+    <ClInclude Include="AI\Actions.h" />
+    <ClInclude Include="AI\PlayerAiSystem.h" />
+    <ClInclude Include="AI\PlayerAiComponent.h" />
+    <ClInclude Include="Shader class\Shader.h" />
     <ClInclude Include="Menu\DeathScreen.h" />
     <ClInclude Include="Menu\ModeSelectScreen.h" />
     <ClInclude Include="Menu\LobbyScreen.h" />
+    <ClInclude Include="ECS\Systems\HealthSystem.h" />
   </ItemGroup>
 </Project>

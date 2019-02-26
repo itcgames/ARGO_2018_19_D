@@ -113,49 +113,39 @@ Game::Game() :
 	m_levelObserver = new LevelObserver(1);
 	m_levelData->registerObserver(m_levelObserver);
 
+	m_bulletManager = new BulletManager(m_world, WORLD_SCALE, m_resourceManager);
+
+	playeraiSystem = new PlayerAiSystem(m_bulletManager);
+
 	initialiseFactories();
 	initialiseEntities();
 	initialiseSystems();
 	setUpFont();
 
+	for (Enemy* i : m_flyEnemies) {
+		playeraiSystem->addEnemy(i);
+	}
+
+	for (Enemy* i : m_bigEnemies) {
+		playeraiSystem->addEnemy(i);
+	}
+
+	for (Enemy* i : m_gunEnemies) {
+		playeraiSystem->addEnemy(i);
+	}
+
+	aiComponent = new PlayerAiComponent(m_player);
+	playeraiSystem->addComponent(aiComponent);
+
+
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
 
-	for (int i = 0; i < 1; i++)
-	{
-		Entity * e = new Entity();
-		e->addComponent(new PositionComponent(-10000, -10000));
-		std::string theName = "bullet";
-		e->addComponent(new SpriteComponent(theName, *m_resourceManager, 30, 5));
-		e->addComponent(new VelocityComponent(VectorAPI(0, 0)));
-		e->addComponent(new TimeToLiveComponent(1.0f));
-		m_movementSystem.addEntity(e);
-		m_renderSystem.addEntity(e);
-		m_ttlSystem.addEntity(e);
-		m_bullets.push_back(e);
-	}
-	m_bulletManager = new BulletManager(m_world, WORLD_SCALE, m_resourceManager);
 	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
 
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
 	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
-
-
-	//float enemyX = 100;
-	//float enemyY = 100;
-	//float enemyWidth = 100;
-	//float enemyHeight = 100;
-	//std::string name = "TestAnimation";
-	//Entity * enemy = new Entity();
-	//enemy->addComponent(new BodyComponent(enemyX, enemyY, enemyWidth, enemyHeight, m_world, WORLD_SCALE));
-	//enemy->addComponent(new PositionComponent(enemyX, enemyY));
-	//enemy->addComponent(new SpriteComponent(name, *m_resourceManager, enemyX, enemyY));
-	////enemy->addComponent(new AnimationComponent());
-	//enemy->addComponent(new AiComponent(AiType::EnemyGun, 0, 200));
-	//m_renderSystem.addEntity(enemy);
-	//m_physicsSystem.addEntity(enemy);
-	////m_animationSystem.addEntity(enemy);
 }
 
 Game::~Game()
@@ -237,7 +227,6 @@ void Game::processEvents()
 				break;
 			}
 
-
 		case SDL_KEYDOWN:
 
 			switch (m_gameState)
@@ -313,16 +302,14 @@ void Game::update(const float & dt)
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
-			
 			m_controlSystem.update();
-			m_aiSystem->update();
-			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+			playeraiSystem->runTree();
+			m_aiSystem->update(dt);
 
+			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);
-			m_movementSystem.update();
-			m_ttlSystem.update();
 			inputHandler->update();
 			m_animationSystem.update(dt / 1000);
 			m_levelManager.update(dt/1000);
@@ -332,8 +319,13 @@ void Game::update(const float & dt)
 				}	
 			}
 			m_particleSystem->update();
+			m_healthSystem->update();
 			m_hud->update();
-			
+			if (!m_healthSystem->playerAlive())
+			{
+				m_healthSystem->setPlayerAliveStatus(true);
+				m_gameState = State::Dead;
+			}
 		}
 		break;
 	case Options:
@@ -406,6 +398,7 @@ void Game::render()
 	case Pause:
 		m_renderSystem.render(m_renderer, m_camera);
 		m_levelManager.render(m_renderer, m_camera);
+		m_renderSystem.render(m_renderer, m_camera);
 		m_particleSystem->draw();
 		m_bulletManager->render(m_renderer, m_camera);
 		m_pauseScreen->drawBackground();
@@ -509,6 +502,8 @@ void Game::initialiseEntities()
 	m_animationSystem.addEntity(e);
 	m_player = e;
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
+	playeraiSystem->addEntity(m_player);
+
 	for(int i = 0; i < GUN_ENEMY_COUNT; ++i)
 	{
 		Enemy * enemy = m_enemyFactory->createGunEnemy();
@@ -540,20 +535,25 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData, m_camera);
-	for (auto i : m_entityList)
+	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData);
+	m_healthSystem = new HealthSystem();
+	for (auto e : m_entityList)
 	{
-		if (i->checkForComponent("Sprite"))
+		if (e->checkForComponent("Sprite"))
 		{
-			m_renderSystem.addEntity(i);
+			m_renderSystem.addEntity(e);
 		}
-		if (i->checkForComponent("Body"))
+		if (e->checkForComponent("Body"))
 		{
-			m_physicsSystem.addEntity(i);
+			m_physicsSystem.addEntity(e);
 		}
-		if (i->checkForComponent("Ai"))
+		if (e->checkForComponent("Ai"))
 		{
-			m_aiSystem->addEntity(i);
+			m_aiSystem->addEntity(e);
+		}
+		if (e->checkForComponent("Health"))
+		{
+			m_healthSystem->addEntity(e);
 		}
 	}
 }
@@ -578,34 +578,14 @@ void Game::setUpFont() {
 	Sans = TTF_OpenFont(path, 50);
 }
 
-void Game::spawnProjectile(float x, float y)
-{
-	for (auto &b : m_bullets)
-	{
-
-		std::vector<std::string> s = { "TimeToLive", "Position", "Velocity" };
-		auto comps = b->getComponentsOfType(s);
-		TimeToLiveComponent * t = dynamic_cast<TimeToLiveComponent*>(comps["TimeToLive"]);
-
-		if (!t->isActive())
-		{
-			t->setActive(true);
-			PositionComponent * p = dynamic_cast<PositionComponent*>(comps["Position"]);
-			p->setPosition(VectorAPI(x, y));
-
-			VelocityComponent * v = dynamic_cast<VelocityComponent*>(comps["Velocity"]);
-			v->setVelocity(VectorAPI(30, ((double)rand() / RAND_MAX) * 2 - 1));
-			t->setTimer(SDL_GetTicks());
-			t->setActive(true);
-			break;
-		}
-
-	}
-}
-
 void Game::loadAlevel(int num)
 {
 	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
+}
+
+void Game::reloadCurrentlevel()
+{
+	m_levelManager.loadLevel(m_player, *m_resourceManager, m_renderer, m_levelManager.getCurrentLevel());
 }
 
 void Game::reloadCurrentlevel()
