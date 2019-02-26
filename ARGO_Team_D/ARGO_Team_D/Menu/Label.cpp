@@ -7,7 +7,7 @@ Label::Label(const char * string, int x, int y, int w, int h, SDL_Color color, S
 	{
 		std::cout << "error error error" << std::endl;
 	}
-	const char *path = "ASSETS\\FONTS\\BloodBlocks.ttf";
+	const char *path = "ASSETS\\FONTS\\Face Your Fears.ttf";
 	arial = TTF_OpenFont(path, 300);
 
 	this->color = color;
@@ -50,6 +50,28 @@ void Label::draw()
 
 void Label::update()
 {
+
+	if (isCheckBoxLabel)
+	{
+
+		if (*condition)
+		{
+			string = "On";
+			SDL_DestroyTexture(message);
+			surfaceMessage = TTF_RenderText_Blended(arial, string, color);
+			message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
+			SDL_FreeSurface(surfaceMessage);
+		}
+		else
+		{
+			string = "Off";
+			SDL_DestroyTexture(message);
+			surfaceMessage = TTF_RenderText_Blended(arial, string, color);
+			message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
+			SDL_FreeSurface(surfaceMessage);
+		}
+	}
+
 
 	if (doTransition)
 	{
@@ -136,4 +158,10 @@ void Label::setPosition(int x, int y)
 void Label::doTransitions(bool b)
 {
 	doTransition = b;
+}
+
+void Label::isACheckBoxLabel(bool * b)
+{
+	isCheckBoxLabel = true;
+	condition = b;
 }

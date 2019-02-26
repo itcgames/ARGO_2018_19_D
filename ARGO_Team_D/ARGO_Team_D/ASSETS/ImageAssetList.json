@@ -15,5 +15,6 @@
   "Background2-3": "./ASSETS//Level Two//level2.2-04.png",
   "GunEnemy": "./ASSETS//IMAGES//GunEnemy.png",
   "FlyEnemy": "./ASSETS//IMAGES//FlyEnemy.png",
-  "BigEnemy": "./ASSETS//IMAGES//BigEnemy.png"
+  "BigEnemy": "./ASSETS//IMAGES//BigEnemy.png",
+  "MenuBackground": "./ASSETS//IMAGES//menu_background.png"
 }

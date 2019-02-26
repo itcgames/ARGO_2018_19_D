@@ -11,9 +11,10 @@ class InputHandler {
 public:
 	InputHandler(ControlSystem & system, SDL_Joystick& controller, SDL_Haptic& haptic);
 	void handleKeyboardInput(SDL_Event theEvent);
-	void handleControllerInput(SDL_Event theEvent);
+	void handleControllerInput(SDL_Event theEvent, bool vibrationOn);
 	void update();
 	bool isPaused();
+	void resetHandler();
 private:
 	Command * m_moveRight;
 	Command * m_moveLeft;

@@ -8,6 +8,7 @@ public:
 	LobbyScreen(float width, float height, Game& game, SDL_Renderer * renderer, SDL_Window * window);
 	~LobbyScreen();
 	void StartGame();
+	void GoToMenu();
 private:
 	Game * m_game;
 };

@@ -11,7 +11,7 @@ Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player
 	{
 		//std::cout << "error error error" << std::endl;
 	}
-	const char *path = "ASSETS\\FONTS\\BloodBlocks.ttf";
+	const char *path = "ASSETS\\FONTS\\Face Your Fears.ttf";
 	arial = TTF_OpenFont(path, 150);
 
 	this->color = {255,0,0,255};

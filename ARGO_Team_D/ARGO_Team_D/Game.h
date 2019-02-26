@@ -219,5 +219,14 @@ private:
 	Entity* m_aiEnt;
 	PlayerAiSystem* playeraiSystem;
 	PlayerAiComponent* aiComponent;
+
+	//options
+	bool vibrationOn = true;
+
+	//Background
+	SDL_Texture * m_texture;
+	SDL_Rect m_background;
+
+
 };
 #endif // !GAME_H
