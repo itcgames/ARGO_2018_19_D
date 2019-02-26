@@ -115,7 +115,7 @@ Game::Game() :
 
 	m_bulletManager = new BulletManager(m_world, WORLD_SCALE, m_resourceManager);
 
-	playeraiSystem = new PlayerAiSystem(m_bulletManager);
+	playeraiSystem = new PlayerAiSystem(m_bulletManager, m_levelObserver);
 
 	initialiseFactories();
 	initialiseEntities();
@@ -135,6 +135,7 @@ Game::Game() :
 	}
 
 	aiComponent = new PlayerAiComponent(m_player);
+	m_player->addComponent(aiComponent);
 	playeraiSystem->addComponent(aiComponent);
 
 
