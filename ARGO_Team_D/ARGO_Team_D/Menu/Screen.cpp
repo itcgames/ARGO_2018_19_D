@@ -15,6 +15,7 @@ void Screen::handleInput(SDL_Event theEvent)
 		{
 			b->getMouseCollision(x, y);
 		}
+
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 		for (auto & b : m_buttons)
@@ -31,8 +32,10 @@ void Screen::handleInput(SDL_Event theEvent)
 				{
 					l->goToTransition();
 				}
+
 			}
 		}
+
 		break;
 
 	case SDL_JOYAXISMOTION:

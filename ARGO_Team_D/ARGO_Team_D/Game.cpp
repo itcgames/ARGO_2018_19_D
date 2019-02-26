@@ -98,7 +98,7 @@ Game::Game() :
 
 	m_gameState = State::Menu;
 	m_menu = new MainMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
-	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
+	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, vibrationOn);
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_pauseScreen = new PauseScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
@@ -146,6 +146,13 @@ Game::Game() :
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
 	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
+
+	m_texture = m_resourceManager->getImageResource("MenuBackground");
+	m_background.x = 0;
+	m_background.y = 0;
+	m_background.w = 1920;
+	m_background.h = 1080;
+
 }
 
 Game::~Game()
@@ -192,7 +199,7 @@ void Game::processEvents()
 			break;
 		case PlayScreen:
 			inputHandler->handleKeyboardInput(event);
-			inputHandler->handleControllerInput(event);
+			inputHandler->handleControllerInput(event,vibrationOn);
 			break;
 		case Options:
 			m_options->handleInput(event);
@@ -272,7 +279,8 @@ void Game::processEvents()
 				//cout << "A button" << endl;
 				if (m_gameState == State::PlayScreen)
 				{
-					m_gameState = State::Pause;
+					fadeToState(State::Pause);
+					//m_gameState = State::Pause;
 				}
 				break;
 			}
@@ -378,7 +386,12 @@ void Game::render()
 
 	SDL_SetRenderDrawColor(m_renderer, 0, 155, 200, 255);
 
+
+	
+
 	SDL_RenderClear(m_renderer);
+
+	SDL_RenderCopy(m_renderer, m_texture, NULL, &m_background);
 
 	switch (m_gameState)
 	{
@@ -447,11 +460,33 @@ void Game::quit()
 
 void Game::setGameState(State state)
 {
+
+	if (m_gameState == State::PlayScreen)
+	{
+		SDL_ShowCursor(SDL_DISABLE);
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+	}
+
+	inputHandler->resetHandler();
 	m_gameState = state;
 }
 
 void Game::fadeToState(State state)
 {
+
+	if (m_gameState == State::PlayScreen)
+	{
+		SDL_ShowCursor(SDL_DISABLE);
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+	}
+
+	inputHandler->resetHandler();
 	m_nextState = state;
 	fadeOn = true;
 	doneFading = false;
