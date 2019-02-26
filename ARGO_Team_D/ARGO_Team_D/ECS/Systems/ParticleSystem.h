@@ -26,6 +26,7 @@ private:
 	std::vector<ParticleComponents> m_components;
 	Camera * cam;
 	const float WORLD_SCALE = 30.f;
+	int num;
 };
 
 #endif // !PARTICLESYSTEM_H

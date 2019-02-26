@@ -1,10 +1,11 @@
 #include "EnemyFactory.h"
 
-EnemyFactory::EnemyFactory(ResourceManager * rm, b2World & world, const float SCALE)
+EnemyFactory::EnemyFactory(ResourceManager * rm, b2World & world, const float SCALE, SDL_Renderer * rend)
 	: m_resourceManager(rm),
 	m_refWorld(world),
 	WORLD_SCALE(SCALE)
 {
+	m_renderer = rend;
 }
 
 EnemyFactory::~EnemyFactory()
@@ -45,6 +46,18 @@ Enemy * EnemyFactory::createEnemy(string spriteId, int idleFrameCount, int walki
 	enemy->position = new PositionComponent(-1000, -1000);
 	enemy->sprite = new SpriteComponent(spriteId, *m_resourceManager, width, height);
 	enemy->body = new BodyComponent(-1000, -1000, width, m_refWorld, WORLD_SCALE, "EnemyBody", flying);
+
+	auto p = new ParticleEffectsComponent(enemy->body->getBody()->GetPosition().x * WORLD_SCALE,
+		enemy->body->getBody()->GetPosition().y * WORLD_SCALE,
+		5, 5, SDL_Color{ 181, 101, 29 },
+		m_renderer, false, 45);
+	p->m_emitter.setEmitting(false);
+	//p->m_emitter.setFramesPerEmission(10);
+	//p->m_emitter.setLooping(true);
+
+
+	enemy->part = p;
+
 	AnimationComponent * a = new AnimationComponent();
 
 	// Setup Animation
@@ -70,5 +83,6 @@ Enemy * EnemyFactory::createEnemy(string spriteId, int idleFrameCount, int walki
 	enemy->entity->addComponent(enemy->sprite);
 	enemy->entity->addComponent(enemy->body);
 	enemy->entity->addComponent(enemy->animation);
+	enemy->entity->addComponent(enemy->part);
 	return enemy;
 }

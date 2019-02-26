@@ -18,7 +18,6 @@ void ParticleSystem::update()
 		pc.part->m_emitter.update((pc.body->getBody()->GetPosition().x * WORLD_SCALE) - (pc.body->getDimensions().x / 2  * pc.part->m_emitter.getDirection())- cam->getBounds().x,
 			(pc.body->getBody()->GetPosition().y * WORLD_SCALE) + pc.body->getDimensions().y / 2 - cam->getBounds().y);
 
-
 		pc.part->m_emitterExplos.update((pc.body->getBody()->GetPosition().x * WORLD_SCALE) - cam->getBounds().x,
 			(pc.body->getBody()->GetPosition().y * WORLD_SCALE) - cam->getBounds().y);
 
@@ -45,6 +44,8 @@ void ParticleSystem::draw()
 
 void ParticleSystem::addEntity(Entity * e)
 {
+	num++;
+	std::cout << "Entitys: " << num << std::endl;
 	std::vector<std::string> allowedTypes{ "Particle", "Body" };
 	auto comps = e->getComponentsOfType(allowedTypes);
 	if (comps.size() == allowedTypes.size())

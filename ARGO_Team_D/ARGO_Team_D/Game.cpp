@@ -515,6 +515,7 @@ void Game::initialiseEntities()
 		m_gunEnemies.push_back(enemy);
 		m_entityList.push_back(enemy->entity);
 		m_animationSystem.addEntity(enemy->entity);
+		m_particleSystem->addEntity(enemy->entity);
 	}
 	for (int i = 0; i < FLY_ENEMY_COUNT; ++i)
 	{
@@ -522,6 +523,7 @@ void Game::initialiseEntities()
 		m_flyEnemies.push_back(enemy);
 		m_entityList.push_back(m_flyEnemies.at(i)->entity);
 		m_animationSystem.addEntity(enemy->entity);
+		m_particleSystem->addEntity(enemy->entity);
 	}
 	for (int i = 0; i < BIG_ENEMY_COUNT; ++i)
 	{
@@ -529,6 +531,7 @@ void Game::initialiseEntities()
 		m_bigEnemies.push_back(enemy);
 		m_entityList.push_back(m_bigEnemies.at(i)->entity);
 		m_animationSystem.addEntity(enemy->entity);
+		m_particleSystem->addEntity(enemy->entity);
 	}
 }
 
@@ -537,7 +540,7 @@ void Game::initialiseEntities()
 /// </summary>
 void Game::initialiseSystems()
 {
-	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData);
+	m_aiSystem = new AiSystem(m_bulletManager, m_playerBody, WORLD_SCALE, m_levelData, m_camera);
 	for (auto i : m_entityList)
 	{
 		if (i->checkForComponent("Sprite"))
@@ -559,7 +562,7 @@ void Game::initialiseFactories()
 {
 	std::string spriteName = "Player";
 	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE, m_renderer);
-	m_enemyFactory = new EnemyFactory(m_resourceManager, m_world, WORLD_SCALE);
+	m_enemyFactory = new EnemyFactory(m_resourceManager, m_world, WORLD_SCALE, m_renderer);
 }
 
 /// <summary>

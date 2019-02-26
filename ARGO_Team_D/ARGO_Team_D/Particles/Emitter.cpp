@@ -50,6 +50,38 @@ Emitter::~Emitter()
 
 void Emitter::update(int positionX, int positionY)
 {
+	//std::cout << m_particles.size() << std::endl;
+	if (burst)
+	{
+		if (looping)
+		{
+			for (int i = 0; i < MAX_PARTICLES; ++i)
+			{
+				if (m_particlesArray[i] != nullptr)
+				{
+					if (m_particlesArray[i]->isDead())
+					{
+						delete m_particlesArray[i];
+
+						m_particlesArray[i] = new Particle(burstX, burstY, width, height, m_color, m_rend, dir, burst, decrement);
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < m_particles.size(); ++i)
+		{
+			if (m_particles[i]->isDead())
+			{
+				delete m_particles.at(i);
+				//std::cout << m_particles.size() << std::endl;
+				m_particles.erase(std::remove(m_particles.begin(), m_particles.end(), m_particles.at(i)), m_particles.end());
+			}
+		}
+	}
+
 	m_posX = positionX;
 	m_posY = positionY;
 
@@ -67,7 +99,7 @@ void Emitter::update(int positionX, int positionY)
 			m_particles.at(i)->update();
 		}
 
-		if (emit)
+		if (emit && !burst)
 		{
 
 			counter++;
@@ -119,31 +151,37 @@ void Emitter::activate(bool b)
 	}
 }
 
+void Emitter::activate(bool b, int x, int y)
+{
+	activateBurst = true;
+	burstX = x;
+	burstY = y;
+	for (int i = 0; i < MAX_PARTICLES; i++)
+	{
+		m_particlesArray[i] = (new Particle(burstX, burstY, width, height, m_color, m_rend, dir, burst, decrement));
+	}
+}
+
 void Emitter::setAlphaDec(int num)
 {
-
 }
 
 void Emitter::drawParticles()
 {
-
 	if (burst)
 	{
 		if (looping)
 		{
 			for (int i = 0; i < MAX_PARTICLES; ++i)
 			{
-
-
-				if (m_particlesArray[i] != nullptr)
+				/*if (m_particlesArray[i] != nullptr)
 				{
 					if (m_particlesArray[i]->isDead())
 					{
 						delete m_particlesArray[i];
 						m_particlesArray[i] = new Particle(m_posX, m_posY, width, height, m_color, m_rend, dir, burst, decrement);
 					}
-				}
-				
+				}*/
 			}
 		}
 		
@@ -158,14 +196,14 @@ void Emitter::drawParticles()
 	}
 	else
 	{
-		for (int i = 0; i < m_particles.size(); ++i)
+		/*for (int i = 0; i < m_particles.size(); ++i)
 		{
 			if (m_particles[i]->isDead())
 			{
 				delete m_particles.at(i);
 				m_particles.erase(std::remove(m_particles.begin(), m_particles.end(), m_particles.at(i)), m_particles.end());
 			}
-		}
+		}*/
 		//std::cout << m_particles.size() << std::endl;
 		//Show particles
 		for (int i = 0; i < m_particles.size(); ++i)

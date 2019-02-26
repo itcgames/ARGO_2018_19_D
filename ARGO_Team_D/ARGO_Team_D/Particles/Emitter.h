@@ -26,6 +26,7 @@ public:
 	void setDirection(int num);
 	int getDirection();
 	void activate(bool b);
+	void activate(bool b, int x, int y);
 	void setAlphaDec(int num);
 private:
 	//Particle* m_particles[MAX_PARTICLES];
@@ -54,6 +55,8 @@ private:
 	bool activateBurst;
 
 	Uint8 decrement;
+
+	int burstX, burstY;
 };
 
 #endif // !EMITTER_H
