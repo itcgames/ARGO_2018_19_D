@@ -20,7 +20,7 @@ void ParticleSystem::update()
 
 		pc.part->m_emitterExplos.update(0, 0);
 
-		if ((pc.body->getBody()->GetLinearVelocity().x > 0 || pc.body->getBody()->GetLinearVelocity().x < 0) && pc.body->getBody()->GetLinearVelocity().y == 0 )
+		if ( pc.part->emit == true &&((pc.body->getBody()->GetLinearVelocity().x > 0 || pc.body->getBody()->GetLinearVelocity().x < 0) && pc.body->getBody()->GetLinearVelocity().y == 0) )
 		{
 			pc.part->m_emitter.setEmitting(true);
 		}

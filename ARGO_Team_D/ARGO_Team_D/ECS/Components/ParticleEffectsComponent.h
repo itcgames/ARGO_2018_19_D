@@ -12,6 +12,7 @@ public:
 		bool isBurst, Uint8 alphaDec);
 	Emitter m_emitter;
 	Emitter m_emitterExplos;
+	bool emit;
 	/*void setEmitting(bool b);
 	void setFramesPerEmission(int num);
 	void setLooping(bool b);

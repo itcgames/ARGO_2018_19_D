@@ -35,6 +35,8 @@ Particle::Particle(int x, int y, int width, int height, SDL_Color color, SDL_Ren
 		float angle = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (2 * acos(-1))));
 		m_velX = speed * cos(angle);
 		m_velY = speed * sin(angle) - 4.f;
+		m_velX *= 1.75f;
+		m_velY *= 1.75f;
 	}
 	srcrect = { 0, 0, 10, 10 };
 	dstrect = { 0, 0, 10, 10 };
