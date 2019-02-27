@@ -257,7 +257,7 @@ void Button::setPosition(int x, int y)
 
 void Button::doTransitions(bool b)
 {
-	doTransition = false;
+	doTransition = b;
 }
 
 void Button::makeCheckbox(bool * b)

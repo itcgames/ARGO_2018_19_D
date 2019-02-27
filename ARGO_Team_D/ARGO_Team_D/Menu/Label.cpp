@@ -165,3 +165,11 @@ void Label::isACheckBoxLabel(bool * b)
 	isCheckBoxLabel = true;
 	condition = b;
 }
+
+void Label::setSize(int x, int y)
+{
+	displayWidth = x;
+	displayHeight = y;
+	message_rect.w = displayWidth;
+	message_rect.h = displayHeight;
+}

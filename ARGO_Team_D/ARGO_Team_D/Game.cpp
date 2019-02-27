@@ -354,6 +354,7 @@ void Game::update(const float & dt)
 		break;
 	case Lobby:
 		m_lobby->update();
+		m_network.update();
 		break;
 	default:
 		break;

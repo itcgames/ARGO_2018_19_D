@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+#define MAX_LOBBIES 5
+
 struct NetworkingComponents {
 	PositionComponent * position = nullptr;
 	NetworkComponent * network = nullptr;
@@ -21,6 +23,11 @@ struct NetworkingComponents {
 class NetworkingSystem : public System
 {
 public:
+	struct Lobby {
+		std::string m_name;
+		int m_numPlayers = 0;
+		bool m_open;
+	};
 	NetworkingSystem();
 	void initClientLocalClient();
 	void addEntity(Entity * e) override;
@@ -30,6 +37,9 @@ public:
 	void joinServer();
 	void readyUp();
 	void unready();
+	std::vector<Lobby> & getLobbies();
+	bool createNewLobby();
+	void joinLobby(int index);
 private:
 	Entity * m_player;
 	std::vector<Entity*> * m_clients;
@@ -39,6 +49,7 @@ private:
 	bool m_inLobby = false;
 	int hostEntity = 0;
 	int m_localPlayerID = -1;
+	std::vector<NetworkingSystem::Lobby> m_lobbies;
 };
 
 #endif // !NETWORKINSYSTEM_H

@@ -15,17 +15,21 @@ std::vector<int> UDPServer::getAvailableLobbies()
 {
 	std::vector<int> availableLobbies;
 	for (int i = 0; i < m_lobbies.size(); ++i) {
-		if (m_lobbies[i].m_open && !m_lobbies[i].m_inGame) {
+		if (m_lobbies[i].m_open && !m_lobbies[i].m_inGame && m_lobbies[i].m_clients.size() < MAX_CLIENTS) {
 			availableLobbies.push_back(i);
 		}
 	}
 	return availableLobbies;
 }
 
-void UDPServer::createLobby()
+bool UDPServer::createLobby()
 {
-	Lobby lobby;
-	m_lobbies.push_back(lobby);
+	if (m_lobbies.size() < MAX_LOBBIES) {
+		Lobby lobby;
+		m_lobbies.push_back(lobby);
+		return true;
+	}
+	return false;
 }
 
 int UDPServer::mapToLobby()
@@ -59,7 +63,7 @@ int UDPServer::mapToLobby()
 		m_waiting.erase(client.first);
 	}
 	std::cout << "Removing Clients from waiting" << std::endl;
-	return 0;
+	return -1;
 }
 
 void UDPServer::startLobby(Lobby & lobby)
@@ -106,6 +110,27 @@ void UDPServer::handleLobby(Lobby & lobby, ClientData & current, Packet & p)
 				std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
 			}
 		}
+	}
+}
+
+void UDPServer::mapClientToLobby(ClientData & current)
+{
+	auto availableLobbies = getAvailableLobbies();
+	if (availableLobbies.empty()) {
+		createLobby();
+		std::cout << "Create Lobby as none available" << std::endl;
+	}
+	int chosenLobby = 0;
+	for (int i = 0; i < m_lobbies.size(); ++i) {
+		if (m_lobbies[i].m_clients.size() < MAX_CLIENTS) {
+			chosenLobby = i;
+			m_ipToLobby[current.mapping] = i;
+			m_lobbies.at(i).m_clients.insert(std::make_pair(current.mapping, current));
+			break;
+		}
+	}
+	for (auto & client : m_lobbies[chosenLobby].m_clients) {
+		m_waiting.erase(client.first);
 	}
 }
 
@@ -183,21 +208,36 @@ void UDPServer::messageHandler()
 				data.index = numWaiting;
 				data.clientAddr = clientAddr;
 				data.clientAddrLen = sizeof(clientAddr);
+				data.mapping = mapping;
 				m_waiting[mapping] = data;
 				auto & current = m_waiting[mapping];
 				numWaiting++;
-				if (numWaiting >= MAX_CLIENTS) {
+				/*if (numWaiting >= MAX_CLIENTS) {
 					mapToLobby();
 					numWaiting = 0;
 					startLobby(m_lobbies.back());
+				}*/
+			}
+			else if (p.type == MessageType::LOBBYCREATED) {
+				if (!m_ipToLobby[mapping]) {
+					if (createLobby()) {
+						auto & lobby = m_lobbies.back();
+						ClientData data;
+						data.index = numWaiting;
+						data.clientAddr = clientAddr;
+						data.clientAddrLen = sizeof(clientAddr);
+						data.mapping = mapping;
+						m_waiting[mapping] = data;
+						mapClientToLobby(data);
+					}
 				}
 			}
-
-			// Handle 
-			if (!m_ipToLobby.empty()) {
-				int lobbyIndex = m_ipToLobby[mapping];
-				auto & current = m_lobbies[lobbyIndex].m_clients[mapping];
-				handleLobby(m_lobbies[lobbyIndex], current, p);
+			else {
+				if (!m_ipToLobby.empty()) {
+					int lobbyIndex = m_ipToLobby[mapping];
+					auto & current = m_lobbies[lobbyIndex].m_clients[mapping];
+					handleLobby(m_lobbies[lobbyIndex], current, p);
+				}
 			}
 
 			std::cout << "Received message from: " << mapping << std::endl;

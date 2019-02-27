@@ -13,7 +13,9 @@ enum MessageType {
 	START,
 	ALLREADY,
 	READY,
-	UNREADY
+	UNREADY,
+	LOBBYCREATED,
+	LOBBYUPDATED
 };
 
 struct Packet {

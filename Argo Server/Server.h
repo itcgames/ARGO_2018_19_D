@@ -7,7 +7,7 @@
 #include "../ARGO_Team_D/ARGO_Team_D/Utils/Packet.h"
 
 #define MAX_CLIENTS 2
-
+#define MAX_LOBBIES 5
 
 class Server {
 public:

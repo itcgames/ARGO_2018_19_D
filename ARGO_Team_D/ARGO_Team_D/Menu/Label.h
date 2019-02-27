@@ -20,6 +20,7 @@ public:
 	void setPosition(int x, int y);
 	void doTransitions(bool b);
 	void isACheckBoxLabel(bool * b);
+	void setSize(int x, int y);
 private:
 
 	bool * condition;

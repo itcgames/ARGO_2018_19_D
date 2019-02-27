@@ -37,6 +37,18 @@ void NetworkingSystem::update()
 	if (m_client != nullptr) {
 		for (int i = 0; i < m_components.size() - 1; ++i) {
 			Packet * p = m_client->Receive();
+			if (p->type == MessageType::LOBBYCREATED) {
+				Lobby lb;
+				lb.m_name = i;
+				lb.m_numPlayers = p->numOtherPlayers;
+				if (lb.m_numPlayers <= 4) {
+					m_lobbies.push_back(lb);
+				}
+			}
+			if (p->type == MessageType::LOBBYUPDATED) {
+				auto & lobby = m_lobbies.at(p->playerID);
+				lobby.m_numPlayers = p->numOtherPlayers;
+			}
 			if (p->type == MessageType::START && !m_inGame) {
 				std::cout << "Started%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" << std::endl;
 				m_localPlayerID = p->playerID;
@@ -118,7 +130,6 @@ void NetworkingSystem::joinServer()
 	ZeroMemory(p, sizeof(struct Packet));
 	p->type = MessageType::JOINED;
 	m_client->Send(p);
-	auto test = m_client->Receive();
 }
 
 void NetworkingSystem::readyUp()
@@ -127,7 +138,6 @@ void NetworkingSystem::readyUp()
 	ZeroMemory(p, sizeof(struct Packet));
 	p->type = MessageType::READY;
 	m_client->Send(p);
-	auto test = m_client->Receive();
 }
 
 void NetworkingSystem::unready()
@@ -137,4 +147,31 @@ void NetworkingSystem::unready()
 	p->type = MessageType::UNREADY;
 	m_client->Send(p);
 	auto test = m_client->Receive();
+}
+
+std::vector<NetworkingSystem::Lobby>& NetworkingSystem::getLobbies()
+{
+	// TODO: insert return statement here
+	return m_lobbies;
+}
+
+bool NetworkingSystem::createNewLobby()
+{
+	if (m_lobbies.size() < MAX_LOBBIES && !m_inLobby) {
+		Lobby lb;
+		m_lobbies.push_back(lb);
+		auto & lobby = m_lobbies.back();
+		lobby.m_name = std::to_string(m_lobbies.size());
+		lobby.m_numPlayers = 1;
+		m_inLobby = true;
+		m_client->setHost(1);
+	}
+	else {
+		return false;
+	}
+	Packet * p = new Packet();
+	ZeroMemory(p, sizeof(struct Packet));
+	p->type = MessageType::LOBBYCREATED;
+	m_client->Send(p);
+	return true;
 }

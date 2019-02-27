@@ -8,7 +8,7 @@ struct ClientData {
 	int index;
 	sockaddr_in clientAddr;
 	int clientAddrLen;
-	std::string ip;
+	std::string mapping;
 };
 
 class UDPServer : public Server {
@@ -22,10 +22,11 @@ public:
 	UDPServer();
 	~UDPServer();
 	std::vector<int> getAvailableLobbies();
-	void createLobby();
+	bool createLobby();
 	int mapToLobby();
 	void startLobby(Lobby & lobby);
 	void handleLobby(Lobby & lobby, ClientData & current, Packet & p);
+	void mapClientToLobby(ClientData & current);
 
 	/*void update();
 	void sendToAllWaiting(Packet * p);
