@@ -98,7 +98,7 @@ public:
 		b2Body * b2Body = m_body->getBody();
 		b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
 
-		if (m_body->isOnGround() && !m_body->isAiRightContact()) {
+		if (m_body->isOnGround() && !m_body->isAiRightContact() && !m_Ai->m_fighting) {
 			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
 			currentVelocity.y = -35;
 
@@ -157,7 +157,7 @@ public:
 
 private:
 	BulletManager * m_manager;
-	uint32 MAXTIME = 5;
+	uint32 MAXTIME = 10;
 	uint32 CURRENTTIME = 0;
 };
 
@@ -265,8 +265,8 @@ public:
 
 	bool run() override
 	{
-		if (m_position->getPosition().y > m_Ai->m_nearestEnemy->position->getPosition().y -32 &&
-			m_position->getPosition().y < m_Ai->m_nearestEnemy->position->getPosition().y + 64) {
+		if (m_position->getPosition().y > m_Ai->m_nearestEnemy->position->getPosition().y - 132 &&
+			m_position->getPosition().y < m_Ai->m_nearestEnemy->position->getPosition().y + 164) {
 			return true;
 		}
 		else {
@@ -289,7 +289,7 @@ public:
 		float dist = sqrt(((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x))
 			+ ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y)));
 
-		if (dist < 5 && !m_body->isRightContact() && ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x < m_body->getBody()->GetPosition().x && m_Ai->m_dir == -1) || (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x > m_body->getBody()->GetPosition().x && m_Ai->m_dir == 1))) {
+		if (dist < 4 && !m_body->isRightContact() && ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x < m_body->getBody()->GetPosition().x && m_Ai->m_dir == -1) || (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x > m_body->getBody()->GetPosition().x && m_Ai->m_dir == 1))) {
 			m_Ai->m_fighting = true;
 			return true;
 		}

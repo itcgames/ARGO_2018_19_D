@@ -83,7 +83,7 @@ public:
 	std::vector<BackgroundData> m_backs;
 
 	// How many times to render the background
-	int m_levelWidth = 2;
+	int m_levelWidth = 3;
 	SDL_Color m_backgroundColour;
 };
 
