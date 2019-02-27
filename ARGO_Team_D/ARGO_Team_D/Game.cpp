@@ -327,6 +327,18 @@ void Game::update(const float & dt)
 		Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 	}
 
+	if (!musicOn)
+	{
+		Mix_HaltMusic();
+	}
+
+	if (Mix_PlayingMusic() == 0 && musicOn)
+	{
+		//Play the music
+		Mix_PlayMusic(m_testMusic, -1);
+		Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	}
+
 	if (Mix_PlayingMusic() == 0)
 	{
 		//Play the music
