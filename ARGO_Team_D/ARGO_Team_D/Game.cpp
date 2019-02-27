@@ -356,8 +356,12 @@ void Game::update(const float & dt)
 			m_levelManager.update(dt/1000);
 			if (m_levelObserver->getComplete()) {
 				if (m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer)) {
-					m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
-					fadeToState(State::PlayScreen);
+					if (m_levelManager.getCurrentLevel() == 0) {
+						m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+					}
+					else if (m_levelManager.getCurrentLevel() == 1) {
+						m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+					}
 				}	
 			}
 			m_particleSystem->update();
@@ -423,9 +427,6 @@ void Game::render()
 	}
 
 	SDL_SetRenderDrawColor(m_renderer, 0, 155, 200, 255);
-
-
-	
 
 	SDL_RenderClear(m_renderer);
 
