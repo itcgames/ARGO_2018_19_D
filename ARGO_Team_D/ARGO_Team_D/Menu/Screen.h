@@ -1,10 +1,10 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include<SDL.h>
-#include"Button.h"
-#include"Label.h"
-#include<vector>
+#include <SDL.h>
+#include "Button.h"
+#include "Label.h"
+#include <vector>
 
 class Screen {
 public:

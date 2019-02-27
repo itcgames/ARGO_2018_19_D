@@ -12,14 +12,17 @@ public:
 		m_entity(e)
 	{
 		id = "PlayerAi";
+		m_dir = 1;
 	}
 	~PlayerAiComponent() {}
 
 	BehaviourTree m_tree;
-	BehaviourTree::Selector m_selectors[1];
-	BehaviourTree::Sequence m_sequences[2];
+	BehaviourTree::Selector m_selectors[3];
+	BehaviourTree::Sequence m_sequences[6];
 	BehaviourTree::Succeeder m_succeeders[1];
 	Entity * m_entity;
 	Enemy * m_nearestEnemy;
+	int m_dir = 1;
+	bool m_fighting = false;
 };
 #endif

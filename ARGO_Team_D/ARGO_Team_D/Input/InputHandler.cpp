@@ -57,7 +57,7 @@ void InputHandler::handleKeyboardInput(SDL_Event theEvent)
 	}
 }
 
-void InputHandler::handleControllerInput(SDL_Event theEvent)
+void InputHandler::handleControllerInput(SDL_Event theEvent,bool vibrationOn)
 {
 	switch (theEvent.type)
 	{
@@ -188,12 +188,20 @@ void InputHandler::handleControllerInput(SDL_Event theEvent)
 			{
 				if (theEvent.jaxis.value > TRIGGER_DEAD_ZONE)
 				{
-					SDL_HapticRumblePlay(gControllerHaptic, 0.5f, UINT32_MAX);
+					if (vibrationOn)
+					{
+						SDL_HapticRumblePlay(gControllerHaptic, 0.5f, UINT32_MAX);
+					}
+					
 					m_ctrlPressed = true;
 				}
 				else
 				{
-					SDL_HapticRumbleStop(gControllerHaptic);
+					if (vibrationOn)
+					{
+						SDL_HapticRumbleStop(gControllerHaptic);
+					}
+					
 					m_ctrlPressed = false;
 				}
 
@@ -234,4 +242,14 @@ void InputHandler::update()
 bool InputHandler::isPaused()
 {
 	return m_paused;
+}
+
+void InputHandler::resetHandler()
+{
+	m_rightPressed = false;
+	m_leftPressed = false;
+	m_upPressed = false;
+	m_ctrlPressed = false;
+	SDL_HapticRumbleStop(gControllerHaptic);
+	//m_paused = false;
 }
