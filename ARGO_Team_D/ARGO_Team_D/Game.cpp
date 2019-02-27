@@ -344,11 +344,10 @@ void Game::update(const float & dt)
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
-			m_controlSystem.update();
-			//playeraiSystem->runTree();
-			m_aiSystem->update(dt);
-
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+			m_controlSystem.update();
+			playeraiSystem->runTree();
+			m_aiSystem->update(dt);
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);
@@ -498,7 +497,6 @@ void Game::quit()
 
 void Game::setGameState(State state)
 {
-
 	if (m_gameState == State::PlayScreen)
 	{
 		SDL_ShowCursor(SDL_DISABLE);
@@ -645,7 +643,7 @@ void Game::setUpFont() {
 
 	if (TTF_Init() < 0)
 	{
-		std::cout << "error error error" << std::endl;
+		std::cout << "Error initialising font" << std::endl;
 	}
 	const char *path = "ASSETS\\FONTS\\TheBlackFestival.ttf";
 	Sans = TTF_OpenFont(path, 50);
@@ -660,4 +658,9 @@ void Game::loadAlevel(int num)
 void Game::reloadCurrentlevel()
 {
 	m_levelManager.loadLevel(m_player, *m_resourceManager, m_renderer, m_levelManager.getCurrentLevel());
+}
+
+void Game::resetPlayerHealth()
+{
+	m_healthSystem->reset();
 }

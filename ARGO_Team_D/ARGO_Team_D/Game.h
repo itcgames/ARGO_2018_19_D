@@ -108,6 +108,7 @@ public:
 
 	void loadAlevel(int num);
 	void reloadCurrentlevel();
+	void resetPlayerHealth();
 
 private:
 	void processEvents();
@@ -121,8 +122,8 @@ private:
 
 	// SDL Window
 	SDL_Window * p_window;
-	int m_windowWidth = 1920;
-	int m_windowHeight = 1080;
+	int m_windowWidth = 1280;
+	int m_windowHeight = 720;
 	bool m_quit = false;
 	TTF_Font* Sans;
 
@@ -192,7 +193,6 @@ private:
 	ModeSelectScreen * m_modeSelect;
 	LobbyScreen * m_lobby;
 
-
 	// Networking
 	NetworkingSystem m_network;
 
@@ -211,16 +211,14 @@ private:
 	PlayerAiSystem* playeraiSystem;
 	PlayerAiComponent* aiComponent;
 
-	//options
+	// Options
 	bool vibrationOn = true;
 
 	//Background
 	SDL_Texture * m_texture;
 	SDL_Rect m_background;
 
-
-
-	//sounds
+	// Sounds
 	Mix_Chunk * rifle = NULL;
 	Mix_Chunk * jumpSound = NULL;
 	Mix_Chunk * deadSound = NULL;

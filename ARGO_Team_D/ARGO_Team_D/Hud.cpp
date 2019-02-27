@@ -60,8 +60,6 @@ Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player
 	{
 		//std::cout << name << " texture failed to load!" << std::endl;
 	}
-
-	
 }
 
 Hud::~Hud()

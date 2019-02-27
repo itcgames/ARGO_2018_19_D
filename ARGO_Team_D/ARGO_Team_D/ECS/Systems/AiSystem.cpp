@@ -50,7 +50,7 @@ void AiSystem::update(float dt)
 		auto body = ac.body->getBody();
 		if (ac.body->getBulletHitCount() >= ac.ai->getMaxHits())
 		{
-			ac.part->m_emitterExplos.activate(true, (ac.body->getBody()->GetPosition().x * WORLD_SCALE),
+			ac.part->m_emitterExplos.activate((ac.body->getBody()->GetPosition().x * WORLD_SCALE),
 				(ac.body->getBody()->GetPosition().y * WORLD_SCALE));
 			m_levelData->enemyKilled();
 			ac.ai->setActivationState(false);
@@ -117,7 +117,6 @@ void AiSystem::handleGroundEnemy(AiComponents & ac, float dt)
 	if (DISTANCE_THRESHOLD > dist.Length())
 	{
 		ac.ai->setShotTimer(ac.ai->getShotTimer() + dt);
-		std::cout << dt << std::endl;
 		if(ac.ai->getShotTimer() > shotRof)
 		{
 			if (Mix_PlayChannel(-1, shoot, 0) == -1)
