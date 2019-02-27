@@ -92,11 +92,6 @@ Game::Game() :
 	}
 
 	m_testMusic = m_resourceManager->getSoundResource("music");
-	if (Mix_PlayMusic(m_testMusic, -1) == -1)
-	{
-	}
-
-	Mix_VolumeMusic(MIX_MAX_VOLUME/2);
 
 
 	jumpSound = Mix_LoadWAV("ASSETS/SOUNDS/jump.wav");
@@ -157,7 +152,7 @@ Game::Game() :
 
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
-	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
+	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player, m_levelData);
 
 	m_texture = m_resourceManager->getImageResource("MenuBackground");
 	m_background.x = 0;
@@ -315,6 +310,13 @@ void Game::processEvents()
 
 void Game::update(const float & dt)
 {
+
+	if (Mix_PlayingMusic() == 0)
+	{
+		//Play the music
+		Mix_PlayMusic(m_testMusic, -1);
+		Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	}
 
 	if (m_gameState == State::PlayScreen)
 	{
@@ -651,6 +653,7 @@ void Game::setUpFont() {
 
 void Game::loadAlevel(int num)
 {
+	m_levelManager.unloadAllLevels();
 	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
 }
 

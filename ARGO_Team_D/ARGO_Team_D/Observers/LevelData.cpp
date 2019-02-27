@@ -46,3 +46,13 @@ void LevelData::reset(int killLimit)
 		}
 	}
 }
+
+int LevelData::getKillLimit()
+{
+	return m_killLimit;
+}
+
+int LevelData::getEnemiesKilled()
+{
+	return m_enemiesKilled;
+}
