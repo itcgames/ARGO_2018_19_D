@@ -289,7 +289,7 @@ public:
 		float dist = sqrt(((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x))
 			+ ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y)));
 
-		if (dist < 5 && !m_body->isRightContact() && ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x < m_body->getBody()->GetPosition().x && m_Ai->m_dir == -1) || (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x > m_body->getBody()->GetPosition().x && m_Ai->m_dir == 1))) {
+		if (dist < 4 && !m_body->isRightContact() && ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x < m_body->getBody()->GetPosition().x && m_Ai->m_dir == -1) || (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x > m_body->getBody()->GetPosition().x && m_Ai->m_dir == 1))) {
 			m_Ai->m_fighting = true;
 			return true;
 		}

@@ -21,6 +21,7 @@ public:
 	void removeEntity(const int id) override;
 	bool playerAlive();
 	void setPlayerAliveStatus(bool status);
+	void reset();
 private:
 	std::map<int, HealthComponents> m_components;
 	bool m_playerAlive;
