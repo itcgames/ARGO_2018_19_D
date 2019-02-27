@@ -18,6 +18,10 @@ public:
 
 	void reset(int killLimit);
 
+	int getKillLimit();
+
+	int getEnemiesKilled();
+
 private:
 	std::vector<Observer *> observers; // observers
 
