@@ -92,11 +92,6 @@ Game::Game() :
 	}
 
 	m_testMusic = m_resourceManager->getSoundResource("music");
-	if (Mix_PlayMusic(m_testMusic, -1) == -1)
-	{
-	}
-
-	Mix_VolumeMusic(MIX_MAX_VOLUME/2);
 
 
 	jumpSound = Mix_LoadWAV("ASSETS/SOUNDS/jump.wav");
@@ -157,7 +152,7 @@ Game::Game() :
 
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
-	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
+	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player, m_levelData);
 
 	m_texture = m_resourceManager->getImageResource("MenuBackground");
 	m_background.x = 0;
@@ -316,6 +311,13 @@ void Game::processEvents()
 void Game::update(const float & dt)
 {
 
+	if (Mix_PlayingMusic() == 0)
+	{
+		//Play the music
+		Mix_PlayMusic(m_testMusic, -1);
+		Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	}
+
 	if (m_gameState == State::PlayScreen)
 	{
 		SDL_ShowCursor(SDL_DISABLE);
@@ -344,7 +346,7 @@ void Game::update(const float & dt)
 		{
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 			m_controlSystem.update();
-			playeraiSystem->runTree();
+			//playeraiSystem->runTree();
 			m_aiSystem->update(dt);
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
@@ -355,6 +357,7 @@ void Game::update(const float & dt)
 			if (m_levelObserver->getComplete()) {
 				if (m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer)) {
 					m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+					fadeToState(State::PlayScreen);
 				}	
 			}
 			m_particleSystem->update();
@@ -511,26 +514,36 @@ void Game::setGameState(State state)
 void Game::fadeToState(State state)
 {
 
-	if (m_gameState == State::PlayScreen)
-	{
-		SDL_ShowCursor(SDL_DISABLE);
-	}
-	else
-	{
-		SDL_ShowCursor(SDL_ENABLE);
-	}
+	
 
 	inputHandler->resetHandler();
 	m_nextState = state;
 	fadeOn = true;
 	doneFading = false;
+	if (m_nextState == State::PlayScreen && m_gameState == State::PlayScreen)
+	{
+		doneFading = true;
+		//SDL_ShowCursor(SDL_DISABLE);
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+	}
 }
 
 void Game::fade()
 {
 	if (fadeOn)
 	{
-		m_transitionAlphaPercent += 0.075;
+		if (m_gameState == State::PlayScreen && m_nextState == State::PlayScreen)
+		{
+			m_transitionAlphaPercent += 1;
+		}
+		else
+		{
+			m_transitionAlphaPercent += 0.075;
+		}
+		
 		if (m_transitionAlphaPercent >= 1)
 		{
 			m_transitionAlphaPercent = 1;
@@ -545,7 +558,9 @@ void Game::fade()
 
 	if (fadeOff)
 	{
+		
 		m_transitionAlphaPercent -= 0.075;
+		
 		if (m_transitionAlphaPercent <= 0)
 		{
 			m_transitionAlphaPercent = 0;
@@ -649,6 +664,7 @@ void Game::setUpFont() {
 
 void Game::loadAlevel(int num)
 {
+	m_levelManager.unloadAllLevels();
 	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
 }
 

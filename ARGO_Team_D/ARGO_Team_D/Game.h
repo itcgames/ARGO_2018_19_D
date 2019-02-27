@@ -123,7 +123,7 @@ private:
 	// SDL Window
 	SDL_Window * p_window;
 	int m_windowWidth = 1920;
-	int m_windowHeight =1080;
+	int m_windowHeight = 1080;
 	bool m_quit = false;
 	TTF_Font* Sans;
 

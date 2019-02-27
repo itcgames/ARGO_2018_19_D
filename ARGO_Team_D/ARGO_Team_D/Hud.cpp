@@ -1,9 +1,9 @@
 #include "Hud.h"
 
-Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player):
+Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player, LevelData * data):
 	m_cam{cam}
 {
-
+	m_lvlData = data;
 	m_player = &player;
 	allowedTypes.push_back("Health");
 	this->rend = &rend;
@@ -18,7 +18,7 @@ Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player
 
 	
 	SDL_GetWindowSize(window, &windowWidth, &windowHeight);
-	string = "Health : " + std::to_string(100);
+	string = "Health: ";
 	std::cout << string.c_str() << std::endl;
 
 	surfaceMessage = TTF_RenderText_Blended(arial, string.c_str(), color);
@@ -28,6 +28,25 @@ Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player
 
 	message_rect.w = 500.0f / m_cam.m_scale.x;
 	message_rect.h = 100.0f / m_cam.m_scale.y;
+
+	string2 = std::to_string(100);
+	surfaceMessage2 = TTF_RenderText_Blended(arial, string2.c_str(), color);
+	message2 = SDL_CreateTextureFromSurface(this->rend, surfaceMessage2);
+	message_rect2.x = float(m_cam.m_position.x - float(m_cam.getBounds().x)) - (900.0f / m_cam.m_scale.x);
+	message_rect2.y = float(m_cam.m_position.y - float(m_cam.getBounds().y)) - (500.0f / m_cam.m_scale.y);
+
+	message_rect2.w = 500.0f / m_cam.m_scale.x;
+	message_rect2.h = 100.0f / m_cam.m_scale.y;
+
+	string3 = std::to_string(m_lvlData->getKillLimit());
+	surfaceMessage3 = TTF_RenderText_Blended(arial, string3.c_str(), color);
+	message3 = SDL_CreateTextureFromSurface(this->rend, surfaceMessage3);
+	message_rect3.x = float(m_cam.m_position.x - float(m_cam.getBounds().x)) - (900.0f / m_cam.m_scale.x);
+	message_rect3.y = float(m_cam.m_position.y - float(m_cam.getBounds().y)) - (500.0f / m_cam.m_scale.y);
+
+	message_rect3.w = 500.0f / m_cam.m_scale.x;
+	message_rect3.h = 100.0f / m_cam.m_scale.y;
+
 
 	srcrect = { 0, 0, 64, 64 };
 	dstrect = { 0, 0, 64, 64 };
@@ -54,6 +73,19 @@ void Hud::update()
 	
 	message_rect.w = 500.0f / m_cam.m_scale.x;
 	message_rect.h = 100.0f / m_cam.m_scale.y;
+
+	message_rect2.x = float(m_cam.m_position.x - float(m_cam.getBounds().x)) - (450.0f / m_cam.m_scale.x);
+	message_rect2.y = float(m_cam.m_position.y - float(m_cam.getBounds().y)) - (500.0f / m_cam.m_scale.y);
+
+	message_rect2.w = 150.0f / m_cam.m_scale.x;
+	message_rect2.h = 100.0f / m_cam.m_scale.y;
+
+
+	message_rect3.x = float(m_cam.m_position.x - float(m_cam.getBounds().x)) + (600.0f / m_cam.m_scale.x);
+	message_rect3.y = float(m_cam.m_position.y - float(m_cam.getBounds().y)) - (500.0f / m_cam.m_scale.y);
+
+	message_rect3.w = 100.0f / m_cam.m_scale.x;
+	message_rect3.h = 100.0f / m_cam.m_scale.y;
 
 	dstrect.x = float(m_cam.m_position.x - float(m_cam.getBounds().x)) - (900.0f / m_cam.m_scale.x);
 	dstrect.y = float(m_cam.m_position.y - float(m_cam.getBounds().y)) - (400.0f / m_cam.m_scale.y);
@@ -88,18 +120,35 @@ void Hud::update()
 		health = hudcomps.health->getHealth();
 
 	}
-	SDL_DestroyTexture(message);
+
+	SDL_DestroyTexture(message2);
 	color = { 255,0,0,255 };
-	string = "Health : " + std::to_string(health);
-	surfaceMessage = TTF_RenderText_Blended(arial, string.c_str(), color);
-	message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
-	SDL_FreeSurface(surfaceMessage);
+	string2 = std::to_string(health);
+	surfaceMessage2 = TTF_RenderText_Blended(arial, string2.c_str(), color);
+	message2 = SDL_CreateTextureFromSurface(rend, surfaceMessage2);
+	SDL_FreeSurface(surfaceMessage2);
+
+
+
+	SDL_DestroyTexture(message3);
+	color = { 255,0,0,255 };
+	int num = m_lvlData->getKillLimit() - m_lvlData->getEnemiesKilled();
+	if (num < 0)
+	{
+		num = 0;
+	}
+	string3 = std::to_string(num);
+	surfaceMessage3 = TTF_RenderText_Blended(arial, string3.c_str(), color);
+	message3 = SDL_CreateTextureFromSurface(rend, surfaceMessage3);
+	SDL_FreeSurface(surfaceMessage3);
 
 }
 
 void Hud::draw()
 {
 	SDL_RenderCopy(rend, message, NULL, &message_rect);
+	SDL_RenderCopy(rend, message2, NULL, &message_rect2);
+	SDL_RenderCopy(rend, message3, NULL, &message_rect3);
 
 	if (lives >= 1)
 	{
