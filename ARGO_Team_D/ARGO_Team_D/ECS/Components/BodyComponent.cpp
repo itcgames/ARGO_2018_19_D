@@ -193,7 +193,7 @@ void BodyComponent::init(float x, float y, float w, float h, bool ignoreGravity)
 
 	// Sensor checks if the body has contact to the right
 	m_rightSensorShape = new b2PolygonShape();
-	m_rightSensorShape->SetAsBox((halfWidth / m_worldScale) / 10.f, (halfHeight / m_worldScale) / 2.f, b2Vec2(halfWidth / m_worldScale, 0), 0);
+	m_rightSensorShape->SetAsBox((halfWidth / m_worldScale) / 2.f, (halfHeight / m_worldScale) / 2.f, b2Vec2(halfWidth / m_worldScale, 0), 0);
 	m_rightFixtureDef.shape = m_rightSensorShape;
 	m_rightFixtureDef.isSensor = true;
 	m_rightFixtureDef.userData = &m_rightData;
