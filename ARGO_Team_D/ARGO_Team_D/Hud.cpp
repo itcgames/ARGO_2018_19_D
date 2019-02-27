@@ -29,10 +29,6 @@ Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player
 	message_rect.w = 500.0f / m_cam.m_scale.x;
 	message_rect.h = 100.0f / m_cam.m_scale.y;
 
-
-
-
-
 	srcrect = { 0, 0, 64, 64 };
 	dstrect = { 0, 0, 64, 64 };
 	dstrect2 = { 0, 0, 64, 64 };
@@ -45,8 +41,6 @@ Hud::Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player
 	{
 		//std::cout << name << " texture failed to load!" << std::endl;
 	}
-
-	
 }
 
 Hud::~Hud()

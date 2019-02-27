@@ -642,7 +642,7 @@ void Game::setUpFont() {
 
 	if (TTF_Init() < 0)
 	{
-		std::cout << "error error error" << std::endl;
+		std::cout << "Error initialising font" << std::endl;
 	}
 	const char *path = "ASSETS\\FONTS\\TheBlackFestival.ttf";
 	Sans = TTF_OpenFont(path, 50);

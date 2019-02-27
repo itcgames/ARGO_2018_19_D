@@ -16,5 +16,6 @@
   "GunEnemy": "./ASSETS//IMAGES//GunEnemy.png",
   "FlyEnemy": "./ASSETS//IMAGES//FlyEnemy.png",
   "BigEnemy": "./ASSETS//IMAGES//BigEnemy.png",
-  "MenuBackground": "./ASSETS//IMAGES//menu_background.png"
+  "MenuBackground": "./ASSETS//IMAGES//menu_background.png",
+  "Portal": "./ASSETS//IMAGES//portal.png"
 }

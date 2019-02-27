@@ -18,7 +18,7 @@ Enemy * EnemyFactory::createGunEnemy()
 	enemy->ai = new AiComponent(EnemyGun, 0, 0, 3);
 	auto p = new ParticleEffectsComponent(enemy->body->getBody()->GetPosition().x * WORLD_SCALE,
 		enemy->body->getBody()->GetPosition().y * WORLD_SCALE,
-		5, 5, SDL_Color{ 181, 101, 29 },
+		5, 5, SDL_Color{ 181, 101, 29 }, SDL_Color{ 255, 0, 0 },
 		m_renderer, false, 45);
 	p->m_emitter.setEmitting(false);
 	enemy->part = p;
@@ -35,7 +35,7 @@ Enemy * EnemyFactory::createFlyEnemy()
 	enemy->ai = new AiComponent(EnemyFly, 0, 0, 1);
 	auto p = new ParticleEffectsComponent(enemy->body->getBody()->GetPosition().x * WORLD_SCALE,
 		enemy->body->getBody()->GetPosition().y * WORLD_SCALE,
-		5, 5, SDL_Color{ 0, 0, 250 },
+		5, 5, SDL_Color{ 168, 120, 250 }, SDL_Color{ 235, 115, 0 },
 		m_renderer, false, 45);
 	p->emit = false;
 	enemy->part = p;
@@ -51,7 +51,7 @@ Enemy * EnemyFactory::createBigEnemy()
 	enemy->ai = new AiComponent(EnemyBig, 0, 0, 10);
 	auto p = new ParticleEffectsComponent(enemy->body->getBody()->GetPosition().x * WORLD_SCALE,
 		enemy->body->getBody()->GetPosition().y * WORLD_SCALE,
-		5, 5, SDL_Color{ 181, 101, 29 },
+		5, 5, SDL_Color{ 181, 101, 29 }, SDL_Color{ 255, 0, 0 },
 		m_renderer, false, 45);
 	p->m_emitter.setEmitting(false);
 	enemy->part = p;
