@@ -219,5 +219,11 @@ private:
 	SDL_Rect m_background;
 
 
+
+	//sounds
+	Mix_Chunk * rifle = NULL;
+	Mix_Chunk * jumpSound = NULL;
+	Mix_Chunk * deadSound = NULL;
+
 };
 #endif // !GAME_H

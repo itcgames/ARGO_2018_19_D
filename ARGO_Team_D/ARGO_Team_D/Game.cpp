@@ -91,10 +91,19 @@ Game::Game() :
 		cout << "Loading..." << endl;
 	}
 
-	//m_testMusic = m_resourceManager->getSoundResource("test");
-	//if (Mix_PlayMusic(m_testMusic, -1) == -1)
-	//{
-	//}
+	m_testMusic = m_resourceManager->getSoundResource("music");
+	if (Mix_PlayMusic(m_testMusic, -1) == -1)
+	{
+	}
+
+	Mix_VolumeMusic(MIX_MAX_VOLUME/2);
+
+
+	jumpSound = Mix_LoadWAV("ASSETS/SOUNDS/jump.wav");
+	Mix_VolumeChunk(jumpSound, 128/4);
+
+	deadSound = Mix_LoadWAV("ASSETS/SOUNDS/dead.wav");
+	Mix_VolumeChunk(jumpSound, 128 / 4);
 
 	m_gameState = State::Menu;
 	m_menu = new MainMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
@@ -121,6 +130,8 @@ Game::Game() :
 	initialiseEntities();
 	initialiseSystems();
 	setUpFont();
+
+	m_controlSystem.bindJump(jumpSound);
 
 	for (Enemy* i : m_flyEnemies) {
 		playeraiSystem->addEnemy(i);
@@ -153,6 +164,8 @@ Game::Game() :
 	m_background.w = 1920;
 	m_background.h = 1080;
 
+	rifle = Mix_LoadWAV("ASSETS/SOUNDS/AssaultRifle.wav");
+	Mix_VolumeChunk(rifle, 128);
 }
 
 Game::~Game()
@@ -230,10 +243,19 @@ void Game::processEvents()
 			{
 			case PlayScreen:
 				m_camera.m_shaking = true;
-				m_gameState = State::Dead;
+				//m_gameState = State::Dead;
 				break;
 			}
+			break;
 
+		case SDL_MOUSEBUTTONUP:
+			switch (m_gameState)
+			{
+			case PlayScreen:
+				m_camera.m_shaking = true;
+				break;
+			}
+			break;
 		case SDL_KEYDOWN:
 
 			switch (m_gameState)
@@ -280,7 +302,6 @@ void Game::processEvents()
 				if (m_gameState == State::PlayScreen)
 				{
 					fadeToState(State::Pause);
-					//m_gameState = State::Pause;
 				}
 				break;
 			}
@@ -293,6 +314,16 @@ void Game::processEvents()
 
 void Game::update(const float & dt)
 {
+
+	if (m_gameState == State::PlayScreen)
+	{
+		SDL_ShowCursor(SDL_DISABLE);
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+	}
+
 	if (!m_network.getHost())
 	{
 		m_network.updateFromHost();
@@ -332,7 +363,11 @@ void Game::update(const float & dt)
 			if (!m_healthSystem->playerAlive())
 			{
 				m_healthSystem->setPlayerAliveStatus(true);
-				m_gameState = State::Dead;
+				if (Mix_PlayChannel(-1, deadSound, 0) == -1)
+				{
+					//return 1;
+				}
+				fadeToState(State::Dead);
 			}
 		}
 		break;

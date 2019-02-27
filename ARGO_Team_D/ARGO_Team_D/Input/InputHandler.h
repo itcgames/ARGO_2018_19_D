@@ -36,6 +36,9 @@ private:
 	SDL_Haptic* gControllerHaptic = NULL;
 
 	float startTimer;
+
+	Mix_Chunk * rifle = NULL;
+	bool playSound = false;
 };
 
 #endif // !INPUTHANDLER_H

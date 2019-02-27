@@ -55,6 +55,10 @@ void ControlSystem::update()
 			{
 				b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
 				currentVelocity.y = -35;
+				if (Mix_PlayChannel(-1, jumpSound, 0) == -1)
+				{
+					//return 1;
+				}
 			}
 			if (m_moveRight)
 			{
@@ -111,6 +115,11 @@ void ControlSystem::fire()
 void ControlSystem::bindBullets(BulletManager * bulletManager)
 {
 	m_bulletManager = bulletManager;
+}
+
+void ControlSystem::bindJump(Mix_Chunk * sound)
+{
+	jumpSound = sound;
 }
 
 void ControlSystem::spawnProjectile(float x, float y)
