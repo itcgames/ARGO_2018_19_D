@@ -142,7 +142,7 @@ Game::Game() :
 
 	aiComponent = new PlayerAiComponent(m_player);
 	m_player->addComponent(aiComponent);
-	//playeraiSystem->addComponent(aiComponent);
+	playeraiSystem->addComponent(aiComponent);
 
 
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
@@ -360,7 +360,7 @@ void Game::update(const float & dt)
 						m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
 					}
 					else if (m_levelManager.getCurrentLevel() == 1) {
-						m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 					}
 					else if (m_levelManager.getCurrentLevel() == 2) {
 						m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
