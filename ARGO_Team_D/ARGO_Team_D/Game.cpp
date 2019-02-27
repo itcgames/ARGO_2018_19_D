@@ -311,11 +311,10 @@ void Game::update(const float & dt)
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
+			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 			m_controlSystem.update();
 			playeraiSystem->runTree();
 			m_aiSystem->update(dt);
-
-			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);

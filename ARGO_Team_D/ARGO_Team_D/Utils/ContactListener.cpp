@@ -31,6 +31,10 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				{
 					data->rightContactStart();
 				}
+				else if (dataA->tag == "BodyAiRight")
+				{
+					data->m_AiContact = true;
+				}
 				else if (dataA->tag == "FlyEnemyBody" && dataB->tag == "PlayerBody")
 				{
 					auto flyEnemy = static_cast<BodyComponent *>(dataA->data);
@@ -94,6 +98,10 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 				else if (dataB->tag == "BodyRight")
 				{
 					data->rightContactStart();
+				}
+				else if (dataB->tag == "BodyAiRight")
+				{
+					data->m_AiContact = true;
 				}
 				else if (dataB->tag == "FlyEnemyBody" && dataA->tag == "PlayerBody")
 				{
@@ -169,6 +177,10 @@ void BodyContactListener::EndContact(b2Contact* contact)
 				{
 					data->rightContactEnd();
 				}
+				else if (dataA->tag == "BodyAiRight")
+				{
+					data->m_AiContact = false;
+				}
 			}
 		}
 		else if (dataA->tag == "TutorialTrigger") {
@@ -187,7 +199,7 @@ void BodyContactListener::EndContact(b2Contact* contact)
 				auto data = static_cast<BodyComponent*>(bodyUserData);
 				if (dataB->tag == "BodyGround")
 				{
-					data->groundContactStart();
+					data->groundContactEnd();
 				}
 				else if (dataB->tag == "BodyLeft")
 				{
@@ -196,6 +208,10 @@ void BodyContactListener::EndContact(b2Contact* contact)
 				else if (dataB->tag == "BodyRight")
 				{
 					data->rightContactEnd();
+				}
+				else if (dataB->tag == "BodyAiRight")
+				{
+					data->m_AiContact = false;
 				}
 			}
 		}

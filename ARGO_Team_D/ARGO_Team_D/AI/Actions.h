@@ -95,10 +95,34 @@ public:
 	}
 	bool run() override
 	{
+		float dist = sqrt(((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x))
+			+ ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y)));
+
 		b2Body * b2Body = m_body->getBody();
 		b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
 
-		if ((m_body->isOnGround() && !m_Ai->m_fighting) || (m_body->isOnGround() && m_Ai->m_nearestEnemy->ai->getType() == 1)) {
+		if (m_body->isOnGround() && !m_body->isAiRightContact()) {
+			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+			currentVelocity.y = -35;
+
+			return true;
+		}
+
+		if (m_body->isOnGround() && m_Ai->m_nearestEnemy->ai->getType() == 1 && m_Ai->m_fighting) {
+			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+			currentVelocity.y = -35;
+
+			return true;
+		}
+
+		if (m_body->isOnGround() && m_body->isRightContact()) {
+			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+			currentVelocity.y = -35;
+
+			return true;
+		}
+
+		if (m_body->isOnGround() && m_body->isLeftContact()) {
 			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
 			currentVelocity.y = -35;
 
@@ -220,7 +244,7 @@ public:
 
 	bool run() override
 	{
-		if (m_observer->getComplete()) {
+		if (m_observer->getComplete() && !m_Ai->m_fighting) {
 			return true;
 		}
 		else
@@ -244,8 +268,8 @@ public:
 
 	bool run() override
 	{
-		if (m_position->getPosition().y > m_Ai->m_nearestEnemy->position->getPosition().y - 132 &&
-			m_position->getPosition().y < m_Ai->m_nearestEnemy->position->getPosition().y + 164) {
+		if (m_position->getPosition().y > m_Ai->m_nearestEnemy->position->getPosition().y -32 &&
+			m_position->getPosition().y < m_Ai->m_nearestEnemy->position->getPosition().y + 64) {
 			return true;
 		}
 		else {
@@ -268,7 +292,7 @@ public:
 		float dist = sqrt(((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x))
 			+ ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y)));
 
-		if (dist < 6 && dist > -6 && dist == dist * m_Ai->m_dir) {
+		if (dist < 5 && !m_body->isRightContact() && ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x < m_body->getBody()->GetPosition().x && m_Ai->m_dir == -1) || (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x > m_body->getBody()->GetPosition().x && m_Ai->m_dir == 1))) {
 			m_Ai->m_fighting = true;
 			return true;
 		}
