@@ -142,7 +142,7 @@ Game::Game() :
 
 	aiComponent = new PlayerAiComponent(m_player);
 	m_player->addComponent(aiComponent);
-	playeraiSystem->addComponent(aiComponent);
+	//playeraiSystem->addComponent(aiComponent);
 
 
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
