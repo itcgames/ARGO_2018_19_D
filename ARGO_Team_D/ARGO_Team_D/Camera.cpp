@@ -11,7 +11,7 @@ Camera::Camera(const int windowWidth, const int windowHeight) :
 	m_viewOffset = 0;
 	m_weight = 0.1f;
 	m_maxOffset = 3;
-	m_shake = 0.1;
+	m_shake = 1.0;
 }
 
 void Camera::update(const VectorAPI & boundPosition, const float & rotation)

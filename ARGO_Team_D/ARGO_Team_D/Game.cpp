@@ -145,7 +145,7 @@ Game::Game() :
 	//playeraiSystem->addComponent(aiComponent);
 
 
-	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
+	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic, &m_camera);
 
 	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
@@ -242,7 +242,7 @@ void Game::processEvents()
 			switch (m_gameState)
 			{
 			case PlayScreen:
-				m_camera.m_shaking = true;
+				//m_camera.m_shaking = true;
 				//m_gameState = State::Dead;
 				break;
 			}
@@ -252,7 +252,7 @@ void Game::processEvents()
 			switch (m_gameState)
 			{
 			case PlayScreen:
-				m_camera.m_shaking = true;
+				//m_camera.m_shaking = true;
 				break;
 			}
 			break;
