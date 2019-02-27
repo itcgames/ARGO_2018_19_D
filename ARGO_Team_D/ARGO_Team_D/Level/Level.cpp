@@ -43,6 +43,7 @@ bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Ren
 		m_backgrounds.push_back(rManager->getImageResource("Background2-3"));
 		m_backgroundColour = { 108, 62, 127, 255 };
 	}
+	std::cout << m_backgrounds.size() << std::endl;
 
 	if (m_map.load(filepath)) {
 		tmx::Vector2u tileCount = m_map.getTileCount();
@@ -338,7 +339,6 @@ void Level::render(SDL_Renderer * renderer, Camera &camera)
 	SDL_Rect destRect;
 	SDL_Rect srcRect;
 	SDL_Rect bounds = camera.getBounds();
-
 
 	SDL_Rect destination;
 	destination.x = -1900 - bounds.x / 1.3f;

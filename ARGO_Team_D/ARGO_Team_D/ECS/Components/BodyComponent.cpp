@@ -247,7 +247,6 @@ int BodyComponent::getBulletHitCount()
 void BodyComponent::setBulletHitCount(int count)
 {
 	m_bulletHitCount = count;
-	std::cout << m_bodyData.tag << ": " << count << std::endl;
 }
 
 void BodyComponent::setInitialPos(b2Vec2 pos)

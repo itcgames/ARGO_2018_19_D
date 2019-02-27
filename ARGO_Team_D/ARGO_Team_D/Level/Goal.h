@@ -5,7 +5,6 @@
 #include "../Camera.h"
 #include "../Resource Manager/ResourceManager.h"
 #include "../ECS//Components/AnimationComponent.h"
-#include <iostream>
 
 class Goal
 {

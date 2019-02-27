@@ -105,7 +105,6 @@ void AiSystem::handleGroundEnemy(AiComponents & ac, float dt)
 	if (DISTANCE_THRESHOLD > dist.Length())
 	{
 		ac.ai->setShotTimer(ac.ai->getShotTimer() + dt);
-		std::cout << dt << std::endl;
 		if(ac.ai->getShotTimer() > shotRof)
 		{
 			ac.ai->setShotTimer(0.f);

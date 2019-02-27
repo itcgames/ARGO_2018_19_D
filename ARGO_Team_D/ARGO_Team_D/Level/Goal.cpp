@@ -29,9 +29,7 @@ void Goal::update(const float dt)
 		{
 			m_currentFrame = 0;
 		}
-		
 	}
-	std::cout << m_currentFrame << std::endl;
 }
 
 void Goal::render(SDL_Renderer * renderer, Camera * cam)

@@ -18,7 +18,8 @@
 #include "../Factories/EnemyFactory.h"
 #include "Goal.h"
 
-struct TileData {
+struct TileData 
+{
 	int destX;
 	int destY;
 	unsigned int srcX;
@@ -29,6 +30,12 @@ struct TileData {
 	b2PolygonShape shape;
 	b2FixtureDef fixture;
 	bool destructible;
+};
+
+struct BackgroundData 
+{
+	SDL_Texture* texture;
+	float xPosition;
 };
 
 class Level {
@@ -72,6 +79,8 @@ public:
 
 
 	std::vector<SDL_Texture*> m_backgrounds;
+
+	std::vector<BackgroundData> m_backs;
 
 	// How many times to render the background
 	int m_levelWidth = 2;
