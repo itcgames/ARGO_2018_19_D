@@ -346,7 +346,7 @@ void Game::update(const float & dt)
 		{
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 			m_controlSystem.update();
-			playeraiSystem->runTree();
+			//playeraiSystem->runTree();
 			m_aiSystem->update(dt);
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
@@ -357,6 +357,7 @@ void Game::update(const float & dt)
 			if (m_levelObserver->getComplete()) {
 				if (m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer)) {
 					m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+					fadeToState(State::PlayScreen);
 				}	
 			}
 			m_particleSystem->update();
@@ -513,26 +514,36 @@ void Game::setGameState(State state)
 void Game::fadeToState(State state)
 {
 
-	if (m_gameState == State::PlayScreen)
-	{
-		SDL_ShowCursor(SDL_DISABLE);
-	}
-	else
-	{
-		SDL_ShowCursor(SDL_ENABLE);
-	}
+	
 
 	inputHandler->resetHandler();
 	m_nextState = state;
 	fadeOn = true;
 	doneFading = false;
+	if (m_nextState == State::PlayScreen && m_gameState == State::PlayScreen)
+	{
+		doneFading = true;
+		//SDL_ShowCursor(SDL_DISABLE);
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+	}
 }
 
 void Game::fade()
 {
 	if (fadeOn)
 	{
-		m_transitionAlphaPercent += 0.075;
+		if (m_gameState == State::PlayScreen && m_nextState == State::PlayScreen)
+		{
+			m_transitionAlphaPercent += 1;
+		}
+		else
+		{
+			m_transitionAlphaPercent += 0.075;
+		}
+		
 		if (m_transitionAlphaPercent >= 1)
 		{
 			m_transitionAlphaPercent = 1;
@@ -547,7 +558,9 @@ void Game::fade()
 
 	if (fadeOff)
 	{
+		
 		m_transitionAlphaPercent -= 0.075;
+		
 		if (m_transitionAlphaPercent <= 0)
 		{
 			m_transitionAlphaPercent = 0;
