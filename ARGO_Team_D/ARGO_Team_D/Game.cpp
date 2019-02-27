@@ -162,6 +162,10 @@ Game::Game() :
 
 	rifle = Mix_LoadWAV("ASSETS/SOUNDS/AssaultRifle.wav");
 	Mix_VolumeChunk(rifle, 128);
+
+	portal = Mix_LoadWAV("ASSETS/SOUNDS/teleport.wav");
+	Mix_VolumeChunk(portal, 128);
+
 }
 
 Game::~Game()
@@ -368,12 +372,17 @@ void Game::update(const float & dt)
 			m_levelManager.update(dt/1000);
 			if (m_levelObserver->getComplete()) {
 				if (m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer)) {
+					if (Mix_PlayChannel(-1, portal, 0) == -1)
+					{
+						//return 1;
+					}
 					if (m_levelManager.getCurrentLevel() == 0) {
 						m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
 						fadeToState(State::PlayScreen);
 					}
 					else if (m_levelManager.getCurrentLevel() == 1) {
 						m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+						
 						fadeToState(State::PlayScreen);
 					}
 				}	

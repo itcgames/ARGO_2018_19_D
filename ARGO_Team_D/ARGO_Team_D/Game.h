@@ -223,6 +223,7 @@ private:
 	Mix_Chunk * rifle = NULL;
 	Mix_Chunk * jumpSound = NULL;
 	Mix_Chunk * deadSound = NULL;
+	Mix_Chunk * portal = NULL;
 
 };
 #endif // !GAME_H
