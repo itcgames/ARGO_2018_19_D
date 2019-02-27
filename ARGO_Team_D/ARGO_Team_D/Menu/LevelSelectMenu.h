@@ -16,6 +16,7 @@ public:
 	void GoToMenu();
 	void LoadLevel1();
 	void LoadLevel2();
+	void LoadLevel3();
 private:
 	Game * m_game;
 };

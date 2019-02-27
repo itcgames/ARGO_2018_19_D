@@ -9,7 +9,7 @@ DeathScreen::DeathScreen(float width, float height, Game & game, SDL_Renderer * 
 	m_height = height;
 	m_cam = &camera;
 
-	Label * lbl = new Label("Your Dead!", m_cam->m_position.x - m_cam->getBounds().x / m_cam->m_scale.x,
+	Label * lbl = new Label("You're Dead!", m_cam->m_position.x - m_cam->getBounds().x / m_cam->m_scale.x,
 		m_cam->m_position.y - m_cam->getBounds().y / m_cam->m_scale.y,
 		700, 300, SDL_Color{ 0, 0, 0, 255 },
 		rend, this->window);

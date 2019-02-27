@@ -102,7 +102,7 @@ Game::Game() :
 
 	m_gameState = State::Menu;
 	m_menu = new MainMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
-	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, vibrationOn);
+	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, vibrationOn, musicOn);
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_pauseScreen = new PauseScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
@@ -311,7 +311,12 @@ void Game::processEvents()
 void Game::update(const float & dt)
 {
 
-	if (Mix_PlayingMusic() == 0)
+	if (!musicOn)
+	{
+		Mix_HaltMusic();
+	}
+
+	if (Mix_PlayingMusic() == 0 && musicOn)
 	{
 		//Play the music
 		Mix_PlayMusic(m_testMusic, -1);

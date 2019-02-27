@@ -213,6 +213,7 @@ private:
 
 	// Options
 	bool vibrationOn = true;
+	bool musicOn = true;
 
 	//Background
 	SDL_Texture * m_texture;
