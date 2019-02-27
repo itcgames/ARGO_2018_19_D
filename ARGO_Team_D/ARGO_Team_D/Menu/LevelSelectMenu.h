@@ -17,6 +17,7 @@ public:
 	void LoadLevel1();
 	void LoadLevel2();
 	void LoadLevel3();
+	void Loadlevel4();
 private:
 	Game * m_game;
 };
