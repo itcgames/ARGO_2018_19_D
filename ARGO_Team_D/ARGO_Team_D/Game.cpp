@@ -496,7 +496,6 @@ void Game::quit()
 
 void Game::setGameState(State state)
 {
-
 	if (m_gameState == State::PlayScreen)
 	{
 		SDL_ShowCursor(SDL_DISABLE);
@@ -657,4 +656,9 @@ void Game::loadAlevel(int num)
 void Game::reloadCurrentlevel()
 {
 	m_levelManager.loadLevel(m_player, *m_resourceManager, m_renderer, m_levelManager.getCurrentLevel());
+}
+
+void Game::resetPlayerHealth()
+{
+	m_healthSystem->reset();
 }

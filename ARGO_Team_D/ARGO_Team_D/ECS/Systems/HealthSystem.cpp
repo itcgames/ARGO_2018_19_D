@@ -72,3 +72,13 @@ void HealthSystem::setPlayerAliveStatus(bool status)
 {
 	m_playerAlive = status;
 }
+
+void HealthSystem::reset()
+{
+	for (auto & comp : m_components)
+	{
+		auto & hc = comp.second;
+		hc.health->setHealth(100);
+		hc.health->setLives(3);
+	}
+}
