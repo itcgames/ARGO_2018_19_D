@@ -120,3 +120,21 @@ void NetworkingSystem::joinServer()
 	m_client->Send(p);
 	auto test = m_client->Receive();
 }
+
+void NetworkingSystem::readyUp()
+{
+	Packet * p = new Packet();
+	ZeroMemory(p, sizeof(struct Packet));
+	p->type = MessageType::READY;
+	m_client->Send(p);
+	auto test = m_client->Receive();
+}
+
+void NetworkingSystem::unready()
+{
+	Packet * p = new Packet();
+	ZeroMemory(p, sizeof(struct Packet));
+	p->type = MessageType::UNREADY;
+	m_client->Send(p);
+	auto test = m_client->Receive();
+}

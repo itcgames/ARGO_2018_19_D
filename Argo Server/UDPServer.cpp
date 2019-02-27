@@ -1,6 +1,7 @@
 #include "UDPServer.h"
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 UDPServer::UDPServer()
 {
@@ -8,6 +9,104 @@ UDPServer::UDPServer()
 
 UDPServer::~UDPServer()
 {
+}
+
+std::vector<int> UDPServer::getAvailableLobbies()
+{
+	std::vector<int> availableLobbies;
+	for (int i = 0; i < m_lobbies.size(); ++i) {
+		if (m_lobbies[i].m_open && !m_lobbies[i].m_inGame) {
+			availableLobbies.push_back(i);
+		}
+	}
+	return availableLobbies;
+}
+
+void UDPServer::createLobby()
+{
+	Lobby lobby;
+	m_lobbies.push_back(lobby);
+}
+
+int UDPServer::mapToLobby()
+{
+	auto availableLobbies = getAvailableLobbies();
+	if (availableLobbies.empty()) {
+		createLobby();
+		std::cout << "Create Lobby as none available" << std::endl;
+	}
+	int clientsPushed = 0;
+	int index = 0;
+	int lobbyIndex = m_lobbies.size() - 1;
+	for (auto client : m_waiting) {
+		if (index < MAX_CLIENTS) {
+			std::cout << "Mapped: " << client.first << std::endl;
+			m_lobbies.back().m_clients.insert(client);
+			m_ipToLobby[client.first] = lobbyIndex;
+			clientsPushed++;
+		}
+		else {
+			// Leave if not full (allows for lobbies below the maximum amount)
+			break;
+		}
+	}
+	auto & lobbyClients = m_lobbies.back().m_clients;
+	/*auto pred = [client](std::pair<const std::string, ClientData> & data) {
+		return std::find(client.begin(), client.end(), data) != client.end();
+	};
+	m_waiting.erase(std::remove_if(m_waiting.begin(), m_waiting.end(), pred), m_waiting.end());*/
+	for (auto & client : lobbyClients) {
+		m_waiting.erase(client.first);
+	}
+	std::cout << "Removing Clients from waiting" << std::endl;
+	return 0;
+}
+
+void UDPServer::startLobby(Lobby & lobby)
+{
+	Packet * p = new Packet;
+	ZeroMemory(p, sizeof(struct Packet) + 1);
+	p->type = MessageType::START;
+
+	Packet * startMsg = new Packet();
+	for (auto & ip : lobby.m_clients) {
+		ZeroMemory(startMsg, sizeof(struct Packet));
+		startMsg->playerID = ip.second.index;
+		startMsg->type = MessageType::START;
+		startMsg->numOtherPlayers = lobby.m_clients.size() - 1;
+		ClientData & clientData = ip.second;
+		int sendResult = sendto(m_listening, (char*)startMsg, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&clientData.clientAddr, clientData.clientAddrLen);
+		if (sendResult == SOCKET_ERROR) {
+			std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
+		}
+		else {
+			char ipSentTo[256];
+			ZeroMemory(&ipSentTo, 256);
+			inet_ntop(AF_INET, &clientData.clientAddr.sin_addr, ipSentTo, 256);
+			std::cout << "Sent message to : " << ipSentTo << ":" << clientData.clientAddr.sin_port << std::endl;
+		}
+	}
+}
+
+void UDPServer::handleLobby(Lobby & lobby, ClientData & current, Packet & p)
+{
+	for (auto & ipPair : lobby.m_clients) {
+		// Send to everyone except yourself
+		ClientData & clientData = ipPair.second;
+		if (clientData.index != current.index) {
+			sockaddr_in & clientAddr = ipPair.second.clientAddr;
+			int sendResult = sendto(m_listening, (char*)&p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&clientData.clientAddr, sizeof(clientData.clientAddr));
+			if (sendResult == SOCKET_ERROR) {
+				std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
+			}
+			else {
+				char ipSentTo[256];
+				ZeroMemory(&ipSentTo, 256);
+				inet_ntop(AF_INET, &clientAddr.sin_addr, ipSentTo, 256);
+				std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
+			}
+		}
+	}
 }
 
 bool UDPServer::createSock()
@@ -58,7 +157,6 @@ void UDPServer::messageHandler()
 	Packet p;
 	int addrFamily = AF_INET;
 	int numWaiting = 0;
-	Packet * startMsg = new Packet();
 	while (true) {
 		std::cout << "Update" << std::endl;
 		// Wipe all memoty of previous packets
@@ -89,44 +187,20 @@ void UDPServer::messageHandler()
 				auto & current = m_waiting[mapping];
 				numWaiting++;
 				if (numWaiting >= MAX_CLIENTS) {
-					for (auto & ip : m_waiting) {
-						ZeroMemory(startMsg, sizeof(struct Packet));
-						startMsg->playerID = ip.second.index;
-						startMsg->type = MessageType::START;
-						startMsg->numOtherPlayers = numWaiting;
-						ClientData & clientData = ip.second;
-						int sendResult = sendto(m_listening, (char*)startMsg, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&clientData.clientAddr, clientData.clientAddrLen);
-						if (sendResult == SOCKET_ERROR) {
-							std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
-						}
-						else {
-							char ipSentTo[256];
-							ZeroMemory(&ipSentTo, 256);
-							inet_ntop(AF_INET, &clientAddr.sin_addr, ipSentTo, 256);
-							std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
-						}
-					}
-				}
-			}
-			auto & current = m_waiting[mapping];
-			for (auto & ipPair : m_waiting) {
-				// Send to everyone except yourself
-				ClientData & clientData = ipPair.second;
-				if (clientData.index != current.index) {
-					int sendResult = sendto(m_listening, (char*)&p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&clientData.clientAddr, sizeof(clientData.clientAddr));
-					if (sendResult == SOCKET_ERROR) {
-						std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
-					}
-					else {
-						char ipSentTo[256];
-						ZeroMemory(&ipSentTo, 256);
-						inet_ntop(AF_INET, &clientAddr.sin_addr, ipSentTo, 256);
-						std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
-					}
+					mapToLobby();
+					numWaiting = 0;
+					startLobby(m_lobbies.back());
 				}
 			}
 
-			std::cout << "Received message from " << clientIP << std::endl;
+			// Handle 
+			if (!m_ipToLobby.empty()) {
+				int lobbyIndex = m_ipToLobby[mapping];
+				auto & current = m_lobbies[lobbyIndex].m_clients[mapping];
+				handleLobby(m_lobbies[lobbyIndex], current, p);
+			}
+
+			std::cout << "Received message from: " << mapping << std::endl;
 		}
 	}
 }

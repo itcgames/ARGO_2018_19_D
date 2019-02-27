@@ -35,11 +35,6 @@ bool UDPClient::init()
 
 bool UDPClient::Send(Packet * p)
 {
-	// Check if actual message is sent
-	/*if (sizeof(p) > 0) {
-
-	}*/
-
 	int result = sendto(m_sock, (char*)p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&m_hint, sizeof(m_hint));
 	if (result == SOCKET_ERROR) {
 		std::cerr << "Socket sen failed with " << WSAGetLastError() << std::endl;

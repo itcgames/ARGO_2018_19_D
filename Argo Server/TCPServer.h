@@ -6,14 +6,13 @@
 #include <thread>
 #include <vector>
 
-struct Lobby {
-	bool m_open = true;
-	bool m_inGame = false;
-	std::vector<SOCKET> m_clients;
-};
-
 class TCPServer : public Server {
 public:
+	struct Lobby {
+		bool m_open = true;
+		bool m_inGame = false;
+		std::vector<SOCKET> m_clients;
+	};
 	TCPServer();
 	~TCPServer();
 	std::vector<int> getAvailableLobbies();

@@ -28,6 +28,8 @@ public:
 	void removeEntity(const int id) override;
 	bool m_inGame = false;
 	void joinServer();
+	void readyUp();
+	void unready();
 private:
 	Entity * m_player;
 	std::vector<Entity*> * m_clients;

@@ -12,7 +12,8 @@ enum MessageType {
 	PLAYER,
 	START,
 	ALLREADY,
-	READY
+	READY,
+	UNREADY
 };
 
 struct Packet {
