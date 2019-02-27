@@ -28,25 +28,29 @@ void HealthSystem::update()
 	{
 		auto & hc = comp.second;
 		int hitCount = hc.body->getBulletHitCount();
+		int currentHealth = hc.health->getHealth();
 		if (hitCount > 0)
 		{
 			hc.body->setBulletHitCount(0);
-			int currentHealth = hc.health->getHealth();
 			currentHealth -= (hitCount * 10);
-			if (currentHealth > 0)
+		}
+		if (hc.body->getBody()->GetPosition().y > 180)
+		{
+			currentHealth = 0;
+		}
+		if (currentHealth > 0)
+		{
+			hc.health->setHealth(currentHealth);
+		}
+		else
+		{
+			hc.health->setHealth(100);
+			int currentLives = hc.health->getLives() - 1;
+			hc.health->setLives(currentLives == 0 ? 3 : currentLives);
+			hc.body->resetPos();
+			if (currentLives == 0)
 			{
-				hc.health->setHealth(currentHealth);
-			}
-			else
-			{
-				hc.health->setHealth(100);
-				int currentLives = hc.health->getLives() - 1;
-				hc.health->setLives(currentLives == 0 ? 3: currentLives);
-				hc.body->resetPos();
-				if (currentLives == 0)
-				{
-					m_playerAlive = false;
-				}
+				m_playerAlive = false;
 			}
 		}
 	}
