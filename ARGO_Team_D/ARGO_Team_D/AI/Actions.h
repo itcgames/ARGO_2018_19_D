@@ -95,9 +95,6 @@ public:
 	}
 	bool run() override
 	{
-		float dist = sqrt(((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x))
-			+ ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y)));
-
 		b2Body * b2Body = m_body->getBody();
 		b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
 

@@ -11,6 +11,9 @@ InputHandler::InputHandler(ControlSystem & system, SDL_Joystick& controller, SDL
 	m_jump = new JumpCommand(m_controlSystem);
 
 	startTimer = SDL_GetTicks();
+
+	rifle = Mix_LoadWAV("ASSETS/SOUNDS/AssaultRifle.wav");
+	Mix_VolumeChunk(rifle, 128 / 8);
 }
 
 void InputHandler::handleKeyboardInput(SDL_Event theEvent)
@@ -29,10 +32,20 @@ void InputHandler::handleKeyboardInput(SDL_Event theEvent)
 		if (theEvent.key.keysym.sym == SDLK_UP || theEvent.key.keysym.sym == SDLK_w)
 		{
 			m_upPressed = true;
+
 		}
 		if (theEvent.key.keysym.sym == SDLK_LCTRL || theEvent.key.keysym.sym == SDLK_LCTRL)
 		{
 			m_ctrlPressed = true;
+			if (!playSound)
+			{
+				if (Mix_PlayChannel(5, rifle, -1) == -1)
+				{
+					//return 1;
+				}
+				playSound = true;
+			}
+			
 		}
 		break;
 
@@ -52,6 +65,8 @@ void InputHandler::handleKeyboardInput(SDL_Event theEvent)
 		if (theEvent.key.keysym.sym == SDLK_LCTRL || theEvent.key.keysym.sym == SDLK_LCTRL)
 		{
 			m_ctrlPressed = false;
+			Mix_HaltChannel(5);
+			playSound = false;
 		}
 		break;
 	}
@@ -70,6 +85,7 @@ void InputHandler::handleControllerInput(SDL_Event theEvent,bool vibrationOn)
 		case 0:
 			//cout << "A button" << endl;
 			m_upPressed = true;
+
 			break;
 		case 1:
 			//cout << "B button" << endl;
@@ -194,6 +210,14 @@ void InputHandler::handleControllerInput(SDL_Event theEvent,bool vibrationOn)
 					}
 					
 					m_ctrlPressed = true;
+					if (!playSound)
+					{
+						if (Mix_PlayChannel(5, rifle, -1) == -1)
+						{
+							//return 1;
+						}
+						playSound = true;
+					}
 				}
 				else
 				{
@@ -203,6 +227,8 @@ void InputHandler::handleControllerInput(SDL_Event theEvent,bool vibrationOn)
 					}
 					
 					m_ctrlPressed = false;
+					Mix_HaltChannel(5);
+					playSound = false;
 				}
 
 			}
@@ -250,6 +276,7 @@ void InputHandler::resetHandler()
 	m_leftPressed = false;
 	m_upPressed = false;
 	m_ctrlPressed = false;
+	Mix_HaltChannel(5);
 	SDL_HapticRumbleStop(gControllerHaptic);
 	//m_paused = false;
 }
