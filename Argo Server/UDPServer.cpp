@@ -1,5 +1,6 @@
 #include "UDPServer.h"
 #include <iostream>
+#include <string>
 
 UDPServer::UDPServer()
 {
@@ -57,6 +58,7 @@ void UDPServer::messageHandler()
 	Packet p;
 	int addrFamily = AF_INET;
 	int numWaiting = 0;
+	Packet * startMsg = new Packet();
 	while (true) {
 		std::cout << "Update" << std::endl;
 		// Wipe all memoty of previous packets
@@ -71,26 +73,29 @@ void UDPServer::messageHandler()
 		}
 		else {
 			// Actually do some stuff here
+			std::string mapping;
 			char clientIP[256];
 			ZeroMemory(&clientIP, 256);
 			// Get the client ip
 			inet_ntop(addrFamily, &clientAddr.sin_addr, clientIP, 256);
-			
-
-
+			mapping = std::string(clientIP)  + ":" + std::to_string(clientAddr.sin_port);
 			// Check if IP exisits in waiting
 			if (p.type == MessageType::JOINED) {
 				ClientData data;
 				data.index = numWaiting;
 				data.clientAddr = clientAddr;
-				m_waiting[clientIP] = data;
+				data.clientAddrLen = sizeof(clientAddr);
+				m_waiting[mapping] = data;
+				auto & current = m_waiting[mapping];
 				numWaiting++;
 				if (numWaiting >= MAX_CLIENTS) {
-					Packet * startMsg = new Packet();
 					for (auto & ip : m_waiting) {
 						ZeroMemory(startMsg, sizeof(struct Packet));
+						startMsg->playerID = ip.second.index;
 						startMsg->type = MessageType::START;
-						int sendResult = sendto(m_listening, (char*)&startMsg, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&m_waiting[ip.first].clientAddr, sizeof(m_waiting[ip.first].clientAddr));
+						startMsg->numOtherPlayers = numWaiting;
+						ClientData & clientData = ip.second;
+						int sendResult = sendto(m_listening, (char*)startMsg, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&clientData.clientAddr, clientData.clientAddrLen);
 						if (sendResult == SOCKET_ERROR) {
 							std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
 						}
@@ -98,24 +103,25 @@ void UDPServer::messageHandler()
 							char ipSentTo[256];
 							ZeroMemory(&ipSentTo, 256);
 							inet_ntop(AF_INET, &clientAddr.sin_addr, ipSentTo, 256);
-							std::cout << "Sent message to :" << ipSentTo << std::endl;
+							std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
 						}
 					}
 				}
 			}
-
-			for (int i = 0; i < numWaiting; ++i) {
-				//Send to everyone but yourself
-				if (i != m_waiting[clientIP].index) {
-					int sendResult = sendto(m_listening, (char*)&p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&m_waiting[clientIP].clientAddr, sizeof(m_waiting[clientIP].clientAddr));
-					if (sendResult != SOCKET_ERROR) {
+			auto & current = m_waiting[mapping];
+			for (auto & ipPair : m_waiting) {
+				// Send to everyone except yourself
+				ClientData & clientData = ipPair.second;
+				if (clientData.index != current.index) {
+					int sendResult = sendto(m_listening, (char*)&p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&clientData.clientAddr, sizeof(clientData.clientAddr));
+					if (sendResult == SOCKET_ERROR) {
 						std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
 					}
 					else {
 						char ipSentTo[256];
 						ZeroMemory(&ipSentTo, 256);
 						inet_ntop(AF_INET, &clientAddr.sin_addr, ipSentTo, 256);
-						std::cout << "Sent message to :" << ipSentTo << std::endl;
+						std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
 					}
 				}
 			}

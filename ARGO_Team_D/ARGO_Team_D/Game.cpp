@@ -325,9 +325,9 @@ void Game::update(const float & dt)
 				m_healthSystem->setPlayerAliveStatus(true);
 				m_gameState = State::Dead;
 			}
-			if (online) {
-				m_network.update();
-			}
+		}
+		if (online) {
+			m_network.update();
 		}
 		break;
 	case Options:

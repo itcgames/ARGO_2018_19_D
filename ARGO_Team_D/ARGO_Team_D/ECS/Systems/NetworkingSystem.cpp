@@ -37,7 +37,8 @@ void NetworkingSystem::update()
 	if (m_client != nullptr) {
 		for (int i = 0; i < m_components.size() - 1; ++i) {
 			Packet * p = m_client->Receive();
-			if (p->type == MessageType::START) {
+			if (p->type == MessageType::START && !m_inGame) {
+				std::cout << "Started%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" << std::endl;
 				m_localPlayerID = p->playerID;
 				int numPlayers = p->numOtherPlayers + 1;
 				std::vector<int> playerIDs;
@@ -72,7 +73,7 @@ void NetworkingSystem::update()
 					int entityID = entityComps.first;
 					auto & networkingComps = entityComps.second;
 					if (networkingComps.network != nullptr && networkingComps.network->networkID == p->playerID) {
-						std::cout << "Received from " << p->playerID << std::endl;
+						//std::cout << "Received from " << p->playerID << std::endl;
 						auto & pos = networkingComps.position;
 						//std::cout << p->position.x << ", " << p->position.y << std::endl;
 						pos->setPosition(p->position);
@@ -117,4 +118,5 @@ void NetworkingSystem::joinServer()
 	ZeroMemory(p, sizeof(struct Packet));
 	p->type = MessageType::JOINED;
 	m_client->Send(p);
+	auto test = m_client->Receive();
 }

@@ -53,9 +53,11 @@ Packet * UDPClient::Receive()
 	Packet * p = new Packet();
 	ZeroMemory(p, sizeof(struct Packet));
 	int size = sizeof(m_hint);
-	int bytesRecv = recvfrom(m_sock, (char*)p, sizeof(struct Packet), 0, (LPSOCKADDR)&m_hint, &size);
+	int bytesRecv = recvfrom(m_sock, (char*)p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&m_hint, &size);
 	if (bytesRecv == SOCKET_ERROR) {
-		std::cerr << "Received nothing" << std::endl;
+		if (WSAGetLastError() != WSAEWOULDBLOCK) {
+			std::cerr << "Error receiving: " << WSAGetLastError() << std::endl;
+		}
 	}
 	return p;
 }

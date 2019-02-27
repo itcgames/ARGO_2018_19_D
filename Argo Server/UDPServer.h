@@ -7,6 +7,8 @@
 struct ClientData {
 	int index;
 	sockaddr_in clientAddr;
+	int clientAddrLen;
+	std::string ip;
 };
 
 //struct Lobby {
