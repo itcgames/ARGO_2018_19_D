@@ -124,7 +124,7 @@ Game::Game() :
 
 	m_bulletManager = new BulletManager(m_world, WORLD_SCALE, m_resourceManager);
 
-	playeraiSystem = new PlayerAiSystem(m_bulletManager);
+	playeraiSystem = new PlayerAiSystem(m_bulletManager, m_levelObserver);
 
 	initialiseFactories();
 	initialiseEntities();
@@ -146,7 +146,8 @@ Game::Game() :
 	}
 
 	aiComponent = new PlayerAiComponent(m_player);
-	//playeraiSystem->addComponent(aiComponent);
+	m_player->addComponent(aiComponent);
+	playeraiSystem->addComponent(aiComponent);
 
 
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
@@ -342,7 +343,7 @@ void Game::update(const float & dt)
 		if (doneFading) // dont update the game unless screen is done fading
 		{
 			m_controlSystem.update();
-			//playeraiSystem->runTree();
+			playeraiSystem->runTree();
 			m_aiSystem->update(dt);
 
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
@@ -572,7 +573,7 @@ void Game::initialiseEntities()
 	m_animationSystem.addEntity(e);
 	m_player = e;
 	m_playerBody = dynamic_cast<BodyComponent*>(e->getComponentsOfType({ "Body" })["Body"]);
-	//playeraiSystem->addEntity(m_player);
+	playeraiSystem->addEntity(m_player);
 
 	for(int i = 0; i < GUN_ENEMY_COUNT; ++i)
 	{
