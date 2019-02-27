@@ -213,6 +213,7 @@ private:
 
 	// Options
 	bool vibrationOn = true;
+	bool musicOn = true;
 
 	//Background
 	SDL_Texture * m_texture;
@@ -222,6 +223,7 @@ private:
 	Mix_Chunk * rifle = NULL;
 	Mix_Chunk * jumpSound = NULL;
 	Mix_Chunk * deadSound = NULL;
+	Mix_Chunk * portal = NULL;
 
 };
 #endif // !GAME_H

@@ -102,7 +102,7 @@ Game::Game() :
 
 	m_gameState = State::Menu;
 	m_menu = new MainMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
-	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, vibrationOn);
+	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, vibrationOn, musicOn);
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_pauseScreen = new PauseScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
@@ -162,6 +162,10 @@ Game::Game() :
 
 	rifle = Mix_LoadWAV("ASSETS/SOUNDS/AssaultRifle.wav");
 	Mix_VolumeChunk(rifle, 128);
+
+	portal = Mix_LoadWAV("ASSETS/SOUNDS/teleport.wav");
+	Mix_VolumeChunk(portal, 128);
+
 }
 
 Game::~Game()
@@ -311,6 +315,30 @@ void Game::processEvents()
 void Game::update(const float & dt)
 {
 
+	if (!musicOn)
+	{
+		Mix_HaltMusic();
+	}
+
+	if (Mix_PlayingMusic() == 0 && musicOn)
+	{
+		//Play the music
+		Mix_PlayMusic(m_testMusic, -1);
+		Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	}
+
+	if (!musicOn)
+	{
+		Mix_HaltMusic();
+	}
+
+	if (Mix_PlayingMusic() == 0 && musicOn)
+	{
+		//Play the music
+		Mix_PlayMusic(m_testMusic, -1);
+		Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	}
+
 	if (Mix_PlayingMusic() == 0)
 	{
 		//Play the music
@@ -356,8 +384,13 @@ void Game::update(const float & dt)
 			m_levelManager.update(dt/1000);
 			if (m_levelObserver->getComplete()) {
 				if (m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer)) {
+					if (Mix_PlayChannel(-1, portal, 0) == -1)
+					{
+						//return 1;
+					}
 					if (m_levelManager.getCurrentLevel() == 0) {
 						m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
 					}
 					else if (m_levelManager.getCurrentLevel() == 1) {
 						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
