@@ -6,10 +6,11 @@
 #include "SDL.h"
 #include <vector>
 #include "../ECS/Systems/ControlSystem.h"
+#include "../Camera.h"
 
 class InputHandler {
 public:
-	InputHandler(ControlSystem & system, SDL_Joystick& controller, SDL_Haptic& haptic);
+	InputHandler(ControlSystem & system, SDL_Joystick& controller, SDL_Haptic& haptic, Camera * cam);
 	void handleKeyboardInput(SDL_Event theEvent);
 	void handleControllerInput(SDL_Event theEvent, bool vibrationOn);
 	void update();
@@ -39,6 +40,8 @@ private:
 
 	Mix_Chunk * rifle = NULL;
 	bool playSound = false;
+
+	Camera * m_cam;
 };
 
 #endif // !INPUTHANDLER_H
