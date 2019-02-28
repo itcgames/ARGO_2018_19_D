@@ -142,7 +142,7 @@ Game::Game() :
 
 	aiComponent = new PlayerAiComponent(m_player);
 	m_player->addComponent(aiComponent);
-	playeraiSystem->addComponent(aiComponent);
+	//playeraiSystem->addComponent(aiComponent);
 
 
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic, &m_camera);
@@ -261,7 +261,7 @@ void Game::processEvents()
 			switch (m_gameState)
 			{
 			case PlayScreen:
-				if (event.key.keysym.sym == SDLK_q)
+				if (event.key.keysym.sym == SDLK_TAB)
 				{
 					m_gameState = State::Pause;
 				}
