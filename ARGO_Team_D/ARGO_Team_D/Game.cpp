@@ -436,6 +436,11 @@ void Game::update(const float & dt)
 				fadeToState(State::Dead);
 			}
 		}
+		if (m_levelManager.isGameFinished())
+		{
+			fadeToState(State::Menu);
+			m_levelManager.setGameFinished(false);
+		}
 		break;
 	case Options:
 		m_options->update();

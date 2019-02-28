@@ -29,11 +29,14 @@ public:
 	int getCurrentLevel();
 	Level * getCurrentLevelObject();
 	void unloadAllLevels();
+	bool isGameFinished();
+	void setGameFinished(bool b);
 protected:
 	TTF_Font * m_font;
 	std::vector<std::string> m_levelPaths;
 	
 	int m_currentLevel;
+	bool finishedGame = false;
 
 };
 

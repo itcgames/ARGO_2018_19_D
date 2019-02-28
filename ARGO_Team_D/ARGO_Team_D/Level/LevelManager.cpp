@@ -64,7 +64,8 @@ bool LevelManager::checkPlayerCollisions(Entity * e, ResourceManager & rm, const
 				m_currentLevel++;
 			}
 			else {
-				m_currentLevel = 0;
+				//m_currentLevel = 0;
+				finishedGame = true;
 			}
 			loadCurrentLevel(rm, renderer);
 			auto startPos = m_levels[m_currentLevel]->m_startPos;
@@ -114,4 +115,14 @@ void LevelManager::unloadAllLevels()
 	for (auto level : m_levels) {
 		level->unload();
 	}
+}
+
+bool LevelManager::isGameFinished()
+{
+	return finishedGame;
+}
+
+void LevelManager::setGameFinished(bool b)
+{
+	finishedGame = b;
 }
