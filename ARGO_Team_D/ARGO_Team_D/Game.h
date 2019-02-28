@@ -110,6 +110,7 @@ public:
 	void reloadCurrentlevel();
 	void resetPlayerHealth();
 	void resetKills();
+	void setAI(bool b);
 
 private:
 	void processEvents();
@@ -225,6 +226,6 @@ private:
 	Mix_Chunk * jumpSound = NULL;
 	Mix_Chunk * deadSound = NULL;
 	Mix_Chunk * portal = NULL;
-
+	bool aiActive = false;
 };
 #endif // !GAME_H

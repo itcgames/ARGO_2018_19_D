@@ -374,7 +374,12 @@ void Game::update(const float & dt)
 		{
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 			m_controlSystem.update();
-			//playeraiSystem->runTree();
+			//if ai is active
+			if (aiActive)
+			{
+				playeraiSystem->runTree();
+			}
+			
 			m_aiSystem->update(dt);
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
@@ -748,4 +753,9 @@ void Game::resetKills()
 	else if (m_levelManager.getCurrentLevel() == 3) {
 		m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 	}
+}
+
+void Game::setAI(bool b)
+{
+	aiActive = b;
 }

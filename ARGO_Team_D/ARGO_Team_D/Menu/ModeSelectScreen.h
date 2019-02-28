@@ -10,6 +10,7 @@ public:
 	~ModeSelectScreen();
 	void GoToGame();
 	void GoToMultiplayerGame();
+	void GoToAI();
 	void GoToMenu();
 private:
 	Game * m_game;
