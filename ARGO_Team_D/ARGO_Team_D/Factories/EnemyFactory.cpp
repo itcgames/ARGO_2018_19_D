@@ -15,7 +15,7 @@ EnemyFactory::~EnemyFactory()
 Enemy * EnemyFactory::createGunEnemy()
 {
 	Enemy * enemy = createEnemy("GunEnemy", 8, 8, 64, 64, false);
-	enemy->ai = new AiComponent(EnemyGun, 0, 0, 3);
+	enemy->ai = new AiComponent(EnemyGun, 0, 0, 5);
 	auto p = new ParticleEffectsComponent(enemy->body->getBody()->GetPosition().x * WORLD_SCALE,
 		enemy->body->getBody()->GetPosition().y * WORLD_SCALE,
 		5, 5, SDL_Color{ 181, 101, 29 }, SDL_Color{ 255, 0, 0 },
@@ -48,7 +48,7 @@ Enemy * EnemyFactory::createFlyEnemy()
 Enemy * EnemyFactory::createBigEnemy()
 {
 	Enemy * enemy = createEnemy("BigEnemy", 8, 8, 128, 128, false);
-	enemy->ai = new AiComponent(EnemyBig, 0, 0, 10);
+	enemy->ai = new AiComponent(EnemyBig, 0, 0, 15);
 	auto p = new ParticleEffectsComponent(enemy->body->getBody()->GetPosition().x * WORLD_SCALE,
 		enemy->body->getBody()->GetPosition().y * WORLD_SCALE,
 		5, 5, SDL_Color{ 181, 101, 29 }, SDL_Color{ 255, 0, 0 },

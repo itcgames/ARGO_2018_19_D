@@ -31,17 +31,22 @@ bool Level::load(const std::string filepath, ResourceManager * rManager, SDL_Ren
 	{
 		m_goalObj = new Goal(rManager);
 	}
-	if (filepath.find("Level1.tmx") != string::npos || filepath.find("Tutorial") != string::npos) {
-		m_backgrounds.push_back(rManager->getImageResource("Background1"));
-		m_backgrounds.push_back(rManager->getImageResource("Background1-2"));
-		m_backgrounds.push_back(rManager->getImageResource("Background1-3"));
-		m_backgroundColour = { 0, 155, 200, 255 };
-	}
-	else if (filepath.find("Level2") != string::npos) {
+	if (filepath.find("Level2") != string::npos) {
 		m_backgrounds.push_back(rManager->getImageResource("Background2"));
 		m_backgrounds.push_back(rManager->getImageResource("Background2-2"));
 		m_backgrounds.push_back(rManager->getImageResource("Background2-3"));
-		m_backgroundColour = { 108, 62, 127, 255 };
+	}
+	else if(filepath.find("Level3") != string::npos)
+	{
+		m_backgrounds.push_back(rManager->getImageResource("Background3"));
+		m_backgrounds.push_back(rManager->getImageResource("Background3-2"));
+		m_backgrounds.push_back(rManager->getImageResource("Background3-3"));
+	}
+	else
+	{
+		m_backgrounds.push_back(rManager->getImageResource("Background1"));
+		m_backgrounds.push_back(rManager->getImageResource("Background1-2"));
+		m_backgrounds.push_back(rManager->getImageResource("Background1-3"));
 	}
 	std::cout << m_backgrounds.size() << std::endl;
 
