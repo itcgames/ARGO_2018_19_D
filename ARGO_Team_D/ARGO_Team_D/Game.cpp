@@ -145,7 +145,7 @@ Game::Game() :
 	playeraiSystem->addComponent(aiComponent);
 
 
-	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
+	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic, &m_camera);
 
 	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
@@ -242,7 +242,7 @@ void Game::processEvents()
 			switch (m_gameState)
 			{
 			case PlayScreen:
-				m_camera.m_shaking = true;
+				//m_camera.m_shaking = true;
 				//m_gameState = State::Dead;
 				break;
 			}
@@ -252,7 +252,7 @@ void Game::processEvents()
 			switch (m_gameState)
 			{
 			case PlayScreen:
-				m_camera.m_shaking = true;
+				//m_camera.m_shaking = true;
 				break;
 			}
 			break;
@@ -397,7 +397,7 @@ void Game::update(const float & dt)
 						fadeToState(State::PlayScreen);
 					}
 					else if (m_levelManager.getCurrentLevel() == 2) {
-						m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
+						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 						fadeToState(State::PlayScreen);
 					}
 				}	
