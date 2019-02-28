@@ -282,7 +282,7 @@ void UDPServer::messageHandler()
 						msg->type = MessageType::LOBBYINFO;
 						msg->playerID = i;
 						msg->numOtherPlayers = m_lobbies.at(i).m_clients.size();
-						int sendResult = sendto(m_listening, (char*)msg, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)client.clientAddr, sizeof(client.clientAddr));
+						int sendResult = sendto(m_listening, (char*)msg, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&client.second.clientAddr, sizeof(client.second.clientAddr));
 						if (sendResult == SOCKET_ERROR) {
 							std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
 						}
