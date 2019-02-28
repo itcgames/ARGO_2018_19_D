@@ -261,7 +261,7 @@ void Game::processEvents()
 			switch (m_gameState)
 			{
 			case PlayScreen:
-				if (event.key.keysym.sym == SDLK_q)
+				if (event.key.keysym.sym == SDLK_TAB)
 				{
 					m_gameState = State::Pause;
 				}
@@ -416,6 +416,18 @@ void Game::update(const float & dt)
 				{
 					//return 1;
 				}
+				if (m_levelManager.getCurrentLevel() == 0) {
+					m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+				}
+				else if (m_levelManager.getCurrentLevel() == 1) {
+					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+				}
+				else if (m_levelManager.getCurrentLevel() == 2) {
+					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+				}
+				else if (m_levelManager.getCurrentLevel() == 3) {
+					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+				}
 				fadeToState(State::Dead);
 			}
 		}
@@ -541,6 +553,7 @@ void Game::quit()
 
 void Game::setGameState(State state)
 {
+
 	if (m_gameState == State::PlayScreen)
 	{
 		SDL_ShowCursor(SDL_DISABLE);
@@ -719,4 +732,20 @@ void Game::reloadCurrentlevel()
 void Game::resetPlayerHealth()
 {
 	m_healthSystem->reset();
+}
+
+void Game::resetKills()
+{
+	if (m_levelManager.getCurrentLevel() == 0) {
+		m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+	}
+	else if (m_levelManager.getCurrentLevel() == 1) {
+		m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+	}
+	else if (m_levelManager.getCurrentLevel() == 2) {
+		m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
+	}
+	else if (m_levelManager.getCurrentLevel() == 3) {
+		m_levelData->reset(7); // to be changed depending on hoe many enemys we need to kill
+	}
 }

@@ -43,7 +43,7 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 
 					auto player = static_cast<BodyComponent *>(dataB->data);
 					int playerHitCount = player->getBulletHitCount();
-					player->setBulletHitCount(playerHitCount + 5);
+					player->setBulletHitCount(playerHitCount + 2);
 				}
 			}
 		}
@@ -111,7 +111,7 @@ void BodyContactListener::BeginContact(b2Contact* contact)
 
 					auto player = static_cast<BodyComponent *>(dataA->data);
 					int playerHitCount = player->getBulletHitCount();
-					player->setBulletHitCount(playerHitCount + 5);
+					player->setBulletHitCount(playerHitCount + 2);
 				}
 			}
 		}
