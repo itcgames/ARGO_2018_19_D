@@ -764,8 +764,3 @@ void Game::setAI(bool b)
 {
 	aiActive = b;
 }
-
-void Game::setAI(bool b)
-{
-	aiActive = b;
-}
