@@ -25,7 +25,7 @@ void PlayerAiSystem::createTree(PlayerAiComponent * c)
 
 
 	// Check if can fight and then shoot
-	m_comp->m_succeeders[0].setChild({ &m_comp->m_sequences[4] });
+	m_comp->m_succeeders[0].setChild({ &m_comp->m_sequences[4]});
 	m_comp->m_sequences[4].addChildren({ &m_comp->m_sequences[5], new Shoot(c->m_entity, m_bulletManager)});
 	m_comp->m_sequences[5].addChildren({ new GoToNearest(c->m_entity, m_enemiesList, m_obs), new CheckPassEnemy(c->m_entity), new CheckInFightPos(c->m_entity)});
 

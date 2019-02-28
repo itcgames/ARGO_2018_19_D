@@ -2,6 +2,7 @@
   "LevelSystem": [
     "./ASSETS/LEVELS/Tutorial1.tmx",
     "./ASSETS/LEVELS/Level1.tmx",
-    "./ASSETS/LEVELS/Level2.tmx"
+    "./ASSETS/LEVELS/Level2.tmx",
+    "./ASSETS/LEVELS/Level3.tmx"
   ]
 }
