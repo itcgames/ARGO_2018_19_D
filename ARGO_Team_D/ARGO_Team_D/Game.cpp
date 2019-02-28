@@ -374,7 +374,7 @@ void Game::update(const float & dt)
 		{
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
 			m_controlSystem.update();
-			playeraiSystem->runTree();
+			//playeraiSystem->runTree();
 			m_aiSystem->update(dt);
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
@@ -394,9 +394,15 @@ void Game::update(const float & dt)
 					}
 					else if (m_levelManager.getCurrentLevel() == 1) {
 						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
 					}
 					else if (m_levelManager.getCurrentLevel() == 2) {
 						m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
+					}
+					else if (m_levelManager.getCurrentLevel() == 3) {
+						m_levelData->reset(7); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
 					}
 				}	
 			}
@@ -409,6 +415,18 @@ void Game::update(const float & dt)
 				if (Mix_PlayChannel(-1, deadSound, 0) == -1)
 				{
 					//return 1;
+				}
+				if (m_levelManager.getCurrentLevel() == 0) {
+					m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+				}
+				else if (m_levelManager.getCurrentLevel() == 1) {
+					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+				}
+				else if (m_levelManager.getCurrentLevel() == 2) {
+					m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
+				}
+				else if (m_levelManager.getCurrentLevel() == 3) {
+					m_levelData->reset(7); // to be changed depending on hoe many enemys we need to kill
 				}
 				fadeToState(State::Dead);
 			}
@@ -535,6 +553,7 @@ void Game::quit()
 
 void Game::setGameState(State state)
 {
+
 	if (m_gameState == State::PlayScreen)
 	{
 		SDL_ShowCursor(SDL_DISABLE);
@@ -713,4 +732,20 @@ void Game::reloadCurrentlevel()
 void Game::resetPlayerHealth()
 {
 	m_healthSystem->reset();
+}
+
+void Game::resetKills()
+{
+	if (m_levelManager.getCurrentLevel() == 0) {
+		m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+	}
+	else if (m_levelManager.getCurrentLevel() == 1) {
+		m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+	}
+	else if (m_levelManager.getCurrentLevel() == 2) {
+		m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
+	}
+	else if (m_levelManager.getCurrentLevel() == 3) {
+		m_levelData->reset(7); // to be changed depending on hoe many enemys we need to kill
+	}
 }

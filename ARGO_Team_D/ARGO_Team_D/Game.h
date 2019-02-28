@@ -109,6 +109,7 @@ public:
 	void loadAlevel(int num);
 	void reloadCurrentlevel();
 	void resetPlayerHealth();
+	void resetKills();
 
 private:
 	void processEvents();

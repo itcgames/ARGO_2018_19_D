@@ -23,6 +23,7 @@ ModeSelectScreen::~ModeSelectScreen()
 void ModeSelectScreen::GoToGame()
 {
 	m_game->loadAlevel(0);
+	m_game->resetKills();
 	m_game->resetPlayerHealth();
 	m_game->fadeToState(State::PlayScreen);
 	for (auto & b : m_buttons)
@@ -38,6 +39,7 @@ void ModeSelectScreen::GoToGame()
 void ModeSelectScreen::GoToMultiplayerGame()
 {
 	m_game->resetPlayerHealth();
+	m_game->resetKills();
 	m_game->setGameState(State::Lobby);
 	for (auto & b : m_buttons)
 	{
