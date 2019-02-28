@@ -1,5 +1,7 @@
 #include "Game.h"
 #include "ECS/Components/AnimationComponent.h"
+#include "Factories/PlayerFactory.h"
+#include "Factories/EnemyFactory.h"
 
 const float WORLD_SCALE = 30.f;
 
@@ -635,7 +637,7 @@ void Game::fade()
 void Game::initialiseEntities()
 {
 	// Init Player
-	Entity * e = m_playerFactory->create(VectorAPI(150, 0));
+	Entity * e = m_playerFactory->create("Player", VectorAPI(64, 64), VectorAPI(150, 0));
 	m_entityList.push_back(e);
 	m_controlSystem.addEntity(e);
 	m_particleSystem->addEntity(e);
@@ -644,7 +646,7 @@ void Game::initialiseEntities()
 	m_player = e;
 	m_players.push_back(e);
 	for (int i = 0; i < 3; ++i) {
-		Entity * e = m_playerFactory->createOnlinePlayer(VectorAPI(150, 0));
+		Entity * e = m_playerFactory->createOnlinePlayer("Player", VectorAPI(64, 64), VectorAPI(150, 0));
 		m_entityList.push_back(e);
 		m_particleSystem->addEntity(e);
 		m_animationSystem.addEntity(e);
@@ -711,7 +713,7 @@ void Game::initialiseSystems()
 void Game::initialiseFactories()
 {
 	std::string spriteName = "Player";
-	m_playerFactory = new PlayerFactory(spriteName, VectorAPI(64, 64), m_resourceManager, m_world, WORLD_SCALE, m_renderer);
+	m_playerFactory = new PlayerFactory(m_resourceManager, m_world, WORLD_SCALE, m_renderer);
 	m_enemyFactory = new EnemyFactory(m_resourceManager, m_world, WORLD_SCALE, m_renderer);
 }
 

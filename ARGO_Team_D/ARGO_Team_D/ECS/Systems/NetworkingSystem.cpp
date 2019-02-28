@@ -214,6 +214,7 @@ bool NetworkingSystem::leaveLobby()
 		p->type = MessageType::LEAVELOBBY;
 		m_client->Send(p);
 		m_client->setHost(0);
+		m_inLobby = false;
 		return true;
 	}
 	return false;

@@ -1,11 +1,8 @@
 #include "EnemyFactory.h"
 
-EnemyFactory::EnemyFactory(ResourceManager * rm, b2World & world, const float SCALE, SDL_Renderer * rend)
-	: m_resourceManager(rm),
-	m_refWorld(world),
-	WORLD_SCALE(SCALE)
+EnemyFactory::EnemyFactory(ResourceManager * rm, b2World & world, const float SCALE, SDL_Renderer * rend) :
+	Factory(rm, world, SCALE, rend)
 {
-	m_renderer = rend;
 }
 
 EnemyFactory::~EnemyFactory()

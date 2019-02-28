@@ -19,10 +19,12 @@ public:
 	void leaveLobby();
 	void startLobby();
 	void updateLobbies();
+	void draw() override;
 private:
 	Game * m_game;
 	SDL_Rect m_lobbyRect;
 	int lobbyIn = 0;
+
 };
 
 #endif // !LOBBYSCREEN_H

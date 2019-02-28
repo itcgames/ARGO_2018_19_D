@@ -163,6 +163,7 @@
     <ClCompile Include="ECS\Systems\HealthSystem.cpp" />
     <ClCompile Include="ECS\Systems\ParticleSystem.cpp" />
     <ClCompile Include="Factories\EnemyFactory.cpp" />
+    <ClCompile Include="Factories\Factory.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Input\Command.cpp" />

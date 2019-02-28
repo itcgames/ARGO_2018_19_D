@@ -10,7 +10,7 @@ class Screen {
 public:
 	Screen();
 	void handleInput(SDL_Event theEvent);
-	void draw(); //draw
+	virtual void draw(); //draw
 	virtual void update();//update
 	bool itemSelected(); //item selected
 protected:

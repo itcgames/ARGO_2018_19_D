@@ -24,8 +24,6 @@
 #include <Box2D\Box2D.h>
 #include "Level/LevelManager.h"
 #include "Factories/Factory.h"
-#include "Factories/PlayerFactory.h"
-#include "Factories/EnemyFactory.h"
 #include "Menu/Button.h"
 #include "Menu/MainMenu.h"
 #include "Menu/OptionsMenu.h"
@@ -107,8 +105,6 @@ public:
 	SDL_Renderer * m_renderer;
 	// Networking
 	NetworkingSystem m_network;
-	PlayerFactory * m_playerFactory;
-
 
 	void loadAlevel(int num);
 	void reloadCurrentlevel();
@@ -148,7 +144,8 @@ private:
 	BodyComponent * m_playerBody;
 
 	// Factories
-	EnemyFactory * m_enemyFactory;
+	Factory * m_playerFactory;
+	Factory * m_enemyFactory;
 
 	// Misc
 	Camera m_camera;
