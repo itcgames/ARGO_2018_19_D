@@ -368,6 +368,7 @@ void Game::update(const float & dt)
 			{
 				playeraiSystem->runTree();
 			}
+			
 			m_aiSystem->update(dt);
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
@@ -423,6 +424,11 @@ void Game::update(const float & dt)
 				}
 				fadeToState(State::Dead);
 			}
+		}
+		if (m_levelManager.isGameFinished())
+		{
+			fadeToState(State::Menu);
+			m_levelManager.setGameFinished(false);
 		}
 		if (online) {
 			m_network.update();

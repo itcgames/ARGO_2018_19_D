@@ -207,6 +207,7 @@
     <ClInclude Include="Menu\LobbyScreen.h" />
     <ClInclude Include="ECS\Systems\HealthSystem.h" />
     <ClInclude Include="Level\Goal.h" />
-	<ClInclude Include="Client\UDPClient.h" />
+    <ClInclude Include="Client\UDPClient.h" />
+    <ClInclude Include="ECS\Components\NetworkComponent.h" />
   </ItemGroup>
 </Project>
