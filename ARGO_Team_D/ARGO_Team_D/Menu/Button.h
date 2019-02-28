@@ -28,7 +28,7 @@ public:
 	
 
 	void makeCheckbox(bool * b);
-
+	bool m_visible = true;
 private:
 
 	bool * condition;

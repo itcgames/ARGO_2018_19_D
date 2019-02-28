@@ -13,7 +13,7 @@ Client::~Client()
 
 bool Client::init()
 {
-	std::string ip = "149.153.106.150";
+	std::string ip = "192.168.1.9";
 	int port = 8080;
 
 	m_sock = socket(AF_INET, SOCK_STREAM, 0);

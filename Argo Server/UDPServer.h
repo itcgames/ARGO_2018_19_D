@@ -27,6 +27,7 @@ public:
 	void startLobby(Lobby & lobby);
 	void handleLobby(Lobby & lobby, ClientData & current, Packet & p);
 	void mapClientToLobby(ClientData & current);
+	void removeFromLobby(std::string & mapping);
 
 	/*void update();
 	void sendToAllWaiting(Packet * p);

@@ -15,7 +15,8 @@ enum MessageType {
 	READY,
 	UNREADY,
 	LOBBYCREATED,
-	LOBBYUPDATED
+	LOBBYUPDATED,
+	LEAVELOBBY
 };
 
 struct Packet {

@@ -74,30 +74,33 @@ void Button::update()
 	}
 	else
 	{
-		message_rect.x = displayX;
-		message_rect.y = displayY;
-		message_rect.w = displayWidth;
-		message_rect.h = displayHeight;
-		r.x = message_rect.x - 5;
-		r.y = message_rect.y - 5;
-		r.w = displayWidth + 20;
-		r.h = displayHeight + 20;
+		if (m_visible) {
+			message_rect.x = displayX;
+			message_rect.y = displayY;
+			message_rect.w = displayWidth;
+			message_rect.h = displayHeight;
+			r.x = message_rect.x - 5;
+			r.y = message_rect.y - 5;
+			r.w = displayWidth + 20;
+			r.h = displayHeight + 20;
+		}
 	}
-
-	if (hasFocus)
-	{
-		SDL_DestroyTexture(message);
-		color = focusColor;
-		surfaceMessage = TTF_RenderText_Blended(arial, string.c_str(), color);
-		message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
-		SDL_FreeSurface(surfaceMessage);
-	}
-	else {
-		SDL_DestroyTexture(message);
-		color = nonFocusColor;
-		surfaceMessage = TTF_RenderText_Blended(arial, string.c_str(), color);
-		message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
-		SDL_FreeSurface(surfaceMessage);
+	if (m_visible) {
+		if (hasFocus)
+		{
+			SDL_DestroyTexture(message);
+			color = focusColor;
+			surfaceMessage = TTF_RenderText_Blended(arial, string.c_str(), color);
+			message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
+			SDL_FreeSurface(surfaceMessage);
+		}
+		else {
+			SDL_DestroyTexture(message);
+			color = nonFocusColor;
+			surfaceMessage = TTF_RenderText_Blended(arial, string.c_str(), color);
+			message = SDL_CreateTextureFromSurface(rend, surfaceMessage);
+			SDL_FreeSurface(surfaceMessage);
+		}
 	}
 
 	
@@ -109,48 +112,52 @@ void Button::update()
 
 void Button::draw()
 {
-	SDL_RenderCopy(rend, message, NULL, &message_rect);
-	SDL_SetRenderDrawColor(rend, color.r, color.g, color.b, color.a);
-	SDL_RenderDrawRect(rend, &r);
+	if (m_visible) {
+		SDL_RenderCopy(rend, message, NULL, &message_rect);
+		SDL_SetRenderDrawColor(rend, color.r, color.g, color.b, color.a);
+		SDL_RenderDrawRect(rend, &r);
+	}
 }
 
 void Button::mousePress()
 {
-	if (hasFocus)
-	{
-		if (!isACheckbox)
+	if (m_visible) {
+		if (hasFocus)
 		{
-			std::cout << string << " pressed" << std::endl;
-			isTransitioning = true;
-			isClicked = true;
-		}
-		else
-		{
-			*condition = !(*condition);
-
-			if (*condition)
+			if (!isACheckbox)
 			{
-				checkboxString = "On";
+				std::cout << string << " pressed" << std::endl;
+				isTransitioning = true;
+				isClicked = true;
 			}
 			else
 			{
-				checkboxString = "Off";
-			}
-		}
+				*condition = !(*condition);
 
-		if (!doTransition)
-		{
-			try
-			{
-				Enter();
+				if (*condition)
+				{
+					checkboxString = "On";
+				}
+				else
+				{
+					checkboxString = "Off";
+				}
 			}
-			catch (std::bad_function_call)
+
+			if (!doTransition)
 			{
-				std::cout << string << " bad function call" << std::endl;
+				try
+				{
+					Enter();
+				}
+				catch (std::bad_function_call)
+				{
+					std::cout << string << " bad function call" << std::endl;
+				}
+				activateFunction = true;
 			}
-			activateFunction = true;
+
 		}
-		
 	}
 }
 
@@ -180,6 +187,7 @@ void Button::reset()
 	percent = 0;
 	hasFocus = false;
 	isClicked = false;
+	m_visible = true;
 }
 
 void Button::getMouseCollision(int x, int y)

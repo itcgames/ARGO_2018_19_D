@@ -16,9 +16,11 @@ public:
 	void setLobbyInformation(std::vector<NetworkingSystem::Lobby> & lobbies);
 	void createLobby();
 	void joinLobby();
+	void leaveLobby();
 private:
 	Game * m_game;
 	SDL_Rect m_lobbyRect;
+	int lobbyIn = 0;
 };
 
 #endif // !LOBBYSCREEN_H

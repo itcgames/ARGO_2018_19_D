@@ -125,12 +125,25 @@ void UDPServer::mapClientToLobby(ClientData & current)
 		if (m_lobbies[i].m_clients.size() < MAX_CLIENTS) {
 			chosenLobby = i;
 			m_ipToLobby[current.mapping] = i;
+			current.index = m_lobbies.at(i).m_clients.size();
 			m_lobbies.at(i).m_clients.insert(std::make_pair(current.mapping, current));
 			break;
 		}
 	}
 	for (auto & client : m_lobbies[chosenLobby].m_clients) {
 		m_waiting.erase(client.first);
+	}
+}
+
+void UDPServer::removeFromLobby(std::string & mapping)
+{
+	int lobbyToRemoveFrom = m_ipToLobby[mapping];
+	auto & clients = m_lobbies.at(lobbyToRemoveFrom).m_clients;
+	clients.erase(mapping);
+	int index = 0;
+	for (auto & client : clients) {
+		client.second.index = index;
+		index++;
 	}
 }
 
@@ -156,7 +169,7 @@ bool UDPServer::bindSock()
 	int address_family = AF_INET;
 	m_hint.sin_family = address_family;
 	m_hint.sin_port = htons(port);
-	inet_pton(m_hint.sin_family, "149.153.106.150", &m_hint.sin_addr);
+	inet_pton(m_hint.sin_family, "192.168.1.9", &m_hint.sin_addr);
 	if (bind(m_listening, (LPSOCKADDR)&m_hint, sizeof(m_hint)) == SOCKET_ERROR) {
 		std::cerr << "Server cannot bind socket: " << WSAGetLastError() << std::endl;
 		exit(EXIT_FAILURE);
@@ -223,14 +236,15 @@ void UDPServer::messageHandler()
 					if (createLobby()) {
 						auto & lobby = m_lobbies.back();
 						ClientData data;
-						data.index = numWaiting;
 						data.clientAddr = clientAddr;
 						data.clientAddrLen = sizeof(clientAddr);
 						data.mapping = mapping;
-						m_waiting[mapping] = data;
 						mapClientToLobby(data);
 					}
 				}
+			}
+			else if (p.type == MessageType::LEAVELOBBY) {
+				removeFromLobby(mapping);
 			}
 			else {
 				if (!m_ipToLobby.empty()) {

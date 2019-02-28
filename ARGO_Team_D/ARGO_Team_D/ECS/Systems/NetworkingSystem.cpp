@@ -165,6 +165,7 @@ bool NetworkingSystem::createNewLobby()
 		lobby.m_numPlayers = 1;
 		m_inLobby = true;
 		m_client->setHost(1);
+		m_lobbyInNumber = m_lobbies.size() - 1;
 	}
 	else {
 		return false;
@@ -173,5 +174,31 @@ bool NetworkingSystem::createNewLobby()
 	ZeroMemory(p, sizeof(struct Packet));
 	p->type = MessageType::LOBBYCREATED;
 	m_client->Send(p);
+	return true;
+}
+
+bool NetworkingSystem::leaveLobby()
+{
+	if (m_inLobby) {
+		if (m_client->getHost()) {
+			m_lobbies.erase(m_lobbies.begin() + m_lobbyInNumber);
+		}
+		Packet * p = new Packet();
+		ZeroMemory(p, sizeof(struct Packet));
+		p->type = MessageType::LEAVELOBBY;
+		m_client->Send(p);
+		m_client->setHost(0);
+		return true;
+	}
+	return false;
+}
+
+int NetworkingSystem::getMyLobby()
+{
+	return m_lobbyInNumber;
+}
+
+bool NetworkingSystem::joinLobby()
+{
 	return true;
 }

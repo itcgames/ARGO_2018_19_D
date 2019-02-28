@@ -20,19 +20,21 @@ void Screen::handleInput(SDL_Event theEvent)
 	case SDL_MOUSEBUTTONDOWN:
 		for (auto & b : m_buttons)
 		{
-			b->mousePress();
+			if (b->m_visible) {
+				b->mousePress();
 
-			if (b->isClicked)
-			{
-				for (auto & c : m_buttons)
+				if (b->isClicked)
 				{
-					c->goToTransition();
-				}
-				for (auto & l : m_labels)
-				{
-					l->goToTransition();
-				}
+					for (auto & c : m_buttons)
+					{
+						c->goToTransition();
+					}
+					for (auto & l : m_labels)
+					{
+						l->goToTransition();
+					}
 
+				}
 			}
 		}
 
@@ -79,17 +81,19 @@ void Screen::handleInput(SDL_Event theEvent)
 		case 0:
 			for (auto & b : m_buttons)
 			{
-				b->mousePress();
+				if (b->m_visible) {
+					b->mousePress();
 
-				if (b->isClicked)
-				{
-					for (auto & c : m_buttons)
+					if (b->isClicked)
 					{
-						c->goToTransition();
-					}
-					for (auto & l : m_labels)
-					{
-						l->goToTransition();
+						for (auto & c : m_buttons)
+						{
+							c->goToTransition();
+						}
+						for (auto & l : m_labels)
+						{
+							l->goToTransition();
+						}
 					}
 				}
 			}
@@ -110,7 +114,22 @@ void Screen::update()
 		{
 			m_selectedItem = m_buttons.size() - 1;
 		}
-
+		int timesHit = 0;
+		while (!m_buttons.at(m_selectedItem)->m_visible) {
+			if (m_selectedItem != m_buttons.size() - 1) {
+				if (!m_buttons.at(m_selectedItem)->m_visible) {
+					m_selectedItem++;
+				}
+			}
+			else {
+				m_selectedItem = 0;
+			}
+			timesHit++;
+			if (timesHit >= m_buttons.size()) {
+				m_selectedItem = 0;
+				break;
+			}
+		}
 		for (int i = 0; i < m_buttons.size(); i++)
 		{
 			if (i != m_selectedItem)
@@ -124,7 +143,8 @@ void Screen::update()
 
 	for (auto & b : m_buttons)
 	{
-		b->update();
+		if (b->m_visible)
+			b->update();
 	}
 	for (auto & l : m_labels) 
 	{
@@ -137,7 +157,8 @@ void Screen::draw()
 {
 	for (auto & b : m_buttons)
 	{
-		b->draw();
+		if (b->m_visible)
+			b->draw();
 	}
 	for (auto & l : m_labels)
 	{

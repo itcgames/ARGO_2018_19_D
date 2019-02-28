@@ -39,7 +39,9 @@ public:
 	void unready();
 	std::vector<Lobby> & getLobbies();
 	bool createNewLobby();
-	void joinLobby(int index);
+	bool leaveLobby();
+	int getMyLobby();
+	bool joinLobby();
 private:
 	Entity * m_player;
 	std::vector<Entity*> * m_clients;
@@ -49,6 +51,7 @@ private:
 	bool m_inLobby = false;
 	int hostEntity = 0;
 	int m_localPlayerID = -1;
+	int m_lobbyInNumber = -1;
 	std::vector<NetworkingSystem::Lobby> m_lobbies;
 };
 
