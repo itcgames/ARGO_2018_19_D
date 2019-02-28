@@ -2,7 +2,7 @@
 
 Goal::Goal(ResourceManager * resourceManager)
 	: m_currentFrame(0),
-	TOTAL_FRAMES(8),
+	TOTAL_FRAMES(16),
 	FRAME_SIDE_LENGTH(200),
 	TIME_PER_FRAME(1.f / 30.f),
 	m_timeSinceLastFrame(0.f)
