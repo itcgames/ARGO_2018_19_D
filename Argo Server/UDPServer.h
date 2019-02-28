@@ -27,11 +27,8 @@ public:
 	void startLobby(Lobby & lobby);
 	void handleLobby(Lobby & lobby, ClientData & current, Packet & p);
 	void mapClientToLobby(ClientData & current);
+	void updateLobbyInfo(Packet & p);
 	void removeFromLobby(std::string & mapping);
-
-	/*void update();
-	void sendToAllWaiting(Packet * p);
-	void sendToAllInLobby(Packet * p, Lobby & lobby);*/
 
 	bool createSock() override;
 	bool bindSock() override;

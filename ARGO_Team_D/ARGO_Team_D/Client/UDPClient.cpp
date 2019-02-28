@@ -14,7 +14,7 @@ bool UDPClient::init()
 	int addrFamily = AF_INET;
 	m_hint.sin_family = AF_INET;
 	m_hint.sin_port = htons(8080);
-	inet_pton(addrFamily, "192.168.1.9", &m_hint.sin_addr);
+	inet_pton(addrFamily, "149.153.106.150", &m_hint.sin_addr);
 	m_sock = socket(addrFamily, SOCK_DGRAM, 0);
 
 	if (m_sock == INVALID_SOCKET) {

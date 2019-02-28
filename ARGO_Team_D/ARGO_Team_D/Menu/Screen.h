@@ -11,7 +11,7 @@ public:
 	Screen();
 	void handleInput(SDL_Event theEvent);
 	void draw(); //draw
-	void update();//update
+	virtual void update();//update
 	bool itemSelected(); //item selected
 protected:
 	std::vector<Button *> m_buttons;

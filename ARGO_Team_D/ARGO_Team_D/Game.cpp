@@ -353,8 +353,15 @@ void Game::update(const float & dt)
 		m_deathScreen->updatePositions();
 		break;
 	case Lobby:
-		m_lobby->update();
 		m_network.update();
+		if (m_network.m_inGame && !m_network.m_inGameChecked) {
+			m_lobby->StartGame();
+			m_network.m_inGameChecked = true;
+		}
+		if (!m_network.m_inGame && m_network.m_lobbiesUpdated) {
+			m_lobby->updateLobbies();
+		}
+		m_lobby->update();
 		break;
 	default:
 		break;

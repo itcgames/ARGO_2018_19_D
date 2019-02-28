@@ -39,9 +39,12 @@ public:
 	void unready();
 	std::vector<Lobby> & getLobbies();
 	bool createNewLobby();
+	void startLobby();
 	bool leaveLobby();
 	int getMyLobby();
 	bool joinLobby();
+	bool m_inGameChecked = false;
+	bool m_lobbiesUpdated = false;
 private:
 	Entity * m_player;
 	std::vector<Entity*> * m_clients;

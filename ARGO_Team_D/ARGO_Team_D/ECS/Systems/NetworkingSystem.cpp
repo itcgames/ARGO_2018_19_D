@@ -38,16 +38,30 @@ void NetworkingSystem::update()
 		for (int i = 0; i < m_components.size() - 1; ++i) {
 			Packet * p = m_client->Receive();
 			if (p->type == MessageType::LOBBYCREATED) {
-				Lobby lb;
-				lb.m_name = i;
-				lb.m_numPlayers = p->numOtherPlayers;
-				if (lb.m_numPlayers <= 4) {
-					m_lobbies.push_back(lb);
+				// Ignore duplicate lobbies
+				if (p->playerID > m_lobbies.size() - 1) {
+					Lobby lb;
+					lb.m_name = std::to_string(i);
+					lb.m_numPlayers = p->numOtherPlayers;
+					if (lb.m_numPlayers <= 4) {
+						m_lobbies.push_back(lb);
+						m_lobbiesUpdated = true;
+					}
 				}
 			}
 			if (p->type == MessageType::LOBBYUPDATED) {
+				if (p->playerID > m_lobbies.size()) {
+					Lobby lb;
+					lb.m_name = i;
+					lb.m_numPlayers = p->numOtherPlayers;
+					if (lb.m_numPlayers <= 4) {
+						m_lobbies.push_back(lb);
+						m_lobbiesUpdated = true;
+					}
+				}
 				auto & lobby = m_lobbies.at(p->playerID);
 				lobby.m_numPlayers = p->numOtherPlayers;
+				m_lobbiesUpdated = true;
 			}
 			if (p->type == MessageType::START && !m_inGame) {
 				std::cout << "Started%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" << std::endl;
@@ -177,6 +191,16 @@ bool NetworkingSystem::createNewLobby()
 	return true;
 }
 
+void NetworkingSystem::startLobby()
+{
+	if (m_inLobby && m_client->getHost()) {
+		Packet * p = new Packet();
+		ZeroMemory(p, sizeof(struct Packet));
+		p->type = MessageType::START;
+		m_client->Send(p);
+	}
+}
+
 bool NetworkingSystem::leaveLobby()
 {
 	if (m_inLobby) {
@@ -200,5 +224,12 @@ int NetworkingSystem::getMyLobby()
 
 bool NetworkingSystem::joinLobby()
 {
-	return true;
+	if (!m_inLobby) {
+		Packet * p = new Packet();
+		ZeroMemory(p, sizeof(struct Packet));
+		p->type = MessageType::JOINLOBBY;
+		m_client->Send(p);
+		return true;
+	}
+	return false;
 }

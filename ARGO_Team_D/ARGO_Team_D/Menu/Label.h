@@ -22,6 +22,7 @@ public:
 	void doTransitions(bool b);
 	void isACheckBoxLabel(bool * b);
 	void setSize(int x, int y);
+	void setString(std::string s);
 	int displayX;
 	int displayY;
 	int displayWidth;

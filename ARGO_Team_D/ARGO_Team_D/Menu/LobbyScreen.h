@@ -17,6 +17,8 @@ public:
 	void createLobby();
 	void joinLobby();
 	void leaveLobby();
+	void startLobby();
+	void updateLobbies();
 private:
 	Game * m_game;
 	SDL_Rect m_lobbyRect;

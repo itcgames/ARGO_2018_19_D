@@ -135,6 +135,57 @@ void UDPServer::mapClientToLobby(ClientData & current)
 	}
 }
 
+void UDPServer::updateLobbyInfo(Packet & p)
+{/*
+	for (auto & cd : m_waiting) {
+		int sendResult = sendto(m_listening, (char*)&p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&cd.second.clientAddr, sizeof(cd.second.clientAddr));
+		if (sendResult == SOCKET_ERROR) {
+			std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
+		}
+		else {
+			char ipSentTo[256];
+			ZeroMemory(&ipSentTo, 256);
+			inet_ntop(AF_INET, &cd.second.clientAddr.sin_addr, ipSentTo, 256);
+			std::cout << "Sent message to : " << ipSentTo << ":" << cd.second.clientAddr.sin_port << std::endl;
+		}
+	}
+	for (auto & lobby : m_lobbies) {
+		for (auto & client : lobby.m_clients) {
+			ClientData & clientData = client.second;
+			sockaddr_in & clientAddr = clientData.clientAddr;
+			int sendResult = sendto(m_listening, (char*)&p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&clientAddr, sizeof(clientAddr));
+			if (sendResult == SOCKET_ERROR) {
+				std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
+			}
+			else {
+				char ipSentTo[256];
+				ZeroMemory(&ipSentTo, 256);
+				inet_ntop(AF_INET, &clientAddr.sin_addr, ipSentTo, 256);
+				std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
+			}
+		}
+	}*/
+	for (int i = 0; i < m_lobbies.size(); ++i) {
+		Packet * msg = new Packet();
+		msg->type = MessageType::LOBBYINFO;
+		msg->playerID = i;
+		msg->numOtherPlayers = m_lobbies.size();
+
+		for (auto & cd : m_waiting) {
+			int sendResult = sendto(m_listening, (char*)msg, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&cd.second.clientAddr, sizeof(cd.second.clientAddr));
+			if (sendResult == SOCKET_ERROR) {
+				std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
+			}
+			else {
+				char ipSentTo[256];
+				ZeroMemory(&ipSentTo, 256);
+				inet_ntop(AF_INET, &cd.second.clientAddr.sin_addr, ipSentTo, 256);
+				std::cout << "Sent message to : " << ipSentTo << ":" << cd.second.clientAddr.sin_port << std::endl;
+			}
+		}
+	}
+}
+
 void UDPServer::removeFromLobby(std::string & mapping)
 {
 	int lobbyToRemoveFrom = m_ipToLobby[mapping];
@@ -169,7 +220,7 @@ bool UDPServer::bindSock()
 	int address_family = AF_INET;
 	m_hint.sin_family = address_family;
 	m_hint.sin_port = htons(port);
-	inet_pton(m_hint.sin_family, "192.168.1.9", &m_hint.sin_addr);
+	inet_pton(m_hint.sin_family, "149.153.106.150", &m_hint.sin_addr);
 	if (bind(m_listening, (LPSOCKADDR)&m_hint, sizeof(m_hint)) == SOCKET_ERROR) {
 		std::cerr << "Server cannot bind socket: " << WSAGetLastError() << std::endl;
 		exit(EXIT_FAILURE);
@@ -223,13 +274,26 @@ void UDPServer::messageHandler()
 				data.clientAddrLen = sizeof(clientAddr);
 				data.mapping = mapping;
 				m_waiting[mapping] = data;
-				auto & current = m_waiting[mapping];
 				numWaiting++;
-				/*if (numWaiting >= MAX_CLIENTS) {
-					mapToLobby();
-					numWaiting = 0;
-					startLobby(m_lobbies.back());
-				}*/
+				int index = 0;
+				for (int i = 0; i < m_lobbies.size(); ++i) {
+					for (auto & client : m_waiting) {
+						Packet * msg = new Packet();
+						msg->type = MessageType::LOBBYINFO;
+						msg->playerID = i;
+						msg->numOtherPlayers = m_lobbies.at(i).m_clients.size();
+						int sendResult = sendto(m_listening, (char*)msg, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)client.clientAddr, sizeof(client.clientAddr));
+						if (sendResult == SOCKET_ERROR) {
+							std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
+						}
+						else {
+							char ipSentTo[256];
+							ZeroMemory(&ipSentTo, 256);
+							inet_ntop(AF_INET, &clientAddr.sin_addr, ipSentTo, 256);
+							std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
+						}
+					}
+				}
 			}
 			else if (p.type == MessageType::LOBBYCREATED) {
 				if (!m_ipToLobby[mapping]) {
@@ -240,11 +304,55 @@ void UDPServer::messageHandler()
 						data.clientAddrLen = sizeof(clientAddr);
 						data.mapping = mapping;
 						mapClientToLobby(data);
+						p.type = MessageType::LOBBYCREATED;
+						p.playerID = m_lobbies.size() - 1;
+						p.numOtherPlayers = m_lobbies.back().m_clients.size();
+						for (auto & cd : m_waiting) {
+							int sendResult = sendto(m_listening, (char*)&p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&cd.second.clientAddr, sizeof(cd.second.clientAddr));
+							if (sendResult == SOCKET_ERROR) {
+								std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
+							}
+							else {
+								char ipSentTo[256];
+								ZeroMemory(&ipSentTo, 256);
+								inet_ntop(AF_INET, &clientAddr.sin_addr, ipSentTo, 256);
+								std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
+							}
+						}
+						for (auto & lobby : m_lobbies) {
+							for (auto & cd : lobby.m_clients) {
+								ClientData & clientData = cd.second;
+								if (clientData.index != data.index) {
+									sockaddr_in & clientAddr = cd.second.clientAddr;
+									int sendResult = sendto(m_listening, (char*)&p, sizeof(struct Packet) + 1, 0, (LPSOCKADDR)&clientData.clientAddr, sizeof(clientData.clientAddr));
+									if (sendResult == SOCKET_ERROR) {
+										std::cerr << "Failed to send: " << WSAGetLastError() << std::endl;
+									}
+									else {
+										char ipSentTo[256];
+										ZeroMemory(&ipSentTo, 256);
+										inet_ntop(AF_INET, &clientAddr.sin_addr, ipSentTo, 256);
+										std::cout << "Sent message to : " << ipSentTo << ":" << clientAddr.sin_port << std::endl;
+									}
+								}
+							}
+						}
 					}
 				}
 			}
+			else if (p.type == MessageType::JOINLOBBY) {
+				ClientData data;
+				data.clientAddr = clientAddr;
+				data.clientAddrLen = sizeof(clientAddr);
+				data.mapping = mapping;
+				mapClientToLobby(data);
+			}
 			else if (p.type == MessageType::LEAVELOBBY) {
 				removeFromLobby(mapping);
+			}
+			else if (p.type == MessageType::START) {
+				int lobbyNumber = m_ipToLobby[mapping];
+				startLobby(m_lobbies.at(lobbyNumber));
 			}
 			else {
 				if (!m_ipToLobby.empty()) {
