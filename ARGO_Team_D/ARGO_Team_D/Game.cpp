@@ -394,9 +394,11 @@ void Game::update(const float & dt)
 					}
 					else if (m_levelManager.getCurrentLevel() == 1) {
 						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
 					}
 					else if (m_levelManager.getCurrentLevel() == 2) {
 						m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
 					}
 				}	
 			}
