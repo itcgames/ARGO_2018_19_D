@@ -142,7 +142,7 @@ Game::Game() :
 
 	aiComponent = new PlayerAiComponent(m_player);
 	m_player->addComponent(aiComponent);
-	//playeraiSystem->addComponent(aiComponent);
+	playeraiSystem->addComponent(aiComponent);
 
 
 	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic, &m_camera);
@@ -397,11 +397,11 @@ void Game::update(const float & dt)
 						fadeToState(State::PlayScreen);
 					}
 					else if (m_levelManager.getCurrentLevel() == 2) {
-						m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
+						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 						fadeToState(State::PlayScreen);
 					}
 					else if (m_levelManager.getCurrentLevel() == 3) {
-						m_levelData->reset(7); // to be changed depending on hoe many enemys we need to kill
+						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 						fadeToState(State::PlayScreen);
 					}
 				}	
@@ -423,10 +423,10 @@ void Game::update(const float & dt)
 					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 				}
 				else if (m_levelManager.getCurrentLevel() == 2) {
-					m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
+					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 				}
 				else if (m_levelManager.getCurrentLevel() == 3) {
-					m_levelData->reset(7); // to be changed depending on hoe many enemys we need to kill
+					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 				}
 				fadeToState(State::Dead);
 			}
@@ -743,9 +743,9 @@ void Game::resetKills()
 		m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 	}
 	else if (m_levelManager.getCurrentLevel() == 2) {
-		m_levelData->reset(5); // to be changed depending on hoe many enemys we need to kill
+		m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 	}
 	else if (m_levelManager.getCurrentLevel() == 3) {
-		m_levelData->reset(7); // to be changed depending on hoe many enemys we need to kill
+		m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 	}
 }
