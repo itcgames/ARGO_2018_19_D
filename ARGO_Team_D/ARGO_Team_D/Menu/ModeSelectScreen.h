@@ -10,6 +10,7 @@ public:
 	~ModeSelectScreen();
 	void GoToGame();
 	void GoToMultiplayerGame();
+	void GoToMenu();
 private:
 	Game * m_game;
 };
