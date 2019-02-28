@@ -400,6 +400,10 @@ void Game::update(const float & dt)
 						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
 						fadeToState(State::PlayScreen);
 					}
+					else if (m_levelManager.getCurrentLevel() == 3) {
+						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
+					}
 				}	
 			}
 			m_particleSystem->update();
