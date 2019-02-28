@@ -51,6 +51,9 @@ private:
 	std::map<int, AiComponents> m_components;
 	LevelData *m_levelData;
 	Camera * m_cam;
+
+	Mix_Chunk * groan = NULL;
+	Mix_Chunk * shoot = NULL;
 };
 
 #endif // !AISYSTEM_H

@@ -36,7 +36,7 @@ public:
 	void fire();
 
 	void bindBullets(BulletManager * bulletManager);
-
+	void bindJump(Mix_Chunk * sound);
 	void spawnProjectile(float x, float y);
 	void removeEntity(const int id) override;
 private:
@@ -55,6 +55,9 @@ private:
 
 	//test
 	bool shotgun = false;
+
+
+	Mix_Chunk * jumpSound = NULL;
 };
 
 

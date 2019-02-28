@@ -7,14 +7,18 @@
   "Temp": "./ASSETS//IMAGES//tileset2.png",
   "tilesheet": "./ASSETS//IMAGES//tilesheet.png",
   "Placeholder": "./ASSETS//IMAGES//tileset2.png",
-  "Background1": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 1.png",
-  "Background1-2": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 2.png",
-  "Background1-3": "./ASSETS//LEVEL ONE//BACKGROUNDS_SECTION 3.png",
+  "Background1": "./ASSETS//LEVEL ONE//Level1-1.png",
+  "Background1-2": "./ASSETS//LEVEL ONE//Level1-2.png",
+  "Background1-3": "./ASSETS//LEVEL ONE//Level1-3.png",
   "Background2": "./ASSETS//Level Two//level2.2-02.png",
   "Background2-2": "./ASSETS//Level Two//level2.2-03.png",
   "Background2-3": "./ASSETS//Level Two//level2.2-04.png",
+  "Background3": "./ASSETS//Level Three//Level3-1.png",
+  "Background3-2": "./ASSETS//Level Three//Level3-2.png",
+  "Background3-3": "./ASSETS//Level Three//Level3-3.png",
   "GunEnemy": "./ASSETS//IMAGES//GunEnemy.png",
   "FlyEnemy": "./ASSETS//IMAGES//FlyEnemy.png",
   "BigEnemy": "./ASSETS//IMAGES//BigEnemy.png",
-  "MenuBackground": "./ASSETS//IMAGES//menu_background.png"
+  "MenuBackground": "./ASSETS//IMAGES//menu_background.png",
+  "Portal": "./ASSETS//IMAGES//portal2.png"
 }

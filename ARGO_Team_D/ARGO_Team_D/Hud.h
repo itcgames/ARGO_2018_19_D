@@ -9,7 +9,7 @@
 #include<string>
 #include"ECS/Components/HealthComponent.h"
 #include"ECS/Entities/Entity.h"
-
+#include"Observers/LevelData.h"
 
 struct HudComponents {
 	HealthComponent * health;
@@ -18,7 +18,7 @@ struct HudComponents {
 class Hud
 {
 public:
-	Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player);
+	Hud(Camera & cam, SDL_Renderer & rend, SDL_Window * window, Entity & player, LevelData * data);
 	~Hud();
 	void update();
 	void draw();
@@ -31,7 +31,19 @@ private:
 	SDL_Texture* message;
 	SDL_Rect message_rect;
 
+
+	SDL_Surface* surfaceMessage2;
+	SDL_Texture* message2;
+	SDL_Rect message_rect2;
+
+	SDL_Surface* surfaceMessage3;
+	SDL_Texture* message3;
+	SDL_Rect message_rect3;
+
+
 	std::string string = "";
+	std::string string2 = "";
+	std::string string3 = "";
 	int windowWidth;
 	int windowHeight;
 
@@ -49,6 +61,8 @@ private:
 
 	int lives;
 	int health;
+
+	LevelData * m_lvlData;
 };
 
 #endif // !HUD_H

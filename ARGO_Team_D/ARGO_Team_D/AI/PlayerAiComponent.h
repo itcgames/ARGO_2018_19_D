@@ -17,9 +17,10 @@ public:
 	~PlayerAiComponent() {}
 
 	BehaviourTree m_tree;
-	BehaviourTree::Selector m_selectors[3];
-	BehaviourTree::Sequence m_sequences[6];
-	BehaviourTree::Succeeder m_succeeders[1];
+	BehaviourTree::Selector m_selectors[4];
+	BehaviourTree::Sequence m_sequences[8];
+	BehaviourTree::Succeeder m_succeeders[2];
+	BehaviourTree::RandomSelector m_random;
 	Entity * m_entity;
 	Enemy * m_nearestEnemy;
 	int m_dir = 1;

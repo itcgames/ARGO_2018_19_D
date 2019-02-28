@@ -28,6 +28,9 @@ public:
 	bool isOnGround();
 	bool isLeftContact();
 	bool isRightContact();
+	bool isAiRightContact();
+	void aiContactStart();
+	void aiContactEnd();
 	void groundContactStart();
 	void groundContactEnd();
 	void leftContactStart();
@@ -40,7 +43,7 @@ public:
 	void setPosition(const b2Vec2 & pos);
 	b2Vec2 getInitialPos();
 	void resetPos();
-
+	bool m_AiContact;
 private:
 	// Private Functions
 	void init(float x, float y, float w, float h, bool ignoreGravity);
@@ -83,6 +86,12 @@ private:
 
 	// Bullet
 	int m_bulletHitCount;
+
+	// AiRight
+	b2PolygonShape * m_AiSensorShape;
+	b2FixtureDef m_AiFixtureDef;
+	
+	CollisionData m_AiData;
 };
 
 #endif // !BODYCOMPONENT_H

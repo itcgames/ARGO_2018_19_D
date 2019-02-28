@@ -8,7 +8,7 @@ class ParticleEffectsComponent: public Component {
 
 public:
 	ParticleEffectsComponent(int x, int y, int particleWidth,
-		int particleHeight, SDL_Color color, SDL_Renderer * renderer,
+		int particleHeight, SDL_Color trailColor, SDL_Color burstColor, SDL_Renderer * renderer,
 		bool isBurst, Uint8 alphaDec);
 	Emitter m_emitter;
 	Emitter m_emitterExplos;

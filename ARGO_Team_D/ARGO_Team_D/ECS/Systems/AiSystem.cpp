@@ -4,9 +4,9 @@ AiSystem::AiSystem(BulletManager * bulletManager, BodyComponent * playerBody, co
 	: m_bulletManager(bulletManager),
 	m_playerBody(playerBody),
 	WORLD_SCALE(SCALE),
-	DISTANCE_THRESHOLD(7.f),
-	GUN_ENEMY_ROF_MS(600.f),
-	BIG_ENEMY_ROF_MS(800.f),
+	DISTANCE_THRESHOLD(7.5f),
+	GUN_ENEMY_ROF_MS(700.f),
+	BIG_ENEMY_ROF_MS(850.f),
 	GUN_ENEMY_SPEED(10.f),
 	FLY_ENEMY_SPEED(12.f),
 	BIG_ENEMY_SPEED(5.f),
@@ -14,6 +14,12 @@ AiSystem::AiSystem(BulletManager * bulletManager, BodyComponent * playerBody, co
 {
 	m_cam = &camera;
 	m_allowedTypes = { "Body", "Animation", "Ai", "Sprite", "Particle" };
+
+	groan = Mix_LoadWAV("ASSETS/SOUNDS/grunt.wav");
+	Mix_VolumeChunk(groan, 128/4);
+
+	shoot = Mix_LoadWAV("ASSETS/SOUNDS/pistol.wav");
+	Mix_VolumeChunk(shoot, 128/4);
 }
 
 AiSystem::~AiSystem()
@@ -44,12 +50,18 @@ void AiSystem::update(float dt)
 		auto body = ac.body->getBody();
 		if (ac.body->getBulletHitCount() >= ac.ai->getMaxHits())
 		{
-			ac.part->m_emitterExplos.activate(true, (ac.body->getBody()->GetPosition().x * WORLD_SCALE),
+			ac.part->m_emitterExplos.activate((ac.body->getBody()->GetPosition().x * WORLD_SCALE),
 				(ac.body->getBody()->GetPosition().y * WORLD_SCALE));
 			m_levelData->enemyKilled();
 			ac.ai->setActivationState(false);
 			ac.body->setBulletHitCount(0); // Reset bullet hit count
 			body->SetTransform(b2Vec2(-1000, 0), body->GetAngle());
+
+			if (Mix_PlayChannel(-1, groan, 0) == -1)
+			{
+				//return 1;
+			}
+
 		}
 		else
 		{
@@ -105,9 +117,12 @@ void AiSystem::handleGroundEnemy(AiComponents & ac, float dt)
 	if (DISTANCE_THRESHOLD > dist.Length())
 	{
 		ac.ai->setShotTimer(ac.ai->getShotTimer() + dt);
-		std::cout << dt << std::endl;
 		if(ac.ai->getShotTimer() > shotRof)
 		{
+			if (Mix_PlayChannel(-1, shoot, 0) == -1)
+			{
+				//return 1;
+			}
 			ac.ai->setShotTimer(0.f);
 			m_bulletManager->createBullet(VectorAPI(bodyPos.x * WORLD_SCALE, bodyPos.y * WORLD_SCALE + ac.body->getDimensions().y / 4.f), direction * 50.f, false);
 		}

@@ -1,15 +1,23 @@
 #include "Emitter.h"
 
+/// <summary>
+/// Emitter constructor function
+/// </summary>
+/// <param name="x">X position of emitter</param>
+/// <param name="y">Y position of emitter</param>
+/// <param name="particleWidth">Width of emiiter particles</param>
+/// <param name="particleHeight">Height of emiiter particles</param>
+/// <param name="color">Color of emitter particles</param>
+/// <param name="renderer">Renderer to draw to window</param>
+/// <param name="isBurst">Bool to tell whether the particles should be a stream or burst</param>
+/// <param name="alphaDec">Alpha decrement to use when fading particles</param>
 Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color color ,SDL_Renderer * renderer , bool isBurst , Uint8 alphaDec)
 {
 	m_rend = renderer;
-
 	m_posX = x;
 	m_posY = y;
-	
 	width = particleWidth;
 	height = particleHeight;
-	
 	m_color = color;
 	emit = true;
 	framesPerEmission = 5;
@@ -20,6 +28,9 @@ Emitter::Emitter(int x, int y, int particleWidth, int particleHeight, SDL_Color 
 	decrement = alphaDec;
 }
 
+/// <summary>
+/// Emitter destructor function
+/// </summary>
 Emitter::~Emitter()
 {
 	//Delete particles
@@ -34,6 +45,11 @@ Emitter::~Emitter()
 	}
 }
 
+/// <summary>
+/// Emitter update function
+/// </summary>
+/// <param name="positionX">X position of emitter</param>
+/// <param name="positionY">Y position of emitter</param>
 void Emitter::update(int positionX, int positionY)
 {
 	if (burst)
@@ -96,37 +112,64 @@ void Emitter::update(int positionX, int positionY)
 	}	
 }
 
+/// <summary>
+/// Draw function of emitter
+/// </summary>
+/// <param name="cam">Camera used for drawing</param>
 void Emitter::draw(Camera * cam)
 {
 	drawParticles(cam);
 }
 
+/// <summary>
+/// Function sets an emitter off to start emitting particles
+/// </summary>
+/// <param name="b">Bool emission state</param>
 void Emitter::setEmitting(bool b)
 {
 	emit = b;
 }
 
+/// <summary>
+/// Function sets the frequency of emission in frames
+/// </summary>
+/// <param name="num">Frames per emission</param>
 void Emitter::setFramesPerEmission(int num)
 {
 	framesPerEmission = num;
 }
 
+/// <summary>
+/// Function allows the looping state of emitter to be set
+/// </summary>
+/// <param name="b">Bool desired looping state</param>
 void Emitter::setLooping(bool b)
 {
 	looping = b;
 }
 
+/// <summary>
+/// Set the direction of the emitter
+/// </summary>
+/// <param name="num">Int desired direction</param>
 void Emitter::setDirection(int num)
 {
 	dir = num;
 }
 
+/// <summary>
+/// Get the direction of the emitter
+/// </summary>
+/// <returns>Int direction</returns>
 int Emitter::getDirection()
 {
 	return dir;
 }
 
-void Emitter::activate(bool b)
+/// <summary>
+/// Activates a burst emitter
+/// </summary>
+void Emitter::activate()
 {
 	activateBurst = true;
 	for (int i = 0; i < MAX_PARTICLES; i++)
@@ -135,7 +178,12 @@ void Emitter::activate(bool b)
 	}
 }
 
-void Emitter::activate(bool b, int x, int y)
+/// <summary>
+/// Activates a burst emitter
+/// </summary>
+/// <param name="x">X position</param>
+/// <param name="y">Y position</param>
+void Emitter::activate(int x, int y)
 {
 	activateBurst = true;
 	burstX = x;
@@ -146,10 +194,10 @@ void Emitter::activate(bool b, int x, int y)
 	}
 }
 
-void Emitter::setAlphaDec(int num)
-{
-}
-
+/// <summary>
+/// Draws all particles
+/// </summary>
+/// <param name="cam">Camera used for rendering</param>
 void Emitter::drawParticles(Camera * cam)
 {
 	//Show particles

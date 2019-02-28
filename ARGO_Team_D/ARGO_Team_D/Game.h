@@ -112,6 +112,9 @@ public:
 
 	void loadAlevel(int num);
 	void reloadCurrentlevel();
+	void resetPlayerHealth();
+	void resetKills();
+	void setAI(bool b);
 
 private:
 	void processEvents();
@@ -220,13 +223,19 @@ private:
 	PlayerAiSystem* playeraiSystem;
 	PlayerAiComponent* aiComponent;
 
-	//options
+	// Options
 	bool vibrationOn = true;
+	bool musicOn = true;
 
 	//Background
 	SDL_Texture * m_texture;
 	SDL_Rect m_background;
 
-
+	// Sounds
+	Mix_Chunk * rifle = NULL;
+	Mix_Chunk * jumpSound = NULL;
+	Mix_Chunk * deadSound = NULL;
+	Mix_Chunk * portal = NULL;
+	bool aiActive = false;
 };
 #endif // !GAME_H

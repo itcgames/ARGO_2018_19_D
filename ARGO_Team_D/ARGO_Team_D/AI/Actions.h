@@ -29,6 +29,12 @@ public:
 		if (m_entity->checkForComponent("Position")) {
 			m_position = dynamic_cast<PositionComponent*>(m_entity->getComponent("Position"));
 		}
+
+		rifle = Mix_LoadWAV("ASSETS/SOUNDS/AssaultRifle.wav");
+		Mix_VolumeChunk(rifle, 128 / 8);
+
+		jumpSound = Mix_LoadWAV("ASSETS/SOUNDS/jump.wav");
+		Mix_VolumeChunk(jumpSound, 128 / 4);
 	}
 
 	virtual bool run() = 0;
@@ -37,6 +43,9 @@ public:
 	PlayerAiComponent* m_Ai;
 	SpriteComponent* m_Sprite;
 	PositionComponent* m_position;
+	Mix_Chunk * rifle = NULL;
+	Mix_Chunk * jumpSound = NULL;
+	bool playSound = false;
 };
 
 class WalkLeft : public Action
@@ -98,9 +107,50 @@ public:
 		b2Body * b2Body = m_body->getBody();
 		b2Vec2 currentVelocity = b2Body->GetLinearVelocity();
 
-		if ((m_body->isOnGround() && !m_Ai->m_fighting) || (m_body->isOnGround() && m_Ai->m_nearestEnemy->ai->getType() == 1)) {
+		if (m_body->isOnGround() && !m_body->isAiRightContact() && !m_Ai->m_fighting) {
 			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
 			currentVelocity.y = -35;
+
+			if(Mix_PlayChannel(-1, jumpSound, 0) == -1)
+			{
+				//return 1;
+			}
+
+			return true;
+		}
+
+		if (m_body->isOnGround() && m_Ai->m_nearestEnemy->ai->getType() == 1 && m_Ai->m_fighting) {
+			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+			currentVelocity.y = -35;
+
+			if(Mix_PlayChannel(-1, jumpSound, 0) == -1)
+			{
+				//return 1;
+			}
+
+			return true;
+		}
+
+		if (m_body->isOnGround() && m_body->isRightContact()) {
+			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+			currentVelocity.y = -35;
+
+			if(Mix_PlayChannel(-1, jumpSound, 0) == -1)
+			{
+				//return 1;
+			}
+
+			return true;
+		}
+
+		if (m_body->isOnGround() && m_body->isLeftContact()) {
+			b2Body->SetLinearVelocity(b2Vec2(currentVelocity.x, -35));
+			currentVelocity.y = -35;
+
+			if(Mix_PlayChannel(-1, jumpSound, 0) == -1)
+			{
+				//return 1;
+			}
 
 			return true;
 		}
@@ -136,7 +186,7 @@ public:
 
 private:
 	BulletManager * m_manager;
-	uint32 MAXTIME = 5;
+	uint32 MAXTIME = 7;
 	uint32 CURRENTTIME = 0;
 };
 
@@ -197,7 +247,7 @@ public:
 
 	bool run() override
 	{
-		if (m_Ai->m_nearestEnemy->position->getPosition().x > m_position->getPosition().x + 100)
+		if (m_Ai->m_nearestEnemy->position->getPosition().x > m_position->getPosition().x + 110)
 		{
 			return true;
 		}
@@ -220,7 +270,7 @@ public:
 
 	bool run() override
 	{
-		if (m_observer->getComplete()) {
+		if (m_observer->getComplete() && !m_Ai->m_fighting) {
 			return true;
 		}
 		else
@@ -268,12 +318,22 @@ public:
 		float dist = sqrt(((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x - m_body->getBody()->GetPosition().x))
 			+ ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y) * (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().y - m_body->getBody()->GetPosition().y)));
 
-		if (dist < 6 && dist > -6 && dist == dist * m_Ai->m_dir) {
+		if (dist < 5 && !m_body->isRightContact() && ((m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x < m_body->getBody()->GetPosition().x && m_Ai->m_dir == -1) || (m_Ai->m_nearestEnemy->body->getBody()->GetPosition().x > m_body->getBody()->GetPosition().x && m_Ai->m_dir == 1))) {
 			m_Ai->m_fighting = true;
+			if (!playSound)
+			{
+				if (Mix_PlayChannel(5, rifle, -1) == -1)
+				{
+					//return 1;
+				}
+				playSound = true;
+			}
 			return true;
 		}
 		else {
 			m_Ai->m_fighting = false;
+			Mix_HaltChannel(5);
+			playSound = false;
 			return false;
 		}
 	}

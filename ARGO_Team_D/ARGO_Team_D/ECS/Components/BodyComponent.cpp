@@ -21,7 +21,9 @@ BodyComponent::BodyComponent(float x, float y, float w, float h, b2World & world
 	m_leftData("BodyLeft", this),
 	m_rightContact(false),
 	m_rightData("BodyRight", this),
-	m_bulletHitCount(0)
+	m_bulletHitCount(0),
+	m_AiContact(false),
+	m_AiData("BodyAiRight", this)
 {
 	float halfWidth = w / 2.f;
 	float halfHeight = h / 2.f;
@@ -51,7 +53,9 @@ BodyComponent::BodyComponent(float x, float y, float rad, b2World & world, float
 	m_leftData("BodyLeft", this),
 	m_rightContact(false),
 	m_rightData("BodyRight", this),
-	m_bulletHitCount(0)
+	m_bulletHitCount(0),
+	m_AiContact(false),
+	m_AiData("BodyAiRight", this)
 {
 	float halfRad = rad / 2.f;
 	b2CircleShape * circleShape = new b2CircleShape();
@@ -123,6 +127,22 @@ bool BodyComponent::isRightContact()
 	return m_rightContact;
 }
 
+bool BodyComponent::isAiRightContact()
+{
+	return m_AiContact;
+}
+
+void BodyComponent::aiContactStart()
+{
+	m_AiContact = true;
+}
+
+void BodyComponent::aiContactEnd()
+{
+	m_AiContact = false;
+
+}
+
 /// <summary>
 /// Init is used to reduce code repetition in the constructor functions
 /// common code is here
@@ -173,7 +193,7 @@ void BodyComponent::init(float x, float y, float w, float h, bool ignoreGravity)
 
 	// Sensor checks if the body has contact to the right
 	m_rightSensorShape = new b2PolygonShape();
-	m_rightSensorShape->SetAsBox((halfWidth / m_worldScale) / 10.f, (halfHeight / m_worldScale) / 2.f, b2Vec2(halfWidth / m_worldScale, 0), 0);
+	m_rightSensorShape->SetAsBox((halfWidth / m_worldScale) / 2.f, (halfHeight / m_worldScale) / 10.f, b2Vec2(halfWidth / m_worldScale, 0), 0);
 	m_rightFixtureDef.shape = m_rightSensorShape;
 	m_rightFixtureDef.isSensor = true;
 	m_rightFixtureDef.userData = &m_rightData;
@@ -181,6 +201,17 @@ void BodyComponent::init(float x, float y, float w, float h, bool ignoreGravity)
 	m_rightFixtureDef.filter.maskBits = 0x0008;
 	b2Fixture * rightSensorFixture = m_body->CreateFixture(&m_rightFixtureDef);
 	rightSensorFixture->SetUserData(&m_rightData);
+
+	// Sensor checks if the body has contact to the bottom right
+	m_AiSensorShape = new b2PolygonShape();
+	m_AiSensorShape->SetAsBox((halfWidth / m_worldScale), (halfHeight / m_worldScale), b2Vec2((halfWidth * 2) / m_worldScale, halfHeight / m_worldScale), 0);
+	m_AiFixtureDef.shape = m_AiSensorShape;
+	m_AiFixtureDef.isSensor = true;
+	m_AiFixtureDef.userData = &m_AiData;
+	m_AiFixtureDef.filter.categoryBits = 0x0004;
+	m_AiFixtureDef.filter.maskBits = 0x0008;
+	b2Fixture * aiSensorFixture = m_body->CreateFixture(&m_AiFixtureDef);
+	aiSensorFixture->SetUserData(&m_AiData);
 }
 
 /// <summary>
@@ -247,7 +278,6 @@ int BodyComponent::getBulletHitCount()
 void BodyComponent::setBulletHitCount(int count)
 {
 	m_bulletHitCount = count;
-	std::cout << m_bodyData.tag << ": " << count << std::endl;
 }
 
 void BodyComponent::setInitialPos(b2Vec2 pos)

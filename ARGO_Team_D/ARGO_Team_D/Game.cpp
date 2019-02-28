@@ -88,14 +88,18 @@ Game::Game() :
 		cout << "Loading..." << endl;
 	}
 
-	//m_testMusic = m_resourceManager->getSoundResource("test");
-	//if (Mix_PlayMusic(m_testMusic, -1) == -1)
-	//{
-	//}
+	m_testMusic = m_resourceManager->getSoundResource("music");
+
+
+	jumpSound = Mix_LoadWAV("ASSETS/SOUNDS/jump.wav");
+	Mix_VolumeChunk(jumpSound, 128/4);
+
+	deadSound = Mix_LoadWAV("ASSETS/SOUNDS/dead.wav");
+	Mix_VolumeChunk(jumpSound, 128 / 4);
 
 	m_gameState = State::Menu;
 	m_menu = new MainMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
-	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, vibrationOn);
+	m_options = new OptionsMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, vibrationOn, musicOn);
 	m_credits = new CreditScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_levelSelect = new LevelSelectMenu(m_windowWidth, m_windowHeight, *this, m_renderer, p_window);
 	m_pauseScreen = new PauseScreen(m_windowWidth, m_windowHeight, *this, m_renderer, p_window, m_camera);
@@ -119,6 +123,8 @@ Game::Game() :
 	initialiseSystems();
 	setUpFont();
 
+	m_controlSystem.bindJump(jumpSound);
+
 	for (Enemy* i : m_flyEnemies) {
 		playeraiSystem->addEnemy(i);
 	}
@@ -136,20 +142,26 @@ Game::Game() :
 	playeraiSystem->addComponent(aiComponent);
 
 
-	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic);
+	inputHandler = new InputHandler(m_controlSystem, *gGameController, *gControllerHaptic, &m_camera);
 
 	m_controlSystem.bindBullets(m_bulletManager);
 	srand(time(NULL));
 
 	m_levelManager.parseLevelSystem("ASSETS/LEVELS/LevelSystem.json", m_world, WORLD_SCALE, Sans, m_gunEnemies, m_flyEnemies, m_bigEnemies);
 
-	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player);
+	m_hud = new Hud(m_camera, *m_renderer, p_window, *m_player, m_levelData);
 
 	m_texture = m_resourceManager->getImageResource("MenuBackground");
 	m_background.x = 0;
 	m_background.y = 0;
 	m_background.w = 1920;
 	m_background.h = 1080;
+
+	rifle = Mix_LoadWAV("ASSETS/SOUNDS/AssaultRifle.wav");
+	Mix_VolumeChunk(rifle, 128);
+
+	portal = Mix_LoadWAV("ASSETS/SOUNDS/teleport.wav");
+	Mix_VolumeChunk(portal, 128);
 
 	online = true;
 }
@@ -228,17 +240,26 @@ void Game::processEvents()
 			switch (m_gameState)
 			{
 			case PlayScreen:
-				m_camera.m_shaking = true;
-				m_gameState = State::Dead;
+				//m_camera.m_shaking = true;
+				//m_gameState = State::Dead;
 				break;
 			}
+			break;
 
+		case SDL_MOUSEBUTTONUP:
+			switch (m_gameState)
+			{
+			case PlayScreen:
+				//m_camera.m_shaking = true;
+				break;
+			}
+			break;
 		case SDL_KEYDOWN:
 
 			switch (m_gameState)
 			{
 			case PlayScreen:
-				if (event.key.keysym.sym == SDLK_q)
+				if (event.key.keysym.sym == SDLK_TAB)
 				{
 					m_gameState = State::Pause;
 				}
@@ -279,7 +300,6 @@ void Game::processEvents()
 				if (m_gameState == State::PlayScreen)
 				{
 					fadeToState(State::Pause);
-					//m_gameState = State::Pause;
 				}
 				break;
 			}
@@ -292,6 +312,46 @@ void Game::processEvents()
 
 void Game::update(const float & dt)
 {
+
+	if (!musicOn)
+	{
+		Mix_HaltMusic();
+	}
+
+	if (Mix_PlayingMusic() == 0 && musicOn)
+	{
+		//Play the music
+		Mix_PlayMusic(m_testMusic, -1);
+		Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	}
+
+	if (!musicOn)
+	{
+		Mix_HaltMusic();
+	}
+
+	if (Mix_PlayingMusic() == 0 && musicOn)
+	{
+		//Play the music
+		Mix_PlayMusic(m_testMusic, -1);
+		Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	}
+
+	if (Mix_PlayingMusic() == 0)
+	{
+		//Play the music
+		Mix_PlayMusic(m_testMusic, -1);
+		Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
+	}
+
+	if (m_gameState == State::PlayScreen)
+	{
+		SDL_ShowCursor(SDL_DISABLE);
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+	}
 	switch (m_gameState)
 	{
 	case Menu:
@@ -301,11 +361,14 @@ void Game::update(const float & dt)
 	case PlayScreen:
 		if (doneFading) // dont update the game unless screen is done fading
 		{
-			m_controlSystem.update();
-			//playeraiSystem->runTree();
-			m_aiSystem->update(dt);
-
 			m_world.Step(1 / 60.f, 10, 5); // Update the Box2d world
+			m_controlSystem.update();
+			//if ai is active
+			if (aiActive)
+			{
+				playeraiSystem->runTree();
+			}
+			m_aiSystem->update(dt);
 			m_bulletManager->update(dt);
 			m_physicsSystem.update();
 			m_camera.update(VectorAPI(m_playerBody->getBody()->GetPosition().x * WORLD_SCALE, m_playerBody->getBody()->GetPosition().y * WORLD_SCALE), 0);
@@ -314,7 +377,26 @@ void Game::update(const float & dt)
 			m_levelManager.update(dt/1000);
 			if (m_levelObserver->getComplete()) {
 				if (m_levelManager.checkPlayerCollisions(m_player, *m_resourceManager, WORLD_SCALE, m_renderer)) {
-					m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+					if (Mix_PlayChannel(-1, portal, 0) == -1)
+					{
+						//return 1;
+					}
+					if (m_levelManager.getCurrentLevel() == 0) {
+						m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
+					}
+					else if (m_levelManager.getCurrentLevel() == 1) {
+						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
+					}
+					else if (m_levelManager.getCurrentLevel() == 2) {
+						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
+					}
+					else if (m_levelManager.getCurrentLevel() == 3) {
+						m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+						fadeToState(State::PlayScreen);
+					}
 				}	
 			}
 			m_particleSystem->update();
@@ -323,7 +405,23 @@ void Game::update(const float & dt)
 			if (!m_healthSystem->playerAlive())
 			{
 				m_healthSystem->setPlayerAliveStatus(true);
-				m_gameState = State::Dead;
+				if (Mix_PlayChannel(-1, deadSound, 0) == -1)
+				{
+					//return 1;
+				}
+				if (m_levelManager.getCurrentLevel() == 0) {
+					m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+				}
+				else if (m_levelManager.getCurrentLevel() == 1) {
+					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+				}
+				else if (m_levelManager.getCurrentLevel() == 2) {
+					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+				}
+				else if (m_levelManager.getCurrentLevel() == 3) {
+					m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+				}
+				fadeToState(State::Dead);
 			}
 		}
 		if (online) {
@@ -466,26 +564,36 @@ void Game::setGameState(State state)
 void Game::fadeToState(State state)
 {
 
-	if (m_gameState == State::PlayScreen)
-	{
-		SDL_ShowCursor(SDL_DISABLE);
-	}
-	else
-	{
-		SDL_ShowCursor(SDL_ENABLE);
-	}
+	
 
 	inputHandler->resetHandler();
 	m_nextState = state;
 	fadeOn = true;
 	doneFading = false;
+	if (m_nextState == State::PlayScreen && m_gameState == State::PlayScreen)
+	{
+		doneFading = true;
+		//SDL_ShowCursor(SDL_DISABLE);
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_ENABLE);
+	}
 }
 
 void Game::fade()
 {
 	if (fadeOn)
 	{
-		m_transitionAlphaPercent += 0.075;
+		if (m_gameState == State::PlayScreen && m_nextState == State::PlayScreen)
+		{
+			m_transitionAlphaPercent += 1;
+		}
+		else
+		{
+			m_transitionAlphaPercent += 0.075;
+		}
+		
 		if (m_transitionAlphaPercent >= 1)
 		{
 			m_transitionAlphaPercent = 1;
@@ -500,7 +608,9 @@ void Game::fade()
 
 	if (fadeOff)
 	{
+		
 		m_transitionAlphaPercent -= 0.075;
+		
 		if (m_transitionAlphaPercent <= 0)
 		{
 			m_transitionAlphaPercent = 0;
@@ -606,7 +716,7 @@ void Game::setUpFont() {
 
 	if (TTF_Init() < 0)
 	{
-		std::cout << "error error error" << std::endl;
+		std::cout << "Error initialising font" << std::endl;
 	}
 	const char *path = "ASSETS\\FONTS\\TheBlackFestival.ttf";
 	Sans = TTF_OpenFont(path, 50);
@@ -614,10 +724,37 @@ void Game::setUpFont() {
 
 void Game::loadAlevel(int num)
 {
+	m_levelManager.unloadAllLevels();
 	m_levelManager.loadLevel(m_player,*m_resourceManager, m_renderer, num);
 }
 
 void Game::reloadCurrentlevel()
 {
 	m_levelManager.loadLevel(m_player, *m_resourceManager, m_renderer, m_levelManager.getCurrentLevel());
+}
+
+void Game::resetPlayerHealth()
+{
+	m_healthSystem->reset();
+}
+
+void Game::resetKills()
+{
+	if (m_levelManager.getCurrentLevel() == 0) {
+		m_levelData->reset(3); // to be changed depending on hoe many enemys we need to kill
+	}
+	else if (m_levelManager.getCurrentLevel() == 1) {
+		m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+	}
+	else if (m_levelManager.getCurrentLevel() == 2) {
+		m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+	}
+	else if (m_levelManager.getCurrentLevel() == 3) {
+		m_levelData->reset(15); // to be changed depending on hoe many enemys we need to kill
+	}
+}
+
+void Game::setAI(bool b)
+{
+	aiActive = b;
 }

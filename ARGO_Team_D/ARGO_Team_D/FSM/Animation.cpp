@@ -37,7 +37,6 @@ void Animation::handle(std::string newState)
 {
 	AnimationState * state = m_current->handle(this, newState);
 	if (nullptr != state && state != m_current) {
-		std::cout << "Changing state" << std::endl;
 		state->onEntry(this);
 	}
 }

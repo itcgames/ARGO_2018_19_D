@@ -5,7 +5,7 @@ Button::Button(const char * string,int x, int y, int w, int h, SDL_Color color, 
 	rend = renderer;
 	if (TTF_Init() < 0)
 	{
-		std::cout << "error error error" << std::endl;
+		std::cout << "Error Initialising TTF library" << std::endl;
 	}
 	const char *path = "ASSETS\\FONTS\\Face Your Fears.ttf";
 	arial = TTF_OpenFont(path, 300);
