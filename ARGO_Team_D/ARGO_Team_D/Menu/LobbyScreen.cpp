@@ -22,6 +22,7 @@ LobbyScreen::LobbyScreen(float width, float height, Game& game, SDL_Renderer * r
 	m_buttons.at(1)->Enter = std::bind(&LobbyScreen::createLobby, this);
 	m_buttons.at(2)->Enter = std::bind(&LobbyScreen::joinLobby, this);
 	m_buttons.at(3)->Enter = std::bind(&LobbyScreen::startLobby, this);
+	m_buttons.at(2)->m_visible = false;
 	m_buttons.at(3)->doTransitions(false);
 	m_buttons.at(3)->m_visible = false;
 	m_buttons.at(0)->doTransitions(false);
@@ -152,4 +153,7 @@ void LobbyScreen::updateLobbies()
 		m_labels.at(i)->setString(lobbies.at(i - numPreDefLabels).m_name.c_str() + std::string(": ") + std::to_string(lobbies.at(i - numPreDefLabels).m_numPlayers));
 	}
 	m_game->m_network.m_lobbiesUpdated = false;
+	if (lobbies.size() > 0) {
+		m_buttons.at(2)->m_visible = true;
+	}
 }

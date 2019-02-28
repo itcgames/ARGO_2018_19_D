@@ -39,9 +39,11 @@ void NetworkingSystem::update()
 			Packet * p = m_client->Receive();
 			if (p->type == MessageType::LOBBYCREATED) {
 				// Ignore duplicate lobbies
-				if (p->playerID > m_lobbies.size() - 1) {
+				int test1 = p->playerID;
+				int test2 = m_lobbies.size() - 1;
+				if (test1 > test2) {
 					Lobby lb;
-					lb.m_name = std::to_string(i);
+					lb.m_name = std::to_string(i + 1);
 					lb.m_numPlayers = p->numOtherPlayers;
 					if (lb.m_numPlayers <= 4) {
 						m_lobbies.push_back(lb);
