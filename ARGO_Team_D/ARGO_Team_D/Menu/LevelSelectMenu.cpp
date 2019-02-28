@@ -43,6 +43,7 @@ void LevelSelectMenu::LoadLevel1()
 {
 	m_game->loadAlevel(0);
 	m_game->resetKills();
+	m_game->resetPlayerHealth();
 	m_game->fadeToState(State::PlayScreen);
 	for (auto & b : m_buttons)
 	{
@@ -58,6 +59,7 @@ void LevelSelectMenu::LoadLevel2()
 {
 	m_game->loadAlevel(1);
 	m_game->resetKills();
+	m_game->resetPlayerHealth();
 	m_game->fadeToState(State::PlayScreen);
 	for (auto & b : m_buttons)
 	{
@@ -73,6 +75,7 @@ void LevelSelectMenu::LoadLevel3()
 {
 	m_game->loadAlevel(2);
 	m_game->resetKills();
+	m_game->resetPlayerHealth();
 	m_game->fadeToState(State::PlayScreen);
 	for (auto & b : m_buttons)
 	{
@@ -88,6 +91,7 @@ void LevelSelectMenu::Loadlevel4()
 {
 	m_game->loadAlevel(3);
 	m_game->resetKills();
+	m_game->resetPlayerHealth();
 	m_game->fadeToState(State::PlayScreen);
 	for (auto & b : m_buttons)
 	{
